@@ -1399,6 +1399,7 @@ package
                case "R3":
 				  if(!this.modalActive)
                   {
+
                      if(this.eMode == this.INVENTORY_MODE)
                      {
                         if(this.InspectButton.ButtonVisible)
@@ -1407,6 +1408,7 @@ package
                         }
                         _loc3_ = true;
                      }
+				  }					 
                   else if(!this.inspectMode && !this.modalActive)
                   {
                      this.onSearch();
