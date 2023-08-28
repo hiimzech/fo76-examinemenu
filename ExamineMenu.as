@@ -142,10 +142,7 @@ package
       
       private var FilterAtxButton:BSButtonHintData;
       
-      //private var InspectRepairButton:BSButtonHintData;
-	  
-	  private var RepairButton:BSButtonHintData;      
-      private var InspectButton:BSButtonHintData;
+      private var InspectRepairButton:BSButtonHintData;
       
       private var RepairKitButton:BSButtonHintData;
       
@@ -318,11 +315,7 @@ package
          this.ToggleEquipButton = new BSButtonHintData("$EQUIP","F","PSN_L2","Xenon_L2",1,this.onToggleEquip);
          this.FilterCraftableButton = new BSButtonHintData("$TOGGLECRAFTABLEITEMS","Q","PSN_L3","Xenon_L3",1,this.onFilterCraftable);
          this.FilterAtxButton = new BSButtonHintData("$TOGGLEATXITEMS","V","PSN_Select","Xenon_Select",1,this.onFilterAtx);
-         
-		 //this.InspectRepairButton = new BSButtonHintData("$REPAIR","T","PSN_Y","Xenon_Y",1,this.onInspectRepair);
-		 this.RepairButton = new BSButtonHintData("$REPAIR","T","PSN_Y","Xenon_Y",1,this.onWorkbenchRepair);
-         this.InspectButton = new BSButtonHintData("$INSPECT","X","PSN_R3","Xenon_R3",1,this.onInspect);
-		 		 
+         this.InspectRepairButton = new BSButtonHintData("$REPAIR","T","PSN_Y","Xenon_Y",1,this.onInspectRepair);
          this.RepairKitButton = new BSButtonHintData("$REPAIR KIT","T","PSN_Y","Xenon_Y",1,this.onRepairKit);
          this.WorkbenchRepairButton = new BSButtonHintData("$WORKBENCH REPAIR","R","PSN_X","Xenon_X",1,this.onWorkbenchRepair);
          this.AutoBuild = new BSButtonHintData("$BUILD","Space","PSN_A","Xenon_A",1,this.onScrapBuildAdd);
@@ -680,8 +673,23 @@ package
             var _loc3_:* = param1.data.levels;
             var _loc4_:* = _loc3_.length;
             var _loc5_:* = 0;
-            while(_loc5_ < _loc4_) { ItemLevelListObject.entryList.push({"text" :"$$LEVEL" + _loc3_[_loc5_].level.toString(),
-                  " level":_loc3_[_loc5_].level,"hasRequired" :_loc3_[_loc5_].hasRequired }); _loc5_++; } ItemLevelListObject.RefreshList(); ItemLevelListObject.addEventListener(BSScrollingList.SELECTION_CHANGE,LevelChange); ItemLevelListObject.selectedIndex=_loc2_; }); BSUIDataManager.Subscribe("ExamineMenuMode",function(param1:FromClientDataEvent):* { var _loc2_:String=String(param1.data.mode); if(_loc2_.length> 0)
+            while(_loc5_ < _loc4_)
+            {
+               ItemLevelListObject.entryList.push({
+                  "text":"$$LEVEL " + _loc3_[_loc5_].level.toString(),
+                  "level":_loc3_[_loc5_].level,
+                  "hasRequired":_loc3_[_loc5_].hasRequired
+               });
+               _loc5_++;
+            }
+            ItemLevelListObject.RefreshList();
+            ItemLevelListObject.addEventListener(BSScrollingList.SELECTION_CHANGE,LevelChange);
+            ItemLevelListObject.selectedIndex = _loc2_;
+         });
+         BSUIDataManager.Subscribe("ExamineMenuMode",function(param1:FromClientDataEvent):*
+         {
+            var _loc2_:String = String(param1.data.mode);
+            if(_loc2_.length > 0)
             {
                if(m_PreviousMode != _loc2_ || _loc2_ == "inspect")
                {
@@ -961,11 +969,7 @@ package
          this.InventoryButtonHints = new Vector.<BSButtonHintData>();
          this.InventoryButtonHints.push(this.ToggleEquipButton);
          this.InventoryButtonHints.push(this.ScrapButton);
-         
-		 //this.InventoryButtonHints.push(this.InspectRepairButton);
-		 this.InventoryButtonHints.push(this.RepairButton);
-		 this.InventoryButtonHints.push(this.InspectButton);
-		 
+         this.InventoryButtonHints.push(this.InspectRepairButton);
          this.InventoryButtonHints.push(this.ModButton);
          this.InventoryButtonHints.push(this.ExitButton);
          this.InventoryButtonHints.push(this.AlternateButton);
@@ -1112,9 +1116,87 @@ package
          else if(this.ModListObject.selectedIndex >= 0 && this.ModListObject.entryList[this.ModListObject.selectedIndex].perkData != null)
          {
             _loc3_ = 0;
-            while(_loc3_ < 2) { _loc1_=getChildByName("PerkPanel" + _loc3_ +"_mc" ) as PerkClipRequirement; if(_loc3_
-											< this.ModListObject.entryList[this.ModListObject.selectedIndex].perkData.length) { _loc2_=this.ModListObject.entryList[this.ModListObject.selectedIndex].perkData[_loc3_]; _loc1_.perkName=_loc2_.text; _loc1_.rank=_loc2_.rank; _loc1_.vaultBoyImageName=_loc2_.clipName; _loc1_.animated=_loc2_.isAnimatedPerk; _loc1_.isLevelMet=!_loc2_.perkLocked; _loc1_.visible=true; } else { _loc1_.visible=false; } _loc3_++; } } } public function InventorySelectionChange(param1:Event) : * { if(!this._isCookingMenu) { this.BGSCodeObj.SwitchBaseItem(); this.FillPossibleModPartArray(new Event("")); this.UpdateDescription(); this.UpdateButtons(); } } private function UpdateMiscItemList() : * { this.MiscItemListObject.filterer.itemFilter=1
-											<< this.RequirementsListObject.selectedIndex; this.MiscItemListObject.RefreshList(); this.UpdateButtons(); } private function SetRightListLabel(param1:String) : * { GlobalFunc.SetText(this.ModSlotBase_mc.SlotsLabel_tf,param1,false); } public function ModModeToSlotsMode() : * { this.BGSCodeObj.RevertChanges(); this.bQueuedBackToMods=true; if(this.isCrafting) { this.ExecuteQueuedActions(); } } public function ExecuteQueuedActions() : * { if(this.bQueuedBackToMods && this.eMode !=this.INVENTORY_MODE) { this.ModListObject.removeEventListener(BSScrollingList.SELECTION_CHANGE,this.ModChange); this.bQueuedBackToMods=false; this.eMode=this.SLOTS_MODE; this.RequirementsListObject.SetInactive(); this.ModSlotListObject.removeEventListener(BSScrollingList.SELECTION_CHANGE,this.FillPossibleModPartArray); this.ModSlotListObject.SetInactive(); this.ModListObject.SetInactive(); this.ModSlotListObject.SetActive(this.InventoryBase_mc.InventoryList_mc,"ModSlotListObject"); this.ModListObject.SetActive(this.ModSlotBase_mc.ModSlotList_mc,"ModListObject"); this.ModListObject.filtersDuplicates=true; this.SetRightListLabel(this._isCookingMenu ?"$AVAILABLE RECIPES" :"$AVAILABLE MODS" ); this.ModSlotListObject.addEventListener(BSScrollingList.SELECTION_CHANGE,this.FillPossibleModPartArray); this.UpdatePerks(); this.UpdateBackground(); this.UpdateDescription(); } } public function InventoryModeToSlotsMode() : Boolean { var _loc1_:Boolean=false; if(this.isCrafting || this.ModSlotBase_mc.ModSlotList_mc.entryList.length> 0)
+            while(_loc3_ < 2)
+            {
+               _loc1_ = getChildByName("PerkPanel" + _loc3_ + "_mc") as PerkClipRequirement;
+               if(_loc3_ < this.ModListObject.entryList[this.ModListObject.selectedIndex].perkData.length)
+               {
+                  _loc2_ = this.ModListObject.entryList[this.ModListObject.selectedIndex].perkData[_loc3_];
+                  _loc1_.perkName = _loc2_.text;
+                  _loc1_.rank = _loc2_.rank;
+                  _loc1_.vaultBoyImageName = _loc2_.clipName;
+                  _loc1_.animated = _loc2_.isAnimatedPerk;
+                  _loc1_.isLevelMet = !_loc2_.perkLocked;
+                  _loc1_.visible = true;
+               }
+               else
+               {
+                  _loc1_.visible = false;
+               }
+               _loc3_++;
+            }
+         }
+      }
+      
+      public function InventorySelectionChange(param1:Event) : *
+      {
+         if(!this._isCookingMenu)
+         {
+            this.BGSCodeObj.SwitchBaseItem();
+            this.FillPossibleModPartArray(new Event(""));
+            this.UpdateDescription();
+            this.UpdateButtons();
+         }
+      }
+      
+      private function UpdateMiscItemList() : *
+      {
+         this.MiscItemListObject.filterer.itemFilter = 1 << this.RequirementsListObject.selectedIndex;
+         this.MiscItemListObject.RefreshList();
+         this.UpdateButtons();
+      }
+      
+      private function SetRightListLabel(param1:String) : *
+      {
+         GlobalFunc.SetText(this.ModSlotBase_mc.SlotsLabel_tf,param1,false);
+      }
+      
+      public function ModModeToSlotsMode() : *
+      {
+         this.BGSCodeObj.RevertChanges();
+         this.bQueuedBackToMods = true;
+         if(this.isCrafting)
+         {
+            this.ExecuteQueuedActions();
+         }
+      }
+      
+      public function ExecuteQueuedActions() : *
+      {
+         if(this.bQueuedBackToMods && this.eMode != this.INVENTORY_MODE)
+         {
+            this.ModListObject.removeEventListener(BSScrollingList.SELECTION_CHANGE,this.ModChange);
+            this.bQueuedBackToMods = false;
+            this.eMode = this.SLOTS_MODE;
+            this.RequirementsListObject.SetInactive();
+            this.ModSlotListObject.removeEventListener(BSScrollingList.SELECTION_CHANGE,this.FillPossibleModPartArray);
+            this.ModSlotListObject.SetInactive();
+            this.ModListObject.SetInactive();
+            this.ModSlotListObject.SetActive(this.InventoryBase_mc.InventoryList_mc,"ModSlotListObject");
+            this.ModListObject.SetActive(this.ModSlotBase_mc.ModSlotList_mc,"ModListObject");
+            this.ModListObject.filtersDuplicates = true;
+            this.SetRightListLabel(this._isCookingMenu ? "$AVAILABLE RECIPES" : "$AVAILABLE MODS");
+            this.ModSlotListObject.addEventListener(BSScrollingList.SELECTION_CHANGE,this.FillPossibleModPartArray);
+            this.UpdatePerks();
+            this.UpdateBackground();
+            this.UpdateDescription();
+         }
+      }
+      
+      public function InventoryModeToSlotsMode() : Boolean
+      {
+         var _loc1_:Boolean = false;
+         if(this.isCrafting || this.ModSlotBase_mc.ModSlotList_mc.entryList.length > 0)
          {
             if(!this._isCookingMenu)
             {
@@ -1289,9 +1371,7 @@ package
                   this.AlternateButton.ButtonText = this.strAlternateButtonText;
                   this.AlternateButton.ButtonEnabled = this.AternateTextEnabled;
                   this.ModButton.ButtonEnabled = this.isCrafting || this.ModSlotListObject.entryList && this.ModSlotListObject.entryList.length > 0;
-				  
-                  /*
-				  if(this._allowRepair)
+                  if(this._allowRepair)
                   {
                      this.InspectRepairButton.ButtonText = "$INSPECT/REPAIR";
                   }
@@ -1299,11 +1379,7 @@ package
                   {
                      this.InspectRepairButton.ButtonText = "$INSPECT";
                   }
-				  this.InspectRepairButton.ButtonVisible = this._allowRepair;
-				  */
-				  this.RepairButton.ButtonVisible = this._allowRepair;
-                  this.InspectButton.ButtonVisible = this.INVENTORY_MODE;		  
-				                    
+                  this.InspectRepairButton.ButtonVisible = this._allowRepair;
                   this.ScrapButton.ButtonVisible = this._showScrapButton;
                   this.ToggleEquipButton.ButtonVisible = this._allowEquip;
                }
@@ -1470,17 +1546,10 @@ package
                   {
                      if(this.eMode == this.INVENTORY_MODE)
                      {
-                        /*
-						if(this.InspectRepairButton.ButtonVisible)
+                        if(this.InspectRepairButton.ButtonVisible)
                         {
                            this.onInspectRepair();
                         }
-						*/
-						if(this.RepairButton.ButtonVisible)
-                        {
-                           this.onWorkbenchRepair();
-                        }
-						
                         _loc3_ = true;
                      }
                      else if(this.eMode == this.INSPECT_MODE)
@@ -1494,19 +1563,7 @@ package
                   }
                   break;
                case "R3":
-				  if(!this.modalActive)
-                  {
-
-                     if(this.eMode == this.INVENTORY_MODE)
-                     {
-                        if(this.InspectButton.ButtonVisible)
-                        {
-                           this.onInspect();
-                        }
-                        _loc3_ = true;
-                     }
-				  }					 
-                  else if(!this.inspectMode && !this.modalActive)
+                  if(!this.inspectMode && !this.modalActive)
                   {
                      this.onSearch();
                      _loc3_ = true;
@@ -1571,7 +1628,11 @@ package
       {
          if(this.eMode == this.INSPECT_MODE)
          {
-            if(param1.delta < 0) { this.BGSCodeObj.ZoomOut(); } else if(param1.delta> 0)
+            if(param1.delta < 0)
+            {
+               this.BGSCodeObj.ZoomOut();
+            }
+            else if(param1.delta > 0)
             {
                this.BGSCodeObj.ZoomIn();
             }
@@ -1638,16 +1699,7 @@ package
          }
       }
       
-	  /*
       private function onInspectRepair() : void
-      {
-         if(this.eMode == this.INVENTORY_MODE)
-         {
-            this.BGSCodeObj.InspectSelectedItem();
-         }
-      }
-	  */
-	  private function onInspect() : void
       {
          if(this.eMode == this.INVENTORY_MODE)
          {
@@ -2156,7 +2208,99 @@ package
             {
                _loc1_ = String(this.BGSCodeObj.GetItemDescription());
             }
-            else if(this.InventoryBase_mc.InventoryList_mc.selectedIndex < this.InventoryBase_mc.InventoryList_mc.entryList.length && this.InventoryBase_mc.InventoryList_mc.entryList[this.InventoryBase_mc.InventoryList_mc.selectedIndex] && this.InventoryBase_mc.InventoryList_mc.entryList[this.InventoryBase_mc.InventoryList_mc.selectedIndex].description !=undefined) { _loc1_=String(this.InventoryBase_mc.InventoryList_mc.entryList[this.InventoryBase_mc.InventoryList_mc.selectedIndex].description); } } else if(this.eMode==this.SLOTS_MODE && this.ModSlotListObject.selectedEntry && !this.ModSlotListObject.selectedEntry.enabled) { _loc1_=String(this.ModSlotListObject.selectedEntry.tooltip); } this.itemDescription=_loc1_; } public function startItemSelection() : * { this.BGSCodeObj.StartItemSelection(); } public function RefreshItemCard(param1:Object=null) : * { this.ItemCardList_mc.onDataChange(); } public function OnItemCardUpdated(param1:Event) : * { var _loc2_:int=Math.max(this.ItemCardList_mc.entryCount,MIN_ITEM_CARD_ENTRIES); this.CenterShadedBG_mc.ItemStats_mc.gotoAndStop("entry" + Math.min(_loc2_,MAX_ITEM_CARD_ENTRIES)); } public function set itemDescription(param1:String) : * { var _loc2_:*=undefined; if(this.m_DynamicModDescEnabled && this.ModListObject.selectedEntry && Boolean(this.ModListObject.selectedEntry.modProperties)) { this.ModDescriptionBase_mc.gotoAndStop("dynamic"); this.ModDescriptionBase_mc.DynamicModDescription_mc.entryData=this.ModListObject.selectedEntry.modProperties; } else { this.ModDescriptionBase_mc.gotoAndStop("default"); GlobalFunc.SetText(this.ModDescriptionBase_mc.ModDescription_tf,param1,false); ShrinkFontToFit(this.ModDescriptionBase_mc.ModDescription_tf,1); _loc2_=param1== ""? 0 : this.ModDescriptionBase_mc.ModDescription_tf.numLines; } } private function onDynamicModDescriptionUpdated(param1:Event) : void { this.ModDescriptionBase_mc.DynamicModDescription_mc.Body_mc.x=(this.ModDescriptionBase_mc.DynamicModDescription_mc.Body_mc.width - this.ModDescriptionBase_mc.DynamicModDescription_mc.displayWidth) 2; } public function set legendaryItemDescription(param1:String) : * { var _loc2_:String=param1; while(_loc2_.indexOf("%%") !=-1) { _loc2_=_loc2_.replace("%%" ,"%"); } while(_loc2_.indexOf("\r\n") !=-1) { _loc2_=_loc2_.replace("\r\n" ,"\n"); } GlobalFunc.SetText(this.LegendaryItemDescription_tf,_loc2_,false); } public function RepositionCurrentModsList() : * { if(this.CurrentModsListObject.entryList.length) { this.CurrentModsBase_mc.visible=true; this.ModSlotBase_mc.SlotsLabel_tf.visible=false; } else { this.CurrentModsBase_mc.visible=false; this.ModSlotBase_mc.SlotsLabel_tf.visible=true; } } public function SetCraftingHierarchy(param1:String) : * { this._craftingHierarchy.splice(0); this.PushCraftingHierarchy(param1); } public function PushCraftingHierarchy(param1:String) : * { this._craftingHierarchy.push(param1); this.UpdateCraftingHierarchy(); } public function PopCraftingHierarchy() : * { if(this._craftingHierarchy.length> 1)
+            else if(this.InventoryBase_mc.InventoryList_mc.selectedIndex < this.InventoryBase_mc.InventoryList_mc.entryList.length && this.InventoryBase_mc.InventoryList_mc.entryList[this.InventoryBase_mc.InventoryList_mc.selectedIndex] && this.InventoryBase_mc.InventoryList_mc.entryList[this.InventoryBase_mc.InventoryList_mc.selectedIndex].description != undefined)
+            {
+               _loc1_ = String(this.InventoryBase_mc.InventoryList_mc.entryList[this.InventoryBase_mc.InventoryList_mc.selectedIndex].description);
+            }
+         }
+         else if(this.eMode == this.SLOTS_MODE && this.ModSlotListObject.selectedEntry && !this.ModSlotListObject.selectedEntry.enabled)
+         {
+            _loc1_ = String(this.ModSlotListObject.selectedEntry.tooltip);
+         }
+         this.itemDescription = _loc1_;
+      }
+      
+      public function startItemSelection() : *
+      {
+         this.BGSCodeObj.StartItemSelection();
+      }
+      
+      public function RefreshItemCard(param1:Object = null) : *
+      {
+         this.ItemCardList_mc.onDataChange();
+      }
+      
+      public function OnItemCardUpdated(param1:Event) : *
+      {
+         var _loc2_:int = Math.max(this.ItemCardList_mc.entryCount,MIN_ITEM_CARD_ENTRIES);
+         this.CenterShadedBG_mc.ItemStats_mc.gotoAndStop("entry" + Math.min(_loc2_,MAX_ITEM_CARD_ENTRIES));
+      }
+      
+      public function set itemDescription(param1:String) : *
+      {
+         var _loc2_:* = undefined;
+         if(this.m_DynamicModDescEnabled && this.ModListObject.selectedEntry && Boolean(this.ModListObject.selectedEntry.modProperties))
+         {
+            this.ModDescriptionBase_mc.gotoAndStop("dynamic");
+            this.ModDescriptionBase_mc.DynamicModDescription_mc.entryData = this.ModListObject.selectedEntry.modProperties;
+         }
+         else
+         {
+            this.ModDescriptionBase_mc.gotoAndStop("default");
+            GlobalFunc.SetText(this.ModDescriptionBase_mc.ModDescription_tf,param1,false);
+            ShrinkFontToFit(this.ModDescriptionBase_mc.ModDescription_tf,1);
+            _loc2_ = param1 == "" ? 0 : this.ModDescriptionBase_mc.ModDescription_tf.numLines;
+         }
+      }
+      
+      private function onDynamicModDescriptionUpdated(param1:Event) : void
+      {
+         this.ModDescriptionBase_mc.DynamicModDescription_mc.Body_mc.x = (this.ModDescriptionBase_mc.DynamicModDescription_mc.Body_mc.width - this.ModDescriptionBase_mc.DynamicModDescription_mc.displayWidth) / 2;
+      }
+      
+      public function set legendaryItemDescription(param1:String) : *
+      {
+         var _loc2_:String = param1;
+         while(_loc2_.indexOf("%%") != -1)
+         {
+            _loc2_ = _loc2_.replace("%%","%");
+         }
+         while(_loc2_.indexOf("\r\n") != -1)
+         {
+            _loc2_ = _loc2_.replace("\r\n","\n");
+         }
+         GlobalFunc.SetText(this.LegendaryItemDescription_tf,_loc2_,false);
+      }
+      
+      public function RepositionCurrentModsList() : *
+      {
+         if(this.CurrentModsListObject.entryList.length)
+         {
+            this.CurrentModsBase_mc.visible = true;
+            this.ModSlotBase_mc.SlotsLabel_tf.visible = false;
+         }
+         else
+         {
+            this.CurrentModsBase_mc.visible = false;
+            this.ModSlotBase_mc.SlotsLabel_tf.visible = true;
+         }
+      }
+      
+      public function SetCraftingHierarchy(param1:String) : *
+      {
+         this._craftingHierarchy.splice(0);
+         this.PushCraftingHierarchy(param1);
+      }
+      
+      public function PushCraftingHierarchy(param1:String) : *
+      {
+         this._craftingHierarchy.push(param1);
+         this.UpdateCraftingHierarchy();
+      }
+      
+      public function PopCraftingHierarchy() : *
+      {
+         if(this._craftingHierarchy.length > 1)
          {
             this._craftingHierarchy.splice(this._craftingHierarchy.length - 1);
             this.UpdateCraftingHierarchy();
@@ -2175,7 +2319,9 @@ package
          else
          {
             _loc3_ = 1;
-            while(_loc3_ < _loc1_) { if(_loc3_> 1)
+            while(_loc3_ < _loc1_)
+            {
+               if(_loc3_ > 1)
                {
                   _loc2_ += " > ";
                }
