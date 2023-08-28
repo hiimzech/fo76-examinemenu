@@ -142,7 +142,10 @@ package
       
       private var FilterAtxButton:BSButtonHintData;
       
-      private var InspectRepairButton:BSButtonHintData;
+      //private var InspectRepairButton:BSButtonHintData;
+	  
+	  private var RepairButton:BSButtonHintData;      
+      private var InspectButton:BSButtonHintData;
       
       private var RepairKitButton:BSButtonHintData;
       
@@ -315,7 +318,11 @@ package
          this.ToggleEquipButton = new BSButtonHintData("$EQUIP","F","PSN_L2","Xenon_L2",1,this.onToggleEquip);
          this.FilterCraftableButton = new BSButtonHintData("$TOGGLECRAFTABLEITEMS","Q","PSN_L3","Xenon_L3",1,this.onFilterCraftable);
          this.FilterAtxButton = new BSButtonHintData("$TOGGLEATXITEMS","V","PSN_Select","Xenon_Select",1,this.onFilterAtx);
-         this.InspectRepairButton = new BSButtonHintData("$REPAIR","T","PSN_Y","Xenon_Y",1,this.onInspectRepair);
+         
+		 //this.InspectRepairButton = new BSButtonHintData("$REPAIR","T","PSN_Y","Xenon_Y",1,this.onInspectRepair);
+		 this.RepairButton = new BSButtonHintData("$REPAIR","T","PSN_Y","Xenon_Y",1,this.onWorkbenchRepair);
+         this.InspectButton = new BSButtonHintData("$INSPECT","X","PSN_R3","Xenon_R3",1,this.onInspect);
+		 		 
          this.RepairKitButton = new BSButtonHintData("$REPAIR KIT","T","PSN_Y","Xenon_Y",1,this.onRepairKit);
          this.WorkbenchRepairButton = new BSButtonHintData("$WORKBENCH REPAIR","R","PSN_X","Xenon_X",1,this.onWorkbenchRepair);
          this.AutoBuild = new BSButtonHintData("$BUILD","Space","PSN_A","Xenon_A",1,this.onScrapBuildAdd);
@@ -969,7 +976,11 @@ package
          this.InventoryButtonHints = new Vector.<BSButtonHintData>();
          this.InventoryButtonHints.push(this.ToggleEquipButton);
          this.InventoryButtonHints.push(this.ScrapButton);
-         this.InventoryButtonHints.push(this.InspectRepairButton);
+         
+		 //this.InventoryButtonHints.push(this.InspectRepairButton);
+		 this.InventoryButtonHints.push(this.RepairButton);
+		 this.InventoryButtonHints.push(this.InspectButton);
+		 
          this.InventoryButtonHints.push(this.ModButton);
          this.InventoryButtonHints.push(this.ExitButton);
          this.InventoryButtonHints.push(this.AlternateButton);
@@ -1371,7 +1382,9 @@ package
                   this.AlternateButton.ButtonText = this.strAlternateButtonText;
                   this.AlternateButton.ButtonEnabled = this.AternateTextEnabled;
                   this.ModButton.ButtonEnabled = this.isCrafting || this.ModSlotListObject.entryList && this.ModSlotListObject.entryList.length > 0;
-                  if(this._allowRepair)
+				  
+                  /*
+				  if(this._allowRepair)
                   {
                      this.InspectRepairButton.ButtonText = "$INSPECT/REPAIR";
                   }
@@ -1379,7 +1392,11 @@ package
                   {
                      this.InspectRepairButton.ButtonText = "$INSPECT";
                   }
-                  this.InspectRepairButton.ButtonVisible = this._allowRepair;
+				  this.InspectRepairButton.ButtonVisible = this._allowRepair;
+				  */
+				  this.RepairButton.ButtonVisible = this._allowRepair;
+                  this.InspectButton.ButtonVisible = this.INVENTORY_MODE;		  
+				                    
                   this.ScrapButton.ButtonVisible = this._showScrapButton;
                   this.ToggleEquipButton.ButtonVisible = this._allowEquip;
                }
@@ -1546,10 +1563,17 @@ package
                   {
                      if(this.eMode == this.INVENTORY_MODE)
                      {
-                        if(this.InspectRepairButton.ButtonVisible)
+                        /*
+						if(this.InspectRepairButton.ButtonVisible)
                         {
                            this.onInspectRepair();
                         }
+						*/
+						if(this.RepairButton.ButtonVisible)
+                        {
+                           this.onWorkbenchRepair();
+                        }
+						
                         _loc3_ = true;
                      }
                      else if(this.eMode == this.INSPECT_MODE)
@@ -1563,7 +1587,19 @@ package
                   }
                   break;
                case "R3":
-                  if(!this.inspectMode && !this.modalActive)
+				  if(!this.modalActive)
+                  {
+
+                     if(this.eMode == this.INVENTORY_MODE)
+                     {
+                        if(this.InspectButton.ButtonVisible)
+                        {
+                           this.onInspect();
+                        }
+                        _loc3_ = true;
+                     }
+				  }					 
+                  else if(!this.inspectMode && !this.modalActive)
                   {
                      this.onSearch();
                      _loc3_ = true;
@@ -1628,7 +1664,7 @@ package
       {
          if(this.eMode == this.INSPECT_MODE)
          {
-            if(param1.delta < 0)
+			if(param1.delta < 0)
             {
                this.BGSCodeObj.ZoomOut();
             }
@@ -1699,7 +1735,16 @@ package
          }
       }
       
+	  /*
       private function onInspectRepair() : void
+      {
+         if(this.eMode == this.INVENTORY_MODE)
+         {
+            this.BGSCodeObj.InspectSelectedItem();
+         }
+      }
+	  */
+	  private function onInspect() : void
       {
          if(this.eMode == this.INVENTORY_MODE)
          {
