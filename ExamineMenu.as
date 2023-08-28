@@ -916,7 +916,104 @@ package
       
       public function AllowRotate() : Boolean
       {
-         return this.eMode != this.MOD_MODE || this.ModSlotBase_mc.ModSlotList_mc.entryList.length <= ExamineMenu_RightHandListStyle.numListItems_Inspectable; } private function onItemPressed(param1:Event) : * { if(!this.bEnteringText && !this.modalActive && !this._wasModalJustConfirmed) { this.onModButton(); param1.stopPropagation(); } if(this._wasModalJustConfirmed) { this._wasModalJustConfirmed=false; } } public function set itemName(param1:String) : * { GlobalFunc.SetText(this.ItemName_tf,param1,false,false); } private function PopulateButtonBar() : void { this.ItemLevelSelectButtons=new Vector.<BSButtonHintData>(); this.ItemLevelSelectButtons.push(this.ItemLevelAcceptButton); this.ItemLevelSelectButtons.push(this.ItemLevelCancelButton); this.ItemLevelAcceptButton.ButtonVisible=false; this.ItemLevelCancelButton.ButtonVisible=false; this.ItemLevelSelectButtons.push(this.ToggleCraftingButton); this.ItemLevelSelectButtons.push(this.FilterCraftableButton); this.ItemLevelSelectButtons.push(this.FilterAtxButton); this.InspectModeButtons=new Vector.<BSButtonHintData>(); this.InspectModeButtons.push(this.RenameButton); this.InspectModeButtons.push(this.TakeButton); this.InspectModeButtons.push(this.PrevButton); this.InspectModeButtons.push(this.NextButton); this.InspectModeButtons.push(this.ZoomInButton); this.InspectModeButtons.push(this.ZoomOutButton); this.InspectModeButtons.push(this.RepairKitButton); this.InspectModeButtons.push(this.WorkbenchRepairButton); this.InspectModeButtons.push(this.ExitButton); this.TakeButton.ButtonVisible=this.TakeButtonVisiblity; this.InventoryButtonHints=new Vector.<BSButtonHintData>(); this.InventoryButtonHints.push(this.ToggleEquipButton); this.InventoryButtonHints.push(this.ScrapButton); this.InventoryButtonHints.push(this.InspectRepairButton); this.InventoryButtonHints.push(this.RepairButton); this.InventoryButtonHints.push(this.InspectButton); this.InventoryButtonHints.push(this.ModButton); this.InventoryButtonHints.push(this.ExitButton); this.InventoryButtonHints.push(this.AlternateButton); this.InventoryButtonHints.push(this.ToggleCraftingButton); this.InventoryButtonHints.push(this.FilterCraftableButton); this.InventoryButtonHints.push(this.FilterAtxButton); this.ModSlotButtonHints=new Vector.<BSButtonHintData>(); this.ModSlotButtonHints.push(this.ModButton); this.ModSlotButtonHints.push(this.BackButton); this.ModSlotButtonHints.push(this.AlternateButton); this.ModSlotButtonHints.push(this.ToggleCraftingButton); this.ModSlotButtonHints.push(this.FilterCraftableButton); this.ModSlotButtonHints.push(this.FilterAtxButton); this.ModsListHints=new Vector.<BSButtonHintData>(); this.ModsListHints.push(this.AutoBuild); this.ModsListHints.push(this.TagButton); this.ModsListHints.push(this.BackButton); this.ModsListHints.push(this.AlternateButton); this.ModsListHints.push(this.ToggleCraftingButton); this.ModsListHints.push(this.FilterCraftableButton); this.ModsListHints.push(this.FilterAtxButton); this.ComponentsListHints=new Vector.<BSButtonHintData>(); this.ComponentsListHints.push(this.Build); this.ComponentsListHints.push(this.ChooseComponents); this.ComponentsListHints.push(this.BackButton); this.MiscItemListHints=new Vector.<BSButtonHintData>(); this.MiscItemListHints.push(this.Add); this.MiscItemListHints.push(this.BackButton); this.MiscItemListHints.push(this.ToggleCraftingButton); this.MiscItemListHints.push(this.FilterCraftableButton); this.MiscItemListHints.push(this.FilterAtxButton); this.QuantityButtons=new Vector.<BSButtonHintData>(); this.QuantityButtons.push(this.QuantityAcceptButton); this.QuantityButtons.push(this.QuantityCancelButton); this.ExternalPurchaseButtons=new Vector.<BSButtonHintData>(); this.ToggleCraftingButton.ButtonVisible=this.allowsModding && this.allowsCrafting; } public function RegisterComponents() : * { this.BGSCodeObj.RegisterComponents(this,this.InventoryListObject,this.ItemName_tf,this.ModDescriptionBase_mc.ModDescription_tf,this.ItemCardList_mc,this.ComponentsListObject,this.ModSlotListObject,this.ModListObject,this.MiscItemListObject,this.RequirementsListObject,this.ButtonHintBar_mc,this.CurrentModsListObject); stage.focus=this.InventoryBase_mc.InventoryList_mc; this.finalizeInitialization(); } public function FillPossibleModPartArray(param1:Event) : * { if(this.ModSlotListObject.selectedIndex> -1 && this.ModListObject.entryList)
+         return this.eMode != this.MOD_MODE || this.ModSlotBase_mc.ModSlotList_mc.entryList.length <= ExamineMenu_RightHandListStyle.numListItems_Inspectable;
+      }
+      
+      private function onItemPressed(param1:Event) : *
+      {
+         if(!this.bEnteringText && !this.modalActive && !this._wasModalJustConfirmed)
+         {
+            this.onModButton();
+            param1.stopPropagation();
+         }
+         if(this._wasModalJustConfirmed)
+         {
+            this._wasModalJustConfirmed = false;
+         }
+      }
+      
+      public function set itemName(param1:String) : *
+      {
+         GlobalFunc.SetText(this.ItemName_tf,param1,false,false);
+      }
+      
+      private function PopulateButtonBar() : void
+      {
+         this.ItemLevelSelectButtons = new Vector.<BSButtonHintData>();
+         this.ItemLevelSelectButtons.push(this.ItemLevelAcceptButton);
+         this.ItemLevelSelectButtons.push(this.ItemLevelCancelButton);
+         this.ItemLevelAcceptButton.ButtonVisible = false;
+         this.ItemLevelCancelButton.ButtonVisible = false;
+         this.ItemLevelSelectButtons.push(this.ToggleCraftingButton);
+         this.ItemLevelSelectButtons.push(this.FilterCraftableButton);
+         this.ItemLevelSelectButtons.push(this.FilterAtxButton);
+         this.InspectModeButtons = new Vector.<BSButtonHintData>();
+         this.InspectModeButtons.push(this.RenameButton);
+         this.InspectModeButtons.push(this.TakeButton);
+         this.InspectModeButtons.push(this.PrevButton);
+         this.InspectModeButtons.push(this.NextButton);
+         this.InspectModeButtons.push(this.ZoomInButton);
+         this.InspectModeButtons.push(this.ZoomOutButton);
+         this.InspectModeButtons.push(this.RepairKitButton);
+         this.InspectModeButtons.push(this.WorkbenchRepairButton);
+         this.InspectModeButtons.push(this.ExitButton);
+         this.TakeButton.ButtonVisible = this.TakeButtonVisiblity;
+         this.InventoryButtonHints = new Vector.<BSButtonHintData>();
+         this.InventoryButtonHints.push(this.ToggleEquipButton);
+         this.InventoryButtonHints.push(this.ScrapButton);
+         
+		 //this.InventoryButtonHints.push(this.InspectRepairButton);
+		 this.InventoryButtonHints.push(this.RepairButton);
+		 this.InventoryButtonHints.push(this.InspectButton);
+		 
+         this.InventoryButtonHints.push(this.ModButton);
+         this.InventoryButtonHints.push(this.ExitButton);
+         this.InventoryButtonHints.push(this.AlternateButton);
+         this.InventoryButtonHints.push(this.ToggleCraftingButton);
+         this.InventoryButtonHints.push(this.FilterCraftableButton);
+         this.InventoryButtonHints.push(this.FilterAtxButton);
+         this.ModSlotButtonHints = new Vector.<BSButtonHintData>();
+         this.ModSlotButtonHints.push(this.ModButton);
+         this.ModSlotButtonHints.push(this.BackButton);
+         this.ModSlotButtonHints.push(this.AlternateButton);
+         this.ModSlotButtonHints.push(this.ToggleCraftingButton);
+         this.ModSlotButtonHints.push(this.FilterCraftableButton);
+         this.ModSlotButtonHints.push(this.FilterAtxButton);
+         this.ModsListHints = new Vector.<BSButtonHintData>();
+         this.ModsListHints.push(this.AutoBuild);
+         this.ModsListHints.push(this.TagButton);
+         this.ModsListHints.push(this.BackButton);
+         this.ModsListHints.push(this.AlternateButton);
+         this.ModsListHints.push(this.ToggleCraftingButton);
+         this.ModsListHints.push(this.FilterCraftableButton);
+         this.ModsListHints.push(this.FilterAtxButton);
+         this.ComponentsListHints = new Vector.<BSButtonHintData>();
+         this.ComponentsListHints.push(this.Build);
+         this.ComponentsListHints.push(this.ChooseComponents);
+         this.ComponentsListHints.push(this.BackButton);
+         this.MiscItemListHints = new Vector.<BSButtonHintData>();
+         this.MiscItemListHints.push(this.Add);
+         this.MiscItemListHints.push(this.BackButton);
+         this.MiscItemListHints.push(this.ToggleCraftingButton);
+         this.MiscItemListHints.push(this.FilterCraftableButton);
+         this.MiscItemListHints.push(this.FilterAtxButton);
+         this.QuantityButtons = new Vector.<BSButtonHintData>();
+         this.QuantityButtons.push(this.QuantityAcceptButton);
+         this.QuantityButtons.push(this.QuantityCancelButton);
+         this.ExternalPurchaseButtons = new Vector.<BSButtonHintData>();
+         this.ToggleCraftingButton.ButtonVisible = this.allowsModding && this.allowsCrafting;
+      }
+      
+      public function RegisterComponents() : *
+      {
+         this.BGSCodeObj.RegisterComponents(this,this.InventoryListObject,this.ItemName_tf,this.ModDescriptionBase_mc.ModDescription_tf,this.ItemCardList_mc,this.ComponentsListObject,this.ModSlotListObject,this.ModListObject,this.MiscItemListObject,this.RequirementsListObject,this.ButtonHintBar_mc,this.CurrentModsListObject);
+         stage.focus = this.InventoryBase_mc.InventoryList_mc;
+         this.finalizeInitialization();
+      }
+      
+      public function FillPossibleModPartArray(param1:Event) : *
+      {
+         if(this.ModSlotListObject.selectedIndex > -1 && this.ModListObject.entryList)
          {
             this.BGSCodeObj.FillModPartArray(this.ModListObject.entryList,this.ModListObject);
          }
