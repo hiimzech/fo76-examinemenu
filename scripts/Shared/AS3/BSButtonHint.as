@@ -467,9 +467,9 @@ package Shared.AS3
             else
             {
                this.HoldMeter_mc.filters = null;
-               this.textField_tf.textColor = 65280;
-               this.IconHolderInstance.IconAnimInstance.Icon_tf.textColor = 65280;
-               this.SecondaryIconHolderInstance.IconAnimInstance.Icon_tf.textColor = 65280;
+               this.textField_tf.textColor = 16108379;
+               this.IconHolderInstance.IconAnimInstance.Icon_tf.textColor = 16108379;
+               this.SecondaryIconHolderInstance.IconAnimInstance.Icon_tf.textColor = 16108379;
             }
          }
       }

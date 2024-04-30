@@ -251,29 +251,33 @@ package Shared
       
       public static const REWARD_TYPE_ENUM_SCORE:* = 24;
       
-      public static const REWARD_TYPE_ENUM_REPAIR_KIT:* = 25;
+      public static const REWARD_TYPE_ENUM_ULTRACITE_BATTERY_FUEL:* = 25;
       
-      public static const REWARD_TYPE_ENUM_LUNCH_BOX:* = 26;
+      public static const REWARD_TYPE_ENUM_REPAIR_KIT:* = 26;
       
-      public static const REWARD_TYPE_ENUM_PREMIUM:* = 27;
+      public static const REWARD_TYPE_ENUM_LUNCH_BOX:* = 27;
       
-      public static const REWARD_TYPE_ENUM_SCORE_BOOST:* = 28;
+      public static const REWARD_TYPE_ENUM_PREMIUM:* = 28;
       
-      public static const REWARD_TYPE_ENUM_STAMPS:* = 29;
+      public static const REWARD_TYPE_ENUM_SCORE_BOOST:* = 29;
       
-      public static const REWARD_TYPE_ENUM_SCOUT_BANNER:* = 30;
+      public static const REWARD_TYPE_ENUM_STAMPS:* = 30;
       
-      public static const REWARD_TYPE_ENUM_FOOD_AND_DRINK:* = 31;
+      public static const REWARD_TYPE_ENUM_SCOUT_BANNER:* = 31;
       
-      public static const REWARD_TYPE_ENUM_RE_ROLLER:* = 32;
+      public static const REWARD_TYPE_ENUM_FOOD_AND_DRINK:* = 32;
       
-      public static const REWARD_TYPE_ENUM_PERK_COIN:* = 33;
+      public static const REWARD_TYPE_ENUM_RE_ROLLER:* = 33;
       
-      public static const REWARD_TYPE_ENUM_SCORE_BOOSTER_CONSUMABLE:* = 34;
+      public static const REWARD_TYPE_ENUM_PERK_COIN:* = 34;
       
-      public static const REWARD_TYPE_ENUM_SCOUT_BACKPACK:* = 35;
+      public static const REWARD_TYPE_ENUM_SCORE_BOOSTER_CONSUMABLE:* = 35;
       
-      public static const REWARD_TYPE_ENUM_FLAIR:* = 36;
+      public static const REWARD_TYPE_ENUM_SCOUT_BACKPACK:* = 36;
+      
+      public static const REWARD_TYPE_ENUM_FLAIR:* = 37;
+      
+      public static const REWARD_TYPE_ENUM_TICKETS:* = 38;
       
       public static const IMAGE_FRAME_MAP:Object = {
          "a":1,
@@ -1070,21 +1074,21 @@ package Shared
          }
       }
       
-      public static function shrinkMultiLineTextToFit(param1:TextField, param2:Number = 0) : void
+      public static function shrinkMultiLineTextToFit(param1:TextField, param2:Number = 0, param3:Number = 0) : void
       {
-         var _loc3_:TextFormat = param1.getTextFormat();
+         var _loc4_:TextFormat = param1.getTextFormat();
          if(param2 == 0)
          {
-            param2 = _loc3_.size as Number;
+            param2 = _loc4_.size as Number;
          }
-         var _loc4_:Number = param2;
-         _loc3_.size = _loc4_;
-         param1.setTextFormat(_loc3_);
-         while(getTextfieldSize(param1) > param1.height && _loc4_ > TEXT_SIZE_MIN)
+         var _loc5_:Number = param2;
+         _loc4_.size = _loc5_;
+         param1.setTextFormat(_loc4_);
+         while(getTextfieldSize(param1) > param1.height - param3 && _loc5_ > TEXT_SIZE_MIN)
          {
-            _loc4_--;
-            _loc3_.size = _loc4_;
-            param1.setTextFormat(_loc3_);
+            _loc5_--;
+            _loc4_.size = _loc5_;
+            param1.setTextFormat(_loc4_);
          }
       }
       

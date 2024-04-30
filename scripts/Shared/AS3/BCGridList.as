@@ -1159,7 +1159,7 @@ package Shared.AS3
                      _loc12_.visible = true;
                      if(this.useVariableWidth)
                      {
-                        _loc12_.x = _loc10_;
+                        _loc12_.x = _loc12_.clipCol != 0 ? _loc10_ : 0;
                      }
                      else
                      {

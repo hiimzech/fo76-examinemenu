@@ -189,6 +189,7 @@ package
       {
          var _loc4_:String = null;
          this.PopulateText("$StackWeight");
+         TextFieldEx.setTextAutoSize(this.Label_tf,TextFieldEx.TEXTAUTOSZ_SHRINK);
          var _loc3_:Number = param1.value * param2;
          if(_loc3_ < 1)
          {

@@ -35,6 +35,8 @@ package Shared.AS3
       
       private var m_UseBackground:Boolean = true;
       
+      private var m_PaddingRect:Rectangle;
+      
       private var ButtonHintBarInternal_mc:MovieClip;
       
       private var _buttonHintDataV:Vector.<BSButtonHintData>;
@@ -57,7 +59,19 @@ package Shared.AS3
          addChild(this.ButtonHintBarInternal_mc);
          this._buttonHintDataV = new Vector.<BSButtonHintData>();
          this.ButtonPoolV = new Vector.<BSButtonHint>();
+         this.m_PaddingRect = new Rectangle();
          this.StartingXPos = this.x;
+      }
+      
+      public function set paddingRect(param1:Rectangle) : void
+      {
+         this.m_PaddingRect = param1;
+         SetIsDirty();
+      }
+      
+      public function get paddingRect() : Rectangle
+      {
+         return this.m_PaddingRect;
       }
       
       public function set useBackground(param1:Boolean) : void
@@ -275,7 +289,7 @@ package Shared.AS3
          this.ButtonHintBarInternal_mc.addChildAt(this.Sizer_mc,0);
          _loc8_.clear();
          _loc8_.beginFill(BACKGROUND_COLOR,this.m_UseBackground ? BACKGROUND_ALPHA : 0);
-         _loc8_.drawRect(0,0,_loc7_.width + BACKGROUND_PAD,_loc7_.height);
+         _loc8_.drawRect(0 + this.m_PaddingRect.x,0 + this.m_PaddingRect.y,_loc7_.width + this.m_PaddingRect.width + BACKGROUND_PAD,_loc7_.height + this.m_PaddingRect.height);
          _loc8_.endFill();
          this.Sizer_mc.x = BACKGROUND_PAD * -0.5;
          if(!CompanionAppMode.isOn)

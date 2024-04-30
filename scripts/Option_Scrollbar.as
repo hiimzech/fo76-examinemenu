@@ -51,6 +51,10 @@ package
       
       public var bDisabled:Boolean = false;
       
+      private var leftBuffer:Number;
+      
+      private var rightBuffer:Number;
+      
       public function Option_Scrollbar()
       {
          super();
@@ -58,6 +62,8 @@ package
          this.fMaxThumbX = this.Track_mc.x + this.Track_mc.width - this.Thumb_mc.width;
          addEventListener(MouseEvent.CLICK,this.onClick);
          this.Thumb_mc.addEventListener(MouseEvent.MOUSE_DOWN,this.onThumbMouseDown);
+         this.leftBuffer = this.Track_mc.x - this.LeftCatcher_mc.x;
+         this.rightBuffer = this.RightCatcher_mc.x + this.RightCatcher_mc.width - this.fMaxThumbX;
       }
       
       public function get MinValue() : Number
@@ -98,6 +104,7 @@ package
       public function set value(param1:Number) : *
       {
          var _loc2_:Number = NaN;
+         var _loc3_:Number = NaN;
          this.fValue = Math.min(Math.max(param1,this.fMinValue),this.fMaxValue);
          if(!this.bDragging)
          {
@@ -109,8 +116,25 @@ package
             {
                _loc2_ = (this.fValue - this.fMinValue) / (this.fMaxValue - this.fMinValue);
             }
-            this.Thumb_mc.x = this.fMinThumbX + _loc2_ * (this.fMaxThumbX - this.fMinThumbX);
+            _loc3_ = _loc2_ * (this.fMaxThumbX - this.fMinThumbX);
+            this.Thumb_mc.x = this.fMinThumbX + _loc3_;
+            this.LeftCatcher_mc.width = this.leftBuffer + _loc3_ + this.Thumb_mc.width / 2;
+            this.RightCatcher_mc.x = this.LeftCatcher_mc.x + this.LeftCatcher_mc.width;
+            this.RightCatcher_mc.width = (1 - _loc2_) * (this.fMaxThumbX - this.fMinThumbX) + this.rightBuffer;
          }
+      }
+      
+      public function CalcInventoryTarget(param1:Number) : *
+      {
+         var _loc3_:Number = NaN;
+         var _loc2_:int = -1;
+         param1 -= this.Thumb_mc.width / 2;
+         if(param1 >= this.fMinThumbX && param1 <= this.fMaxThumbX)
+         {
+            _loc3_ = (param1 - this.fMinThumbX) / (this.fMaxThumbX - this.fMinThumbX);
+            _loc2_ = (this.fMaxValue - this.fMinValue) * _loc3_ + this.fMinValue;
+         }
+         return _loc2_;
       }
       
       public function Decrement() : *

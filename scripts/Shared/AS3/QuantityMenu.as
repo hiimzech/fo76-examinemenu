@@ -37,6 +37,8 @@ package Shared.AS3
       
       public static const CONFIRM:String = "QuantityMenu::quantityConfirmed";
       
+      public static const MAX:String = "QuantityMenu::quantityMaxed";
+      
       public static const CANCEL:String = "QuantityMenu::quantityCancelled";
        
       
@@ -84,6 +86,8 @@ package Shared.AS3
       
       protected var iTriggerStepSize:int;
       
+      private var fInventoryTarget:Number;
+      
       protected var bOpened:Boolean;
       
       protected var prevFocusObj:InteractiveObject;
@@ -94,12 +98,15 @@ package Shared.AS3
       
       protected var m_AcceptButton:BSButtonHintData;
       
+      protected var m_MaxButton:BSButtonHintData;
+      
       protected var m_CancelButton:BSButtonHintData;
       
       public function QuantityMenu()
       {
          var _loc1_:Vector.<BSButtonHintData> = null;
          this.m_AcceptButton = new BSButtonHintData("$ACCEPT","Space","PSN_A","Xenon_A",1,this.onConfirm);
+         this.m_MaxButton = new BSButtonHintData("$MAX","Q","PSN_L3","Xenon_L3",1,this.onMax);
          this.m_CancelButton = new BSButtonHintData("$CANCEL","TAB","PSN_B","Xenon_B",1,this.onCancel);
          super();
          this.uiScrollStartTime = 0;
@@ -131,9 +138,11 @@ package Shared.AS3
          {
             _loc1_ = new Vector.<BSButtonHintData>();
             _loc1_.push(this.m_AcceptButton);
+            _loc1_.push(this.m_MaxButton);
             _loc1_.push(this.m_CancelButton);
             this.ButtonHintBar_mc.SetButtonHintData(_loc1_);
          }
+         this.ShowMaxQuantityButton(false);
          BSUIDataManager.Subscribe("FireForgetEvent",this.onFireForgetEventUpdate);
       }
       
@@ -215,6 +224,11 @@ package Shared.AS3
       public function get inTextInputMode() : Boolean
       {
          return Boolean(this.Value_tf) && stage.focus == this.Value_tf;
+      }
+      
+      public function ShowMaxQuantityButton(param1:Boolean) : void
+      {
+         this.m_MaxButton.ButtonVisible = param1;
       }
       
       public function OpenMenuRange(param1:InteractiveObject, param2:String, param3:uint, param4:uint, param5:uint = 4294967295, param6:* = 0, param7:Boolean = false) : *
@@ -390,7 +404,7 @@ package Shared.AS3
          return _loc1_;
       }
       
-      internal function quantityInput(param1:uint) : void
+      public function quantityInput(param1:uint) : void
       {
          var _loc2_:* = Math.min(param1,this.uiMaxQuantity);
          _loc2_ = Math.max(_loc2_,this.uiMinQuantity);
@@ -417,6 +431,7 @@ package Shared.AS3
                this.uiScrollStartTime = getTimer();
                this.iScrollSpeed = 1;
                this.modifyQuantity(1);
+               this.fInventoryTarget = -1;
                addEventListener(Event.ENTER_FRAME,this.onArrowTick);
                removeEventListener(KeyboardEvent.KEY_DOWN,this.onKeyDown);
             }
@@ -426,6 +441,7 @@ package Shared.AS3
                this.uiScrollStartTime = getTimer();
                this.iScrollSpeed = -1;
                this.modifyQuantity(-1);
+               this.fInventoryTarget = -1;
                addEventListener(Event.ENTER_FRAME,this.onArrowTick);
                removeEventListener(KeyboardEvent.KEY_DOWN,this.onKeyDown);
             }
@@ -468,6 +484,12 @@ package Shared.AS3
          dispatchEvent(new Event(CONFIRM,true,true));
       }
       
+      private function onMax() : void
+      {
+         this.stopScroll();
+         dispatchEvent(new Event(MAX,true,true));
+      }
+      
       private function onCancel() : void
       {
          this.stopScroll();
@@ -486,7 +508,7 @@ package Shared.AS3
          }
       }
       
-      internal function onArrowMouseUp(param1:Event) : void
+      internal function onArrowMouseUp() : void
       {
          this.bIsScrolling = false;
          this.uiScrollCurSpeed = 1;
@@ -504,6 +526,11 @@ package Shared.AS3
             {
                this.uiScrollCurSpeed += int(Math.floor(this.uiScrollCurSpeed * (_loc2_ / SCROLL_TIMECOEF)));
                this.uiScrollCurSpeed = Math.min(this.uiScrollCurSpeed,SCROLL_MAX);
+               if(this.fInventoryTarget > -1 && (this.uiQuantity + this.uiScrollCurSpeed * this.iScrollSpeed > this.fInventoryTarget && this.iScrollSpeed > 0 || this.uiQuantity + this.uiScrollCurSpeed * this.iScrollSpeed < this.fInventoryTarget && this.iScrollSpeed < 0))
+               {
+                  this.modifyQuantity(this.fInventoryTarget - this.uiQuantity);
+                  this.onArrowMouseUp();
+               }
                this.modifyQuantity(this.uiScrollCurSpeed * this.iScrollSpeed);
             }
          }
@@ -518,6 +545,8 @@ package Shared.AS3
       public function onArrowMouseDown(param1:MouseEvent) : *
       {
          var _loc3_:MovieClip = null;
+         var _loc4_:Number = NaN;
+         var _loc5_:Number = NaN;
          var _loc2_:Object = param1.target;
          if(param1.target as MovieClip)
          {
@@ -527,18 +556,30 @@ package Shared.AS3
                this.bIsScrolling = true;
                this.uiScrollStartTime = getTimer();
                this.iScrollSpeed = 1;
+               _loc4_ = this.QuantityScrollbar_mc.Thumb_mc.x + this.QuantityScrollbar_mc.Thumb_mc.width / 2;
+               this.fInventoryTarget = this.QuantityScrollbar_mc.CalcInventoryTarget(param1.currentTarget.mouseX);
                this.modifyQuantity(this.iArrowStepSize);
+               _loc5_ = this.QuantityScrollbar_mc.Thumb_mc.x + this.QuantityScrollbar_mc.Thumb_mc.width / 2;
                stage.addEventListener(MouseEvent.MOUSE_UP,this.onArrowMouseUp);
-               addEventListener(Event.ENTER_FRAME,this.onArrowTick);
+               if(_loc5_ - param1.currentTarget.mouseX > 0 == _loc4_ - param1.currentTarget.mouseX > 0)
+               {
+                  addEventListener(Event.ENTER_FRAME,this.onArrowTick);
+               }
             }
             else if(_loc3_ == this.QuantityScrollbar_mc.LeftCatcher_mc)
             {
                this.bIsScrolling = true;
                this.uiScrollStartTime = getTimer();
                this.iScrollSpeed = -1;
+               this.fInventoryTarget = this.QuantityScrollbar_mc.CalcInventoryTarget(param1.currentTarget.mouseX);
+               _loc4_ = this.QuantityScrollbar_mc.Thumb_mc.x + this.QuantityScrollbar_mc.Thumb_mc.width / 2;
                this.modifyQuantity(-this.iArrowStepSize);
+               _loc5_ = this.QuantityScrollbar_mc.Thumb_mc.x + this.QuantityScrollbar_mc.Thumb_mc.width / 2;
                stage.addEventListener(MouseEvent.MOUSE_UP,this.onArrowMouseUp);
-               addEventListener(Event.ENTER_FRAME,this.onArrowTick);
+               if(_loc5_ - param1.currentTarget.mouseX > 0 == _loc4_ - param1.currentTarget.mouseX > 0)
+               {
+                  addEventListener(Event.ENTER_FRAME,this.onArrowTick);
+               }
             }
          }
       }
@@ -621,6 +662,11 @@ package Shared.AS3
             else if(param1 == "RTrigger")
             {
                this.modifyQuantity(this.iTriggerStepSize);
+               _loc3_ = true;
+            }
+            else if(param1 == "Q" && this.m_MaxButton.ButtonVisible)
+            {
+               this.onMax();
                _loc3_ = true;
             }
          }

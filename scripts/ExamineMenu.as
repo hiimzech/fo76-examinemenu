@@ -165,12 +165,6 @@ package
       
       private var Add:BSButtonHintData;
       
-      private var hideUIButton:BSButtonHintData;
-      
-      private var RepairButton:BSButtonHintData;
-      
-      private var InspectButton:BSButtonHintData;
-      
       protected var ItemLevelSelectButtons:Vector.<BSButtonHintData>;
       
       protected var ItemLevelAcceptButton:BSButtonHintData;
@@ -287,10 +281,6 @@ package
       
       private var m_PreviousMode:String = "";
       
-      private var isHideUI:Boolean = false;
-      
-      private var hasPerkPanel:Boolean = false;
-      
       private var m_SelectedModListEntryIndex:int = -1;
       
       private var m_RestoreSelectedIndex:Boolean = false;
@@ -298,6 +288,16 @@ package
       private var m_DynamicModDescEnabled:Boolean = false;
       
       private var m_AdvancedModDescMode:Boolean = false;
+      
+      private var hideUIButton:BSButtonHintData;
+      
+      private var RepairButton:BSButtonHintData;
+      
+      private var InspectButton:BSButtonHintData;
+      
+      private var isHideUI:Boolean = false;
+      
+      private var hasPerkPanel:Boolean = false;
       
       public function ExamineMenu()
       {
@@ -322,8 +322,6 @@ package
          this.BackButton = new BSButtonHintData("$BACK","TAB","PSN_B","Xenon_B",1,this.onBackButton);
          this.ScrapButton = new BSButtonHintData("$SCRAP","G","PSN_R2","Xenon_R2",1,this.onScrapBuildAdd);
          this.ToggleEquipButton = new BSButtonHintData("$EQUIP","F","PSN_L2","Xenon_L2",1,this.onToggleEquip);
-         this.FilterCraftableButton = new BSButtonHintData("SHOW ALL CRAFTABLES","Q","PSN_L3","Xenon_L3",1,this.onFilterCraftable);
-         this.FilterAtxButton = new BSButtonHintData("LEARNT PLANS","V","PSN_Select","Xenon_Select",1,this.onFilterAtx);
          this.RepairKitButton = new BSButtonHintData("$REPAIR KIT","T","PSN_Y","Xenon_Y",1,this.onRepairKit);
          this.WorkbenchRepairButton = new BSButtonHintData("$WORKBENCH REPAIR","R","PSN_X","Xenon_X",1,this.onWorkbenchRepair);
          this.AutoBuild = new BSButtonHintData("$BUILD","Space","PSN_A","Xenon_A",1,this.onScrapBuildAdd);
@@ -1800,58 +1798,6 @@ package
          this.filterCommon();
       }
       
-      private function onHideUI() : void
-      {
-         if(this._inspectMode || this.QuantityModal_mc.opened || isCookingMenu)
-         {
-            return;
-         }
-         if(this.hideUIButton.ButtonText == "HIDE UI")
-         {
-            this.hideUIButton.ButtonText = "SHOW UI";
-            this.isHideUI = false;
-            this.hideUIButton.ButtonFlashing = false;
-            this.InventoryBase_mc.visible = true;
-            this.ModSlotBase_mc.visible = true;
-            this.ItemCardList_mc.visible = true;
-            this.CraftingHeirarchy_mc.visible = true;
-            this.KnownModsInfo_mc.visible = true;
-            this.LegendaryItemDescription_tf.visible = true;
-            this.InventoryBase_mc.InventoryList_mc.disableInput_Inspectable = false;
-            this.UpdateDescription();
-            this.UpdateBackground();
-            this.UpdatePerks();
-            if(this.hasPerkPanel)
-            {
-               this.CenterShadedBG_mc.gotoAndStop("craftModPerks");
-               this.perkPanelLabel_mc.visible = true;
-            }
-            else
-            {
-               this.CenterShadedBG_mc.gotoAndStop("craftMod");
-               this.perkPanelLabel_mc.visible = false;
-            }
-            this.OnItemCardUpdated(null);
-         }
-         else
-         {
-            this.hideUIButton.ButtonText = "HIDE UI";
-            this.isHideUI = true;
-            this.InventoryBase_mc.visible = false;
-            this.ModSlotBase_mc.visible = false;
-            this.ItemCardList_mc.visible = false;
-            this.perkPanelLabel_mc.visible = false;
-            this.PerkPanel0_mc.visible = false;
-            this.PerkPanel1_mc.visible = false;
-            this.CraftingHeirarchy_mc.visible = false;
-            this.KnownModsInfo_mc.visible = false;
-            this.LegendaryItemDescription_tf.visible = false;
-            this.InventoryBase_mc.InventoryList_mc.disableInput_Inspectable = true;
-            this.CenterShadedBG_mc.gotoAndStop("inspectNoMenus");
-            this.hideUIButton.ButtonFlashing = true;
-         }
-      }
-      
       private function filterCommon() : void
       {
          var _loc2_:Array = null;
@@ -2187,6 +2133,7 @@ package
                      this.ModListObject.SetInactive();
                      this.ModSlotListObject.SetActive(this.ModSlotBase_mc.ModSlotList_mc,"ModSlotListObject");
                      this.InventoryListObject.SetActive(this.InventoryBase_mc.InventoryList_mc,"InventoryListObject");
+                     this.InventoryListObject.selectedIndex = 0;
                      this.ModListObject.removeEventListener(BSScrollingList.SELECTION_CHANGE,this.ModChange);
                      this.SetRightListLabel("$CURRENT MODS");
                      this.eMode = this.INVENTORY_MODE;
@@ -2382,7 +2329,7 @@ package
          {
             _loc2_ = _loc2_.replace("\r\n","\n");
          }
-         GlobalFunc.SetText(this.LegendaryItemDescription_tf,_loc2_,false);
+         GlobalFunc.SetText(this.LegendaryItemDescription_tf,_loc2_,true);
       }
       
       public function RepositionCurrentModsList() : *
@@ -2443,6 +2390,58 @@ package
             }
          }
          this.CraftingHeirarchy_mc.CraftingHeirarchy_tf.text = _loc2_.toUpperCase();
+      }
+      
+      private function onHideUI() : void
+      {
+         if(this._inspectMode || this.QuantityModal_mc.opened || isCookingMenu)
+         {
+            return;
+         }
+         if(this.hideUIButton.ButtonText == "HIDE UI")
+         {
+            this.hideUIButton.ButtonText = "SHOW UI";
+            this.isHideUI = false;
+            this.hideUIButton.ButtonFlashing = false;
+            this.InventoryBase_mc.visible = true;
+            this.ModSlotBase_mc.visible = true;
+            this.ItemCardList_mc.visible = true;
+            this.CraftingHeirarchy_mc.visible = true;
+            this.KnownModsInfo_mc.visible = true;
+            this.LegendaryItemDescription_tf.visible = true;
+            this.InventoryBase_mc.InventoryList_mc.disableInput_Inspectable = false;
+            this.UpdateDescription();
+            this.UpdateBackground();
+            this.UpdatePerks();
+            if(this.hasPerkPanel)
+            {
+               this.CenterShadedBG_mc.gotoAndStop("craftModPerks");
+               this.perkPanelLabel_mc.visible = true;
+            }
+            else
+            {
+               this.CenterShadedBG_mc.gotoAndStop("craftMod");
+               this.perkPanelLabel_mc.visible = false;
+            }
+            this.OnItemCardUpdated(null);
+         }
+         else
+         {
+            this.hideUIButton.ButtonText = "HIDE UI";
+            this.isHideUI = true;
+            this.InventoryBase_mc.visible = false;
+            this.ModSlotBase_mc.visible = false;
+            this.ItemCardList_mc.visible = false;
+            this.perkPanelLabel_mc.visible = false;
+            this.PerkPanel0_mc.visible = false;
+            this.PerkPanel1_mc.visible = false;
+            this.CraftingHeirarchy_mc.visible = false;
+            this.KnownModsInfo_mc.visible = false;
+            this.LegendaryItemDescription_tf.visible = false;
+            this.InventoryBase_mc.InventoryList_mc.disableInput_Inspectable = true;
+            this.CenterShadedBG_mc.gotoAndStop("inspectNoMenus");
+            this.hideUIButton.ButtonFlashing = true;
+         }
       }
       
       internal function frame12() : *
