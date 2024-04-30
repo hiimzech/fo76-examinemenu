@@ -1,0 +1,30 @@
+package ExamineMenu_fla
+{
+   import flash.display.MovieClip;
+   import flash.events.Event;
+   
+   [Embed(source="/_assets/assets.swf", symbol="ExamineMenu_fla.Attribute5_37")]
+   public dynamic class Attribute5_37 extends MovieClip
+   {
+       
+      
+      public var AttributeText_mc:MovieClip;
+      
+      public function Attribute5_37()
+      {
+         super();
+         addFrameScript(0,this.frame1,82,this.frame83);
+      }
+      
+      internal function frame1() : *
+      {
+         stop();
+      }
+      
+      internal function frame83() : *
+      {
+         dispatchEvent(new Event("ExamineMenu::DisplayNextAttribute",true));
+         stop();
+      }
+   }
+}

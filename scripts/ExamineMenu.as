@@ -1,5 +1,6 @@
 package
 {
+   import Shared.AS3.BCGridList;
    import Shared.AS3.BSButtonHintBar;
    import Shared.AS3.BSButtonHintData;
    import Shared.AS3.BSScrollingList;
@@ -25,8 +26,13 @@ package
    import scaleform.gfx.Extensions;
    import scaleform.gfx.TextFieldEx;
    
+   [Embed(source="/_assets/assets.swf", symbol="ExamineMenu")]
    public class ExamineMenu extends IMenu
    {
+      
+      private static const MIN_ITEM_CARD_ENTRIES:int = 10;
+      
+      private static const MAX_ITEM_CARD_ENTRIES:int = 15;
       
       public static const EVENT_UPDATE_PIPBOY_INV_SELECTION:String = "Pipboy::UpdateInventorySelection";
       
@@ -72,8 +78,6 @@ package
       public var Header_mc:MovieClip;
       
       public var perkPanelLabel_mc:MovieClip;
-      
-      public var ItemStatsLabel_mc:MovieClip;
       
       public var KnownModsInfo_mc:MovieClip;
       
@@ -139,11 +143,9 @@ package
       
       private var FilterAtxButton:BSButtonHintData;
       
-      private var RepairButton:BSButtonHintData;
-      
-      private var InspectButton:BSButtonHintData;
-      
       private var RepairKitButton:BSButtonHintData;
+      
+      private var WorkbenchRepairButton:BSButtonHintData;
       
       private var ModsListHints:Vector.<BSButtonHintData>;
       
@@ -162,6 +164,12 @@ package
       private var MiscItemListHints:Vector.<BSButtonHintData>;
       
       private var Add:BSButtonHintData;
+      
+      private var hideUIButton:BSButtonHintData;
+      
+      private var RepairButton:BSButtonHintData;
+      
+      private var InspectButton:BSButtonHintData;
       
       protected var ItemLevelSelectButtons:Vector.<BSButtonHintData>;
       
@@ -203,15 +211,15 @@ package
       
       private var _ScrapQuantity:uint = 1;
       
-      private var bConfirm = false;
+      private var bConfirm:* = false;
       
-      private var strStartName = "";
+      private var strStartName:* = "";
       
-      private var strBuildButtonText = "$BUILD";
+      private var strBuildButtonText:* = "$BUILD";
       
       private var strAlternateButtonText:String = "";
       
-      private var AternateTextEnabled = true;
+      private var AternateTextEnabled:* = true;
       
       private var LastFocusedClip:InteractiveObject;
       
@@ -267,7 +275,7 @@ package
       
       private var _wasModalJustConfirmed:Boolean = false;
       
-      private var _isModeInitialized = false;
+      private var _isModeInitialized:* = false;
       
       private var _isExternalPurchaseOpen:Boolean = false;
       
@@ -279,9 +287,17 @@ package
       
       private var m_PreviousMode:String = "";
       
+      private var isHideUI:Boolean = false;
+      
+      private var hasPerkPanel:Boolean = false;
+      
       private var m_SelectedModListEntryIndex:int = -1;
       
       private var m_RestoreSelectedIndex:Boolean = false;
+      
+      private var m_DynamicModDescEnabled:Boolean = false;
+      
+      private var m_AdvancedModDescMode:Boolean = false;
       
       public function ExamineMenu()
       {
@@ -306,11 +322,10 @@ package
          this.BackButton = new BSButtonHintData("$BACK","TAB","PSN_B","Xenon_B",1,this.onBackButton);
          this.ScrapButton = new BSButtonHintData("$SCRAP","G","PSN_R2","Xenon_R2",1,this.onScrapBuildAdd);
          this.ToggleEquipButton = new BSButtonHintData("$EQUIP","F","PSN_L2","Xenon_L2",1,this.onToggleEquip);
-         this.FilterCraftableButton = new BSButtonHintData("$TOGGLECRAFTABLEITEMS","Q","PSN_L3","Xenon_L3",1,this.onFilterCraftable);
-         this.FilterAtxButton = new BSButtonHintData("$TOGGLEATXITEMS","V","PSN_Select","Xenon_Select",1,this.onFilterAtx);
-         this.RepairButton = new BSButtonHintData("$REPAIR","T","PSN_Y","Xenon_Y",1,this.onInspectRepair);
-         this.InspectButton = new BSButtonHintData("$INSPECT","X","PSN_R3","Xenon_R3",1,this.onInspect);
+         this.FilterCraftableButton = new BSButtonHintData("SHOW ALL CRAFTABLES","Q","PSN_L3","Xenon_L3",1,this.onFilterCraftable);
+         this.FilterAtxButton = new BSButtonHintData("LEARNT PLANS","V","PSN_Select","Xenon_Select",1,this.onFilterAtx);
          this.RepairKitButton = new BSButtonHintData("$REPAIR KIT","T","PSN_Y","Xenon_Y",1,this.onRepairKit);
+         this.WorkbenchRepairButton = new BSButtonHintData("$WORKBENCH REPAIR","R","PSN_X","Xenon_X",1,this.onWorkbenchRepair);
          this.AutoBuild = new BSButtonHintData("$BUILD","Space","PSN_A","Xenon_A",1,this.onScrapBuildAdd);
          this.ChooseComponents = new BSButtonHintData("$CHOOSE COMPONENTS","Space","PSN_A","Xenon_A",1,this.onModButton);
          this.TagButton = new BSButtonHintData("$TAG FOR SEARCH","X","PSN_R3","Xenon_R3",1,this.onSearch);
@@ -323,6 +338,11 @@ package
          this.QuantityCancelButton = new BSButtonHintData("$CANCEL","TAB","PSN_B","Xenon_B",1,this.onQuantityCancel);
          this.RotateButton = new BSButtonHintData("$ROTATE","A/D","PSN_L2R2","Xenon_L2R2",1,null);
          this.CameraButton = new BSButtonHintData("$CAMERA","C","PSN_L1","Xenon_L1",1,null);
+         this.FilterCraftableButton = new BSButtonHintData("SHOW ALL CRAFTABLES","Q","PSN_L3","Xenon_L3",1,this.onFilterCraftable);
+         this.FilterAtxButton = new BSButtonHintData("LEARNT PLANS","V","PSN_Select","Xenon_Select",1,this.onFilterAtx);
+         this.hideUIButton = new BSButtonHintData("SHOW UI","G","PSN_R2","Xenon_R2",1,this.onHideUI);
+         this.RepairButton = new BSButtonHintData("$REPAIR","T","PSN_Y","Xenon_Y",1,this.onWorkbenchRepair);
+         this.InspectButton = new BSButtonHintData("$INSPECT","X","PSN_R3","Xenon_R3",1,this.onInspect);
          this._craftingHierarchy = new Array();
          super();
          addFrameScript(11,this.frame12,17,this.frame18,24,this.frame25,37,this.frame38);
@@ -489,6 +509,18 @@ package
          this.RefreshKnownModsVisibility();
       }
       
+      private function get isWorkbench() : *
+      {
+         return this._isWorkbench;
+      }
+      
+      private function set isWorkbench(param1:Boolean) : *
+      {
+         this._isWorkbench = param1;
+         this.SetButtonHintData();
+         this.UpdateButtons();
+      }
+      
       private function get repairKitCount() : *
       {
          return this._repairKitCount;
@@ -617,6 +649,7 @@ package
          this.PopulateButtonBar();
          addEventListener(BSScrollingList.ITEM_PRESS,this.onItemPressed);
          addEventListener(MouseEvent.MOUSE_WHEEL,this.onMouseWheel);
+         addEventListener(QuantityMenu.CONFIRM,this.onQuantityAccept);
          this.InventoryListObject.addEventListener(BSScrollingList.SELECTION_CHANGE,this.InventorySelectionChange);
          this.ModSlotListObject.addEventListener(BSScrollingList.SELECTION_CHANGE,this.FillPossibleModPartArray);
          this.ModSlotListObject.addEventListener(ListInfoObject.ENTRY_LIST_CHANGE,this.UpdateButtons);
@@ -630,6 +663,16 @@ package
          this.InventoryBase_mc.InventoryList_mc.dummyEntryText = "$NO_ITEMS";
          this.ModSlotBase_mc.ModSlotList_mc.addsDummyEntryOnBlankList = true;
          this.ModSlotBase_mc.ModSlotList_mc.dummyEntryText = "$None_Available";
+         this.ModDescriptionBase_mc.DynamicModDescription_mc.maxRows = 1;
+         this.ModDescriptionBase_mc.DynamicModDescription_mc.maxCols = 6;
+         this.ModDescriptionBase_mc.DynamicModDescription_mc.listItemClassName = "DynamicModDescriptionEntry";
+         this.ModDescriptionBase_mc.DynamicModDescription_mc.scrollVertical = false;
+         this.ModDescriptionBase_mc.DynamicModDescription_mc.useVariableWidth = true;
+         this.ModDescriptionBase_mc.DynamicModDescription_mc.disableInput = true;
+         addEventListener(BCGridList.LIST_UPDATED,this.onDynamicModDescriptionUpdated);
+         this.ItemCardList_mc.bottomUp = true;
+         this.ItemCardList_mc.addEventListener(ItemCard.EVENT_ITEM_CARD_UPDATED,this.OnItemCardUpdated);
+         this.CenterShadedBG_mc.ItemStats_mc.gotoAndStop("entry10");
       }
       
       private function finalizeInitialization() : *
@@ -678,12 +721,18 @@ package
                         EnterModding();
                   }
                }
+               ItemCard_Entry.DynamicModDescEnable = param1.data.dynamicModDescEnabled;
+               ItemCard_Entry.AdvanceModDescMode = param1.data.advancedModDesc;
+               DynamicModDescriptionEntry.AdvancedModDescMode = param1.data.advancedModDesc;
+               m_DynamicModDescEnabled = param1.data.dynamicModDescEnabled;
+               m_AdvancedModDescMode = param1.data.advancedModDesc;
                allowsModding = param1.data.allowsModding;
                allowsCrafting = param1.data.allowsCrafting;
                ToggleCraftingButton.ButtonVisible = allowsModding && allowsCrafting;
                _allowRename = param1.data.allowsRenaming;
                RenameButton.ButtonVisible = _allowRename;
                allowClearName = param1.data.canClearName;
+               isWorkbench = param1.data.isWorkbench;
                repairKitCount = param1.data.repairKitCount;
                RepairKitsEnabled = param1.data.repairKitsEnabled;
                RenameButton.ButtonText = !!allowClearName ? "$CLEARNAME" : "$RENAME";
@@ -798,7 +847,6 @@ package
          this.ModSlotBase_mc.visible = false;
          this.CurrentModsBase_mc.ModSlotList_mc.visible = true;
          this.ItemCardList_mc.visible = this.ItemStatsVisibility;
-         this.ItemStatsLabel_mc.ItemStatsLabel_tf.visible = this.ItemStatsVisibility;
          this.CurrentModsListObject.SetActive(this.CurrentModsBase_mc.ModSlotList_mc,"CurrentModsListObject");
          this.eMode = this.INSPECT_MODE;
          this.InventoryBase_mc.InventoryList_mc.disableInput_Inspectable = true;
@@ -928,6 +976,7 @@ package
          this.InspectModeButtons.push(this.ZoomInButton);
          this.InspectModeButtons.push(this.ZoomOutButton);
          this.InspectModeButtons.push(this.RepairKitButton);
+         this.InspectModeButtons.push(this.WorkbenchRepairButton);
          this.InspectModeButtons.push(this.ExitButton);
          this.TakeButton.ButtonVisible = this.TakeButtonVisiblity;
          this.InventoryButtonHints = new Vector.<BSButtonHintData>();
@@ -948,6 +997,7 @@ package
          this.ModSlotButtonHints.push(this.ToggleCraftingButton);
          this.ModSlotButtonHints.push(this.FilterCraftableButton);
          this.ModSlotButtonHints.push(this.FilterAtxButton);
+         this.ModSlotButtonHints.push(this.hideUIButton);
          this.ModsListHints = new Vector.<BSButtonHintData>();
          this.ModsListHints.push(this.AutoBuild);
          this.ModsListHints.push(this.TagButton);
@@ -956,6 +1006,7 @@ package
          this.ModsListHints.push(this.ToggleCraftingButton);
          this.ModsListHints.push(this.FilterCraftableButton);
          this.ModsListHints.push(this.FilterAtxButton);
+         this.ModsListHints.push(this.hideUIButton);
          this.ComponentsListHints = new Vector.<BSButtonHintData>();
          this.ComponentsListHints.push(this.Build);
          this.ComponentsListHints.push(this.ChooseComponents);
@@ -1292,6 +1343,7 @@ package
          this.ToggleCraftingButton.ButtonText = this.isCrafting ? "$SWITCHTOMODIFY" : "$SWITCHTOCRAFT";
          this.FilterCraftableButton.ButtonVisible = true;
          this.FilterAtxButton.ButtonVisible = true;
+         this.hideUIButton.ButtonVisible = false;
          if(this.inspectMode)
          {
             this.Header_mc.HeaderText_tf.text = "$INSPECT";
@@ -1310,10 +1362,16 @@ package
             _loc1_ = new TextField();
             _loc1_.text = "$REPAIR_KIT_NUM";
             this.RepairKitButton.ButtonText = _loc1_.text.replace("{1}",this._repairKitCount);
+            this.WorkbenchRepairButton.ButtonVisible = this._isWorkbench;
+            this.WorkbenchRepairButton.ButtonDisabled = !this.BGSCodeObj.CanRepairSelectedItem(false);
+            this.RepairButton.ButtonVisible = this.WorkbenchRepairButton.ButtonVisible;
+            this.RepairButton.ButtonDisabled = this.WorkbenchRepairButton.ButtonDisabled;
          }
          else
          {
             this.RepairKitButton.ButtonVisible = false;
+            this.WorkbenchRepairButton.ButtonVisible = false;
+            this.RepairButton.ButtonVisible = false;
          }
          switch(this.eMode)
          {
@@ -1333,8 +1391,7 @@ package
                   this.AlternateButton.ButtonText = this.strAlternateButtonText;
                   this.AlternateButton.ButtonEnabled = this.AternateTextEnabled;
                   this.ModButton.ButtonEnabled = this.isCrafting || this.ModSlotListObject.entryList && this.ModSlotListObject.entryList.length > 0;
-                  this.RepairButton.ButtonVisible = this._allowRepair;
-                  this.InspectButton.ButtonVisible = this.INVENTORY_MODE;
+                  this.InspectButton.ButtonVisible = true;
                   this.ScrapButton.ButtonVisible = this._showScrapButton;
                   this.ToggleEquipButton.ButtonVisible = this._allowEquip;
                }
@@ -1345,6 +1402,8 @@ package
                this.AlternateButton.ButtonEnabled = this.AternateTextEnabled;
                this.ItemLevelAcceptButton.ButtonVisible = false;
                this.ItemLevelCancelButton.ButtonVisible = false;
+               this.hideUIButton.ButtonVisible = !this._isCookingMenu;
+               this.hasPerkPanel = this.perkPanelLabel_mc.visible;
                break;
             case this.MOD_MODE:
                this.AutoBuild.ButtonVisible = true;
@@ -1375,6 +1434,8 @@ package
                this.AlternateButton.ButtonEnabled = this.AternateTextEnabled;
                this.ItemLevelAcceptButton.ButtonVisible = false;
                this.ItemLevelCancelButton.ButtonVisible = false;
+               this.hideUIButton.ButtonVisible = !this._isCookingMenu;
+               this.hasPerkPanel = this.perkPanelLabel_mc.visible;
                break;
             case this.REQUIREMENTS_MODE:
                this.BGSCodeObj.SetItemSelectValuesForComponents(this.MiscItemListObject.entryList,this.MiscItemListObject.CategoryNameList);
@@ -1414,6 +1475,10 @@ package
          {
             _loc3_ = this.QuantityModal_mc.ProcessUserEvent(param1,param2);
          }
+         if(this.isHideUI && param1 != "RTrigger")
+         {
+            return false;
+         }
          if(param2 == false && !_loc3_)
          {
             switch(param1)
@@ -1422,7 +1487,6 @@ package
                case "Accept":
                   if(this.modalActive)
                   {
-                     this.onQuantityAccept();
                      _loc3_ = true;
                   }
                   else if(this.TakeButtonVisiblity)
@@ -1486,8 +1550,18 @@ package
                case "RTrigger":
                   if(!this.modalActive)
                   {
-                     this.onScrapBuildAdd();
-                     _loc3_ = true;
+                     if(this._eMode == this.SLOTS_MODE || this._eMode == this.MOD_MODE)
+                     {
+                        if(this.hideUIButton.ButtonVisible)
+                        {
+                           this.onHideUI();
+                        }
+                     }
+                     else
+                     {
+                        this.onScrapBuildAdd();
+                        _loc3_ = true;
+                     }
                   }
                   break;
                case "LTrigger":
@@ -1504,7 +1578,7 @@ package
                      {
                         if(this.RepairButton.ButtonVisible)
                         {
-                           this.onRepair();
+                           this.onWorkbenchRepair();
                         }
                         _loc3_ = true;
                      }
@@ -1527,9 +1601,13 @@ package
                         {
                            this.onInspect();
                         }
+                        else if(!this.inspectMode)
+                        {
+                           this.onSearch();
+                        }
                         _loc3_ = true;
                      }
-                     else if(!this.inspectMode && !this.modalActive)
+                     else if(!this.inspectMode)
                      {
                         this.onSearch();
                         _loc3_ = true;
@@ -1542,6 +1620,14 @@ package
                      if(!this.inspectMode && this.allowsModding && this.allowsCrafting)
                      {
                         this.ToggleCrafting();
+                        _loc3_ = true;
+                     }
+                     else if(this.inspectMode)
+                     {
+                        if(this.WorkbenchRepairButton.ButtonVisible)
+                        {
+                           this.onWorkbenchRepair();
+                        }
                         _loc3_ = true;
                      }
                   }
@@ -1650,19 +1736,19 @@ package
          }
       }
       
+      private function onWorkbenchRepair() : void
+      {
+         if(this._allowRepair)
+         {
+            this.BGSCodeObj.RepairSelectedItem();
+         }
+      }
+      
       private function onInspect() : void
       {
          if(this.eMode == this.INVENTORY_MODE)
          {
             this.BGSCodeObj.InspectSelectedItem();
-         }
-      }
-      
-      private function onRepair() : void
-      {
-         if(this._allowRepair)
-         {
-            this.BGSCodeObj.RepairSelectedItem();
          }
       }
       
@@ -1684,6 +1770,14 @@ package
          {
             return;
          }
+         if(this.FilterCraftableButton.ButtonText == "SHOW ALL CRAFTABLES")
+         {
+            this.FilterCraftableButton.ButtonText = "SHOW AVAIL CRAFTABLES";
+         }
+         else
+         {
+            this.FilterCraftableButton.ButtonText = "SHOW ALL CRAFTABLES";
+         }
          this.BGSCodeObj.ToggleCraftable();
          this.filterCommon();
       }
@@ -1694,8 +1788,68 @@ package
          {
             return;
          }
+         if(this.FilterAtxButton.ButtonText == "LEARNT PLANS")
+         {
+            this.FilterAtxButton.ButtonText = "ALL PLANS";
+         }
+         else
+         {
+            this.FilterAtxButton.ButtonText = "LEARNT PLANS";
+         }
          this.BGSCodeObj.ToggleAtx();
          this.filterCommon();
+      }
+      
+      private function onHideUI() : void
+      {
+         if(this._inspectMode || this.QuantityModal_mc.opened || isCookingMenu)
+         {
+            return;
+         }
+         if(this.hideUIButton.ButtonText == "HIDE UI")
+         {
+            this.hideUIButton.ButtonText = "SHOW UI";
+            this.isHideUI = false;
+            this.hideUIButton.ButtonFlashing = false;
+            this.InventoryBase_mc.visible = true;
+            this.ModSlotBase_mc.visible = true;
+            this.ItemCardList_mc.visible = true;
+            this.CraftingHeirarchy_mc.visible = true;
+            this.KnownModsInfo_mc.visible = true;
+            this.LegendaryItemDescription_tf.visible = true;
+            this.InventoryBase_mc.InventoryList_mc.disableInput_Inspectable = false;
+            this.UpdateDescription();
+            this.UpdateBackground();
+            this.UpdatePerks();
+            if(this.hasPerkPanel)
+            {
+               this.CenterShadedBG_mc.gotoAndStop("craftModPerks");
+               this.perkPanelLabel_mc.visible = true;
+            }
+            else
+            {
+               this.CenterShadedBG_mc.gotoAndStop("craftMod");
+               this.perkPanelLabel_mc.visible = false;
+            }
+            this.OnItemCardUpdated(null);
+         }
+         else
+         {
+            this.hideUIButton.ButtonText = "HIDE UI";
+            this.isHideUI = true;
+            this.InventoryBase_mc.visible = false;
+            this.ModSlotBase_mc.visible = false;
+            this.ItemCardList_mc.visible = false;
+            this.perkPanelLabel_mc.visible = false;
+            this.PerkPanel0_mc.visible = false;
+            this.PerkPanel1_mc.visible = false;
+            this.CraftingHeirarchy_mc.visible = false;
+            this.KnownModsInfo_mc.visible = false;
+            this.LegendaryItemDescription_tf.visible = false;
+            this.InventoryBase_mc.InventoryList_mc.disableInput_Inspectable = true;
+            this.CenterShadedBG_mc.gotoAndStop("inspectNoMenus");
+            this.hideUIButton.ButtonFlashing = true;
+         }
       }
       
       private function filterCommon() : void
@@ -1832,29 +1986,43 @@ package
       private function onQuantityAccept() : *
       {
          var _loc1_:* = undefined;
-         if(this.eMode == this.INVENTORY_MODE)
+         if(this.QuantityModal_mc.inTextInputMode)
          {
-            _loc1_ = this.InventoryListObject.selectedEntry;
-            if(_loc1_ != null)
+            this.QuantityModal_mc.updateQuantityInput();
+         }
+         else
+         {
+            if(this.eMode == this.INVENTORY_MODE)
             {
-               this._ScrapQuantity = Math.min(_loc1_.count,this.QuantityModal_mc.quantity);
-               this.BGSCodeObj.ScrapItem(this._ScrapQuantity);
+               _loc1_ = this.InventoryListObject.selectedEntry;
+               if(_loc1_ != null)
+               {
+                  this._ScrapQuantity = Math.min(_loc1_.count,this.QuantityModal_mc.quantity);
+                  this.BGSCodeObj.ScrapItem(this._ScrapQuantity);
+               }
             }
+            else if(this.isCrafting)
+            {
+               this.m_SelectedModListEntryIndex = this._eMode == this.LEVEL_SELECT_MODE ? this.ItemLevelListObject.selectedIndex : this.ModListObject.selectedIndex;
+               this.m_RestoreSelectedIndex = true;
+               this.BGSCodeObj.StartBuildConfirm(this.QuantityModal_mc.quantity);
+            }
+            this._wasModalJustConfirmed = true;
+            this.closeQuantityModal();
          }
-         else if(this.isCrafting)
-         {
-            this.m_SelectedModListEntryIndex = this._eMode == this.LEVEL_SELECT_MODE ? this.ItemLevelListObject.selectedIndex : this.ModListObject.selectedIndex;
-            this.m_RestoreSelectedIndex = true;
-            this.BGSCodeObj.StartBuildConfirm(this.QuantityModal_mc.quantity);
-         }
-         this._wasModalJustConfirmed = true;
-         this.closeQuantityModal();
       }
       
       private function onQuantityCancel() : *
       {
-         this.m_RestoreSelectedIndex = false;
-         this.closeQuantityModal();
+         if(this.QuantityModal_mc.inTextInputMode)
+         {
+            this.QuantityModal_mc.CancelTextInput();
+         }
+         else
+         {
+            this.m_RestoreSelectedIndex = false;
+            this.closeQuantityModal();
+         }
       }
       
       private function onAlternateButton() : void
@@ -2078,7 +2246,7 @@ package
          }
          else if(param1 == 3)
          {
-            ++this.ModSlotBase_mc.ModSlotList_mc.scrollPosition;
+            this.ModSlotBase_mc.ModSlotList_mc.scrollPosition += 1;
          }
       }
       
@@ -2175,11 +2343,32 @@ package
          this.ItemCardList_mc.onDataChange();
       }
       
+      public function OnItemCardUpdated(param1:Event) : *
+      {
+         var _loc2_:int = Math.max(this.ItemCardList_mc.entryCount,MIN_ITEM_CARD_ENTRIES);
+         this.CenterShadedBG_mc.ItemStats_mc.gotoAndStop("entry" + Math.min(_loc2_,MAX_ITEM_CARD_ENTRIES));
+      }
+      
       public function set itemDescription(param1:String) : *
       {
-         GlobalFunc.SetText(this.ModDescriptionBase_mc.ModDescription_tf,param1,false);
-         ShrinkFontToFit(this.ModDescriptionBase_mc.ModDescription_tf,1);
-         var _loc2_:* = param1 == "" ? 0 : this.ModDescriptionBase_mc.ModDescription_tf.numLines;
+         var _loc2_:* = undefined;
+         if(this.m_DynamicModDescEnabled && this.ModListObject.selectedEntry && Boolean(this.ModListObject.selectedEntry.modProperties))
+         {
+            this.ModDescriptionBase_mc.gotoAndStop("dynamic");
+            this.ModDescriptionBase_mc.DynamicModDescription_mc.entryData = this.ModListObject.selectedEntry.modProperties;
+         }
+         else
+         {
+            this.ModDescriptionBase_mc.gotoAndStop("default");
+            GlobalFunc.SetText(this.ModDescriptionBase_mc.ModDescription_tf,param1,false);
+            ShrinkFontToFit(this.ModDescriptionBase_mc.ModDescription_tf,1);
+            _loc2_ = param1 == "" ? 0 : this.ModDescriptionBase_mc.ModDescription_tf.numLines;
+         }
+      }
+      
+      private function onDynamicModDescriptionUpdated(param1:Event) : void
+      {
+         this.ModDescriptionBase_mc.DynamicModDescription_mc.Body_mc.x = (this.ModDescriptionBase_mc.DynamicModDescription_mc.Body_mc.width - this.ModDescriptionBase_mc.DynamicModDescription_mc.displayWidth) / 2;
       }
       
       public function set legendaryItemDescription(param1:String) : *
@@ -2238,7 +2427,7 @@ package
          var _loc2_:* = "";
          if(_loc1_ == 1)
          {
-            _loc2_ = this._craftingHierarchy[0];
+            _loc2_ = String(this._craftingHierarchy[0]);
          }
          else
          {
