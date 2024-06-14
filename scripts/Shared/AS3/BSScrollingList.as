@@ -91,6 +91,8 @@ package Shared.AS3
       
       protected var bInitialized:Boolean;
       
+      protected var bSilentSelectionMode:Boolean = false;
+      
       protected var strTextOption:String;
       
       protected var bDisableSelection:Boolean;
@@ -127,6 +129,7 @@ package Shared.AS3
          this.bMouseDrivenNav = false;
          this.bReverseList = false;
          this.bUpdated = false;
+         this.bSilentSelectionMode = false;
          this.bInitialized = false;
          if(loaderInfo != null)
          {
@@ -495,6 +498,40 @@ package Shared.AS3
       public function set enableScrollWrap(param1:Boolean) : *
       {
          this.bEnableScrollWrap = param1;
+      }
+      
+      public function get silentSelectionMode() : Boolean
+      {
+         return this.bSilentSelectionMode;
+      }
+      
+      public function setSilentSelectionMode(param1:Boolean) : void
+      {
+         if(this.bSilentSelectionMode != param1)
+         {
+            this.bSilentSelectionMode = param1;
+            this.refreshAllEntries();
+         }
+      }
+      
+      protected function refreshAllEntries() : void
+      {
+         var _loc2_:BSScrollingListEntry = null;
+         var _loc1_:uint = 0;
+         while(_loc1_ < this.EntriesA.length)
+         {
+            _loc2_ = this.FindClipForEntry(_loc1_);
+            if(_loc2_ == null)
+            {
+               this.InvalidateData();
+               _loc2_ = this.FindClipForEntry(_loc1_);
+            }
+            if(_loc2_ != null)
+            {
+               this.SetEntry(_loc2_,this.EntriesA[_loc1_]);
+            }
+            _loc1_++;
+         }
       }
       
       protected function doSetSelectedIndex(param1:int) : *
@@ -1189,7 +1226,7 @@ package Shared.AS3
          var aEntryObject:Object = param2;
          if(aEntryClip != null)
          {
-            aEntryClip.selected = aEntryObject == this.selectedEntry;
+            aEntryClip.selected = this.bSilentSelectionMode ? false : aEntryObject == this.selectedEntry;
             try
             {
                aEntryClip.SetEntryText(aEntryObject,this.strTextOption);

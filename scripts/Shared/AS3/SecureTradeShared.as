@@ -101,6 +101,8 @@ package Shared.AS3
       
       public static const CURRENCY_EXPEDITION_STAMPS:uint = 11;
       
+      public static const CURRENCY_SUPPLIES:uint = 12;
+      
       public static const CURRENCY_INVALID:uint = uint.MAX_VALUE;
       
       public static const MACHINE_TYPE_INVALID:* = 0;
@@ -144,6 +146,7 @@ package Shared.AS3
       public static function setCurrencyIcon(param1:SWFLoaderClip, param2:uint, param3:Boolean = false) : MovieClip
       {
          var _loc4_:String = null;
+         trace(param2);
          switch(param2)
          {
             case CURRENCY_CAPS:
@@ -207,6 +210,9 @@ package Shared.AS3
                {
                   _loc4_ = "IconCu_Stamps";
                }
+               break;
+            case CURRENCY_SUPPLIES:
+               _loc4_ = "IconCu_SuppliesHUD";
          }
          return param1.setContainerIconClip(_loc4_);
       }

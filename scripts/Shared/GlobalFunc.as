@@ -13,6 +13,7 @@ package Shared
    import flash.system.fscommand;
    import flash.text.TextField;
    import flash.text.TextFormat;
+   import flash.text.TextLineMetrics;
    import flash.utils.ByteArray;
    import flash.utils.describeType;
    import flash.utils.getQualifiedClassName;
@@ -32,6 +33,8 @@ package Shared
       public static const PLAYER_ICON_TEXTURE_BUFFER:String = "AvatarTextureBuffer";
       
       public static const STORE_IMAGE_TEXTURE_BUFFER:String = "StoreTextureBuffer";
+      
+      public static const ACCOUNT_UPGRADES_STORE_IMAGE_TEXTURE_BUFFER:String = "AccountUpgradesStoreTextureBuffer";
       
       public static const MAP_TEXTURE_BUFFER:String = "MapMenuTextureBuffer";
       
@@ -1089,6 +1092,22 @@ package Shared
             _loc5_--;
             _loc4_.size = _loc5_;
             param1.setTextFormat(_loc4_);
+         }
+      }
+      
+      public static function shrinkMultilineToFitLines(param1:TextField, param2:String, param3:Boolean = false) : *
+      {
+         var _loc4_:TextFormat;
+         var _loc5_:Number = (_loc4_ = param1.getTextFormat()).size as Number;
+         var _loc6_:TextLineMetrics = param1.getLineMetrics(0);
+         var _loc7_:int = param1.height / _loc6_.height;
+         GlobalFunc.SetText(param1,param2,false,param3);
+         while(param1.numLines > _loc7_ && _loc5_ > TEXT_SIZE_MIN)
+         {
+            _loc5_--;
+            _loc4_.size = _loc5_;
+            param1.setTextFormat(_loc4_);
+            GlobalFunc.SetText(param1,param2,false,param3);
          }
       }
       
