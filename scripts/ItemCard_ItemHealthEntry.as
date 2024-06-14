@@ -39,6 +39,20 @@ package
          {
             Label_tf.appendText(" size(" + barLen.toString() + ")");
          }
+         else if(barLen = 100)
+         {
+            var curhp:int = int(param1.currentHealth);
+            var maxhp:int = int(param1.maximumHealth);
+            if(curhp > 0)
+            {
+               var dura:int = GlobalFunc.Lerp(220,2,0,maxhp * 2,curhp,true) - 1;
+               Label_tf.appendText(" [" + dura.toString() + "%]");
+            }
+            else
+            {
+               Label_tf.appendText(" [0%]");
+            }
+         }
       }
    }
 }
