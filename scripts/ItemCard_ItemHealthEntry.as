@@ -20,10 +20,6 @@ package
       {
          super();
          Extensions.enabled = true;
-         if(Label_tf != null)
-         {
-            TextFieldEx.setTextAutoSize(Label_tf,TextFieldEx.TEXTAUTOSZ_SHRINK);
-         }
       }
       
       public static function IsEntryValid(param1:Object) : Boolean
@@ -45,13 +41,17 @@ package
             var maxhp:int = int(param1.maximumHealth);
             if(curhp > 0)
             {
-               var dura:int = GlobalFunc.Lerp(220,2,0,maxhp * 2,curhp,true) - 1;
+               var dura:int = curhp / maxhp * 100;
                Label_tf.appendText(" [" + dura.toString() + "%]");
             }
             else
             {
                Label_tf.appendText(" [0%]");
             }
+         }
+         if(Label_tf != null)
+         {
+            TextFieldEx.setTextAutoSize(Label_tf,TextFieldEx.TEXTAUTOSZ_SHRINK);
          }
       }
    }
