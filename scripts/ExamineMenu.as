@@ -339,7 +339,7 @@ package
          this.FilterCraftableButton = new BSButtonHintData("SHOW ALL CRAFTABLES","Q","PSN_L3","Xenon_L3",1,this.onFilterCraftable);
          this.FilterAtxButton = new BSButtonHintData("LEARNT PLANS","V","PSN_Select","Xenon_Select",1,this.onFilterAtx);
          this.hideUIButton = new BSButtonHintData("SHOW UI","G","PSN_R2","Xenon_R2",1,this.onHideUI);
-         this.RepairButton = new BSButtonHintData("$REPAIR","T","PSN_Y","Xenon_Y",1,this.onWorkbenchRepair);
+         this.RepairButton = new BSButtonHintData("REPAIR","T","PSN_Y","Xenon_Y",1,this.onTRepair);
          this.InspectButton = new BSButtonHintData("$INSPECT","X","PSN_R3","Xenon_R3",1,this.onInspect);
          this._craftingHierarchy = new Array();
          super();
@@ -1360,10 +1360,16 @@ package
             _loc1_ = new TextField();
             _loc1_.text = "$REPAIR_KIT_NUM";
             this.RepairKitButton.ButtonText = _loc1_.text.replace("{1}",this._repairKitCount);
+            this.RepairButton.ButtonText = "REPAIR";
             this.WorkbenchRepairButton.ButtonVisible = this._isWorkbench;
             this.WorkbenchRepairButton.ButtonDisabled = !this.BGSCodeObj.CanRepairSelectedItem(false);
             this.RepairButton.ButtonVisible = this.WorkbenchRepairButton.ButtonVisible;
             this.RepairButton.ButtonDisabled = this.WorkbenchRepairButton.ButtonDisabled;
+            if(this.WorkbenchRepairButton.ButtonDisabled && this._repairKitCount)
+            {
+               this.RepairButton.ButtonText = this.RepairKitButton.ButtonText;
+               this.RepairButton.ButtonDisabled = !this.RepairButton.ButtonDisabled;
+            }
          }
          else
          {
@@ -1576,7 +1582,7 @@ package
                      {
                         if(this.RepairButton.ButtonVisible)
                         {
-                           this.onWorkbenchRepair();
+                           this.onTRepair();
                         }
                         _loc3_ = true;
                      }
@@ -2441,6 +2447,18 @@ package
             this.InventoryBase_mc.InventoryList_mc.disableInput_Inspectable = true;
             this.CenterShadedBG_mc.gotoAndStop("inspectNoMenus");
             this.hideUIButton.ButtonFlashing = true;
+         }
+      }
+      
+      private function onTRepair() : void
+      {
+         if(this.RepairButton.ButtonText = "REPAIR")
+         {
+            this.onWorkbenchRepair();
+         }
+         else
+         {
+            this.onRepairKit();
          }
       }
       
