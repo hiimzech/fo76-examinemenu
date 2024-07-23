@@ -30,23 +30,33 @@ package
       override public function PopulateEntry(param1:Object) : *
       {
          GlobalFunc.updateConditionMeter(this.ConditionMeter_mc,param1.currentHealth,param1.maximumHealth,param1.durability);
-         var barLen:int = 101 - this.ConditionMeter_mc.currentFrame;
-         if(barLen < 100)
+         var barSize:int = 102 - this.ConditionMeter_mc.currentFrame;
+         var meterframe:int = int(this.ConditionMeter_mc.MeterClip_mc.currentFrame);
+         var framepercent:Number = 0;
+         var curhp:Number = Number(param1.currentHealth);
+         var maxhp:Number = Number(param1.maximumHealth);
+         var dura:Number = curhp / maxhp * 100;
+         if(barSize < 100)
          {
-            Label_tf.appendText(" size(" + barLen.toString() + ")");
-         }
-         else if(barLen = 100)
-         {
-            var curhp:int = int(param1.currentHealth);
-            var maxhp:int = int(param1.maximumHealth);
             if(curhp > 0)
             {
-               var dura:int = curhp / maxhp * 100;
-               Label_tf.appendText(" [" + dura.toString() + "%]");
+               framepercent = 200 - (meterframe - 2) * 100 / (218 / 2);
+               Label_tf.appendText(" " + dura.toFixed(2) + "% (" + barSize.toString() + ")");
             }
             else
             {
-               Label_tf.appendText(" [0%]");
+               Label_tf.appendText(" 0%" + " (" + barSize.toString() + ")");
+            }
+         }
+         else if(barSize = 100)
+         {
+            if(curhp > 0)
+            {
+               Label_tf.appendText(" " + dura.toFixed(2) + "% " + maxhp.toString());
+            }
+            else
+            {
+               Label_tf.appendText(" 0% " + maxhp.toString());
             }
          }
          if(Label_tf != null)
