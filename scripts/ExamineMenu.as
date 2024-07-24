@@ -1360,15 +1360,14 @@ package
             _loc1_ = new TextField();
             _loc1_.text = "$REPAIR_KIT_NUM";
             this.RepairKitButton.ButtonText = _loc1_.text.replace("{1}",this._repairKitCount);
+            this.RepairKitButton.ButtonVisible = this.RepairKitsEnabled;
             this.RepairButton.ButtonText = "REPAIR";
+            this.RepairButton.ButtonVisible = true;
             this.WorkbenchRepairButton.ButtonVisible = this._isWorkbench;
             this.WorkbenchRepairButton.ButtonDisabled = !this.BGSCodeObj.CanRepairSelectedItem(false);
-            this.RepairButton.ButtonVisible = this.WorkbenchRepairButton.ButtonVisible;
-            this.RepairButton.ButtonDisabled = this.WorkbenchRepairButton.ButtonDisabled;
-            if(this.WorkbenchRepairButton.ButtonDisabled && this._repairKitCount)
+            if(this.WorkbenchRepairButton.ButtonDisabled && this.RepairKitsEnabled)
             {
                this.RepairButton.ButtonText = this.RepairKitButton.ButtonText;
-               this.RepairButton.ButtonDisabled = !this.RepairButton.ButtonDisabled;
             }
          }
          else
@@ -2452,7 +2451,7 @@ package
       
       private function onTRepair() : void
       {
-         if(this.RepairButton.ButtonText = "REPAIR")
+         if(this.RepairButton.ButtonText == "REPAIR")
          {
             this.onWorkbenchRepair();
          }

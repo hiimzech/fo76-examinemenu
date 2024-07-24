@@ -3,7 +3,6 @@ package
    import Shared.GlobalFunc;
    import flash.display.MovieClip;
    import scaleform.gfx.Extensions;
-   import scaleform.gfx.TextFieldEx;
    
    [Embed(source="/_assets/assets.swf", symbol="ItemCard_ItemHealthEntry")]
    public class ItemCard_ItemHealthEntry extends ItemCard_Entry
@@ -35,34 +34,34 @@ package
          var framepercent:Number = 0;
          var curhp:Number = Number(param1.currentHealth);
          var maxhp:Number = Number(param1.maximumHealth);
-         var dura:Number = curhp / maxhp * 100;
+         var ratio:Number = curhp / maxhp * 100;
+         var result:Array = new Array();
          if(barSize < 100)
          {
+            result[0] = "HP%/Max/DU";
             if(curhp > 0)
             {
                framepercent = 200 - (meterframe - 2) * 100 / (218 / 2);
-               Label_tf.appendText(" " + dura.toFixed(2) + "% (" + barSize.toString() + ")");
+               result[1] = ratio.toFixed(2) + "% / " + maxhp.toString() + " / " + barSize.toString();
             }
             else
             {
-               Label_tf.appendText(" 0%" + " (" + barSize.toString() + ")");
+               result[1] = "0% / " + maxhp.toString() + " / " + barSize.toString();
             }
          }
          else if(barSize = 100)
          {
+            result[0] = "HP%/Max";
             if(curhp > 0)
             {
-               Label_tf.appendText(" " + dura.toFixed(2) + "% " + maxhp.toString());
+               result[1] = ratio.toFixed(2) + "% / " + maxhp.toString();
             }
             else
             {
-               Label_tf.appendText(" 0% " + maxhp.toString());
+               result[1] = "0% / " + maxhp.toString();
             }
          }
-         if(Label_tf != null)
-         {
-            TextFieldEx.setTextAutoSize(Label_tf,TextFieldEx.TEXTAUTOSZ_SHRINK);
-         }
+         return result;
       }
    }
 }

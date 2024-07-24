@@ -56,6 +56,7 @@ package
       
       public function ItemCard()
       {
+         this.m_EntrySpacing = -3.5;
          super();
          this._InfoObj = new Array();
          this._showItemDesc = true;
@@ -284,9 +285,19 @@ package
          if(_loc8_.maxMeterHealth > 0 && _loc8_.currentHealth != -1 && this.bItemHealthEnabled)
          {
             _loc2_ = this.CreateEntry(this.ET_ITEM_HEALTH);
+            var dura:Array = null;
             if(_loc2_ != null)
             {
-               (_loc2_ as ItemCard_ItemHealthEntry).PopulateEntry(_loc8_);
+               dura = (_loc2_ as ItemCard_ItemHealthEntry).PopulateEntry(_loc8_);
+               var nxtLine:ItemCard_Entry = this.CreateEntry(this.ET_STANDARD);
+               if(nxtLine != null)
+               {
+                  (nxtLine = new ItemCard_StandardEntry()).PopulateEntry({
+                     "text":String(dura[0]),
+                     "value":String(dura[1])
+                  });
+                  _loc3_.push(nxtLine);
+               }
                _loc3_.push(_loc2_);
             }
          }

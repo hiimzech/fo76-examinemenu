@@ -22,7 +22,7 @@ package
       override public function PopulateEntry(param1:Object) : *
       {
          super.PopulateEntry(param1);
-         Value_tf.appendText(" /" + GlobalFunc.ShortTimeString(param1.duration));
+         Value_tf.appendText(" / " + GlobalFunc.ShortTimeString(param1.duration));
          var _loc2_:Number = Value_tf.x + Value_tf.getLineMetrics(0).x - this.TimerIcon_mc.width / 2 - 10;
          if(_loc2_ < this.TIMER_ORIG_X)
          {
