@@ -4,11 +4,9 @@ package
    import scaleform.gfx.Extensions;
    import scaleform.gfx.TextFieldEx;
    
-   [Embed(source="/_assets/assets.swf", symbol="CurrentModListEntry")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol298")]
    public class CurrentModListEntry extends BSScrollingListEntry
    {
-       
-      
       public function CurrentModListEntry()
       {
          super();
@@ -17,3 +15,4 @@ package
       }
    }
 }
+

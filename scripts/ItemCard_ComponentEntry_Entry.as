@@ -4,12 +4,10 @@ package
    import flash.display.MovieClip;
    import flash.text.TextLineMetrics;
    
-   [Embed(source="/_assets/assets.swf", symbol="ItemCard_ComponentEntry_Entry")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol273")]
    public class ItemCard_ComponentEntry_Entry extends BSScrollingListEntry
    {
-      
       public static const ICON_SPACING:Number = 15;
-       
       
       public var FavIcon_mc:MovieClip;
       
@@ -37,3 +35,4 @@ package
       }
    }
 }
+

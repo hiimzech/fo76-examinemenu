@@ -18,7 +18,6 @@ package Shared.AS3
    
    public dynamic class BSButtonHint extends BSUIComponent
    {
-      
       private static var colorMatrix:ColorMatrixFilter = null;
       
       private static const DISABLED_GREY_OUT_ALPHA:Number = 0.5;
@@ -104,7 +103,6 @@ package Shared.AS3
       };
       
       private static const WarningColorMatrixFilter:ColorMatrixFilter = new ColorMatrixFilter(new Array(1,0,0,0,-9,0,1,0,0,-141,0,0,1,0,-114,0,0,0,1,0));
-       
       
       public var textField_tf:TextField;
       
@@ -243,13 +241,13 @@ package Shared.AS3
             case PlatformChangeEvent.PLATFORM_PC_KB_FR:
                if(FRtoENMap.hasOwnProperty(param1))
                {
-                  param1 = String(FRtoENMap[param1]);
+                  param1 = FRtoENMap[param1];
                }
                break;
             case PlatformChangeEvent.PLATFORM_PC_KB_BE:
                if(BEtoENMap.hasOwnProperty(param1))
                {
-                  param1 = String(BEtoENMap[param1]);
+                  param1 = BEtoENMap[param1];
                }
          }
          return param1;
@@ -287,7 +285,7 @@ package Shared.AS3
             }
             if(NameToTextMap.hasOwnProperty(_loc1_))
             {
-               _loc1_ = String(NameToTextMap[_loc1_]);
+               _loc1_ = NameToTextMap[_loc1_];
             }
          }
          return _loc1_;
@@ -322,7 +320,7 @@ package Shared.AS3
                }
                if(NameToTextMap.hasOwnProperty(_loc1_))
                {
-                  _loc1_ = String(NameToTextMap[_loc1_]);
+                  _loc1_ = NameToTextMap[_loc1_];
                }
             }
          }
@@ -697,3 +695,4 @@ package Shared.AS3
       }
    }
 }
+

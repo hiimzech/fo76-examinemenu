@@ -10,8 +10,6 @@ package Shared.AS3
    
    public class BSScrollingListEntry extends MovieClip
    {
-       
-      
       public var border:MovieClip;
       
       public var textField:TextField;
@@ -156,7 +154,7 @@ package Shared.AS3
       public function SetEntryText(param1:Object, param2:String) : *
       {
          var _loc3_:Number = NaN;
-         if(this.textField != null && param1 != null && param1.hasOwnProperty("text"))
+         if(this.textField != null && param1 != null && Boolean(param1.hasOwnProperty("text")))
          {
             if(param2 == BSScrollingList.TEXT_OPTION_SHRINK_TO_FIT)
             {
@@ -194,3 +192,4 @@ package Shared.AS3
       }
    }
 }
+

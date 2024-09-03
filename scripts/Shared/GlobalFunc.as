@@ -21,7 +21,6 @@ package Shared
    
    public class GlobalFunc
    {
-      
       public static const PIPBOY_GREY_OUT_ALPHA:Number = 0.5;
       
       public static const SELECTED_RECT_ALPHA:Number = 1;
@@ -320,7 +319,6 @@ package Shared
          8:9,
          9:10
       };
-       
       
       public function GlobalFunc()
       {
@@ -1097,8 +1095,8 @@ package Shared
       
       public static function shrinkMultilineToFitLines(param1:TextField, param2:String, param3:Boolean = false) : *
       {
-         var _loc4_:TextFormat;
-         var _loc5_:Number = (_loc4_ = param1.getTextFormat()).size as Number;
+         var _loc4_:TextFormat = param1.getTextFormat();
+         var _loc5_:Number = _loc4_.size as Number;
          var _loc6_:TextLineMetrics = param1.getLineMetrics(0);
          var _loc7_:int = param1.height / _loc6_.height;
          GlobalFunc.SetText(param1,param2,false,param3);
@@ -1231,7 +1229,8 @@ package Shared
          {
             _loc2_++;
          }
-         _loc3_ = (_loc5_ = param1.substring(_loc2_)).length - 1;
+         _loc5_ = param1.substring(_loc2_);
+         _loc3_ = _loc5_.length - 1;
          while(_loc5_.charAt(_loc3_) == " " || _loc5_.charAt(_loc3_) == "\n" || _loc5_.charAt(_loc3_) == "\r" || _loc5_.charAt(_loc3_) == "\t")
          {
             _loc3_--;
@@ -1300,10 +1299,10 @@ package Shared
          var _loc2_:Boolean = false;
          var _loc3_:Number = 0;
          var _loc4_:String = "";
-         if(param1 != null && param1.hasOwnProperty("isLegendary"))
+         if(param1 != null && Boolean(param1.hasOwnProperty("isLegendary")))
          {
             _loc2_ = Boolean(param1.isLegendary);
-            if(_loc2_ && param1.hasOwnProperty("numLegendaryStars"))
+            if(_loc2_ && Boolean(param1.hasOwnProperty("numLegendaryStars")))
             {
                _loc3_ = Number(param1.numLegendaryStars);
                _loc5_ = 0;
@@ -1340,3 +1339,4 @@ package Shared
       }
    }
 }
+

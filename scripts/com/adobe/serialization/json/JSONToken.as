@@ -2,9 +2,7 @@ package com.adobe.serialization.json
 {
    public final class JSONToken
    {
-      
       internal static const token:JSONToken = new JSONToken();
-       
       
       public var type:int;
       
@@ -25,3 +23,4 @@ package com.adobe.serialization.json
       }
    }
 }
+

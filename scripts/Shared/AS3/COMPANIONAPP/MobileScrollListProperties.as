@@ -2,8 +2,6 @@ package Shared.AS3.COMPANIONAPP
 {
    public class MobileScrollListProperties
    {
-       
-      
       public var linkageId:String;
       
       public var maskDimension:Number;
@@ -22,3 +20,4 @@ package Shared.AS3.COMPANIONAPP
       }
    }
 }
+

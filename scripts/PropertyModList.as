@@ -3,11 +3,9 @@ package
    import Shared.AS3.BSScrollingList;
    import Shared.AS3.BSScrollingListEntry;
    
-   [Embed(source="/_assets/assets.swf", symbol="PropertyModList")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol13")]
    public class PropertyModList extends BSScrollingList
    {
-       
-      
       public var comparisonArray:Array;
       
       public function PropertyModList()
@@ -40,3 +38,4 @@ package
       }
    }
 }
+

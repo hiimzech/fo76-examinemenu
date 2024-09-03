@@ -2,8 +2,6 @@ package com.adobe.serialization.json
 {
    public class JSONTokenizer
    {
-       
-      
       private var strict:Boolean;
       
       private var obj:Object;
@@ -14,10 +12,9 @@ package com.adobe.serialization.json
       
       private var ch:String;
       
-      private const controlCharsRegExp:RegExp = /[\x00-\x1F]/;
-      
       public function JSONTokenizer(param1:String, param2:Boolean)
       {
+         this.controlCharsRegExp = /[\x00-\x1F]/;
          super();
          this.jsonString = param1;
          this.strict = param2;
@@ -84,7 +81,8 @@ package com.adobe.serialization.json
                }
                break;
             case "n":
-               if((_loc4_ = "n" + this.nextChar() + this.nextChar() + this.nextChar()) == "null")
+               _loc4_ = "n" + this.nextChar() + this.nextChar() + this.nextChar();
+               if(_loc4_ == "null")
                {
                   _loc1_ = JSONToken.create(JSONTokenType.NULL,null);
                   this.nextChar();
@@ -95,7 +93,8 @@ package com.adobe.serialization.json
                }
                break;
             case "N":
-               if((_loc5_ = "N" + this.nextChar() + this.nextChar()) == "NaN")
+               _loc5_ = "N" + this.nextChar() + this.nextChar();
+               if(_loc5_ == "NaN")
                {
                   _loc1_ = JSONToken.create(JSONTokenType.NAN,NaN);
                   this.nextChar();
@@ -132,7 +131,7 @@ package com.adobe.serialization.json
          var _loc1_:int = this.loc;
          while(true)
          {
-            _loc1_ = this.jsonString.indexOf("\"",_loc1_);
+            _loc1_ = int(this.jsonString.indexOf("\"",_loc1_));
             if(_loc1_ >= 0)
             {
                _loc3_ = 0;
@@ -167,7 +166,7 @@ package com.adobe.serialization.json
          var _loc8_:int = 0;
          var _loc9_:int = 0;
          var _loc10_:String = null;
-         if(this.strict && this.controlCharsRegExp.test(param1))
+         if(this.strict && Boolean(this.controlCharsRegExp.test(param1)))
          {
             this.parseError("String contains unescaped control character (0x00-0x1F)");
          }
@@ -177,7 +176,7 @@ package com.adobe.serialization.json
          var _loc5_:int = param1.length;
          do
          {
-            _loc3_ = param1.indexOf("\\",_loc4_);
+            _loc3_ = int(param1.indexOf("\\",_loc4_));
             if(_loc3_ < 0)
             {
                _loc2_ += param1.substr(_loc4_);
@@ -205,7 +204,8 @@ package com.adobe.serialization.json
                   break;
                case "u":
                   _loc7_ = "";
-                  if((_loc8_ = _loc4_ + 4) > _loc5_)
+                  _loc8_ = _loc4_ + 4;
+                  if(_loc8_ > _loc5_)
                   {
                      this.parseError("Unexpected end of input.  Expecting 4 hex digits after \\u.");
                   }
@@ -432,3 +432,4 @@ package com.adobe.serialization.json
       }
    }
 }
+

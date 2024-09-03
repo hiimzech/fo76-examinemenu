@@ -5,8 +5,6 @@ package Shared.AS3
    
    public class StyleSheet
    {
-       
-      
       public function StyleSheet()
       {
          super();
@@ -19,11 +17,11 @@ package Shared.AS3
          var _loc10_:* = null;
          var _loc11_:* = null;
          var _loc5_:String = getQualifiedClassName(param2);
-         var _loc6_:XML;
-         var _loc7_:XMLList = (_loc6_ = describeType(param2))..variable;
+         var _loc6_:XML = describeType(param2);
+         var _loc7_:XMLList = _loc6_..variable;
          for each(_loc8_ in _loc7_)
          {
-            _loc9_ = String(_loc8_.@name);
+            _loc9_ = _loc8_.@name;
             _loc10_ = typeof param2[_loc9_];
             _loc11_ = typeof param1[_loc9_];
             if(param1.hasOwnProperty(_loc9_))
@@ -65,3 +63,4 @@ package Shared.AS3
       }
    }
 }
+

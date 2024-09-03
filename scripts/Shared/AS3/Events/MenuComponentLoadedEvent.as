@@ -6,9 +6,7 @@ package Shared.AS3.Events
    
    public final class MenuComponentLoadedEvent extends Event
    {
-      
       public static const MENU_COMPONENT_LOADED:String = "MenuComponentLoaded";
-       
       
       private var _sender:MenuComponent;
       
@@ -29,3 +27,4 @@ package Shared.AS3.Events
       }
    }
 }
+

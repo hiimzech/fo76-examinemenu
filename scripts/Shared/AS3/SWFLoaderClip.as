@@ -9,11 +9,9 @@ package Shared.AS3
    import flash.system.ApplicationDomain;
    import flash.utils.getDefinitionByName;
    
-   [Embed(source="/_assets/assets.swf", symbol="Shared.AS3.SWFLoaderClip")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol364")]
    public class SWFLoaderClip extends MovieClip
    {
-       
-      
       internal var SWF:DisplayObject;
       
       internal var menuLoader:Loader;
@@ -57,7 +55,8 @@ package Shared.AS3
             this.forceUnload();
             if(ApplicationDomain.currentDomain.hasDefinition(param1))
             {
-               if((_loc4_ = getDefinitionByName(param1) as Class) != null)
+               _loc4_ = getDefinitionByName(param1) as Class;
+               if(_loc4_ != null)
                {
                   return new _loc4_() as MovieClip;
                }
@@ -72,8 +71,8 @@ package Shared.AS3
       
       public function setContainerIconClip(param1:String, param2:String = "", param3:String = null) : MovieClip
       {
-         var _loc4_:MovieClip;
-         if((_loc4_ = this.getIconClip(param1,param2,param3)) != null)
+         var _loc4_:MovieClip = this.getIconClip(param1,param2,param3);
+         if(_loc4_ != null)
          {
             addChild(_loc4_);
             _loc4_.scaleX = this.ClipScale;
@@ -243,3 +242,4 @@ package Shared.AS3
       }
    }
 }
+

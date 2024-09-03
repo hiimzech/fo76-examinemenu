@@ -10,11 +10,9 @@ package
    import scaleform.gfx.Extensions;
    import scaleform.gfx.TextFieldEx;
    
-   [Embed(source="/_assets/assets.swf", symbol="ConfirmPanel")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol302")]
    public class ConfirmPanel extends MovieClip
    {
-       
-      
       public var ButtonHintBar_mc:BSButtonHintBar;
       
       public var BGRect_mc:MovieClip;
@@ -372,3 +370,4 @@ package
       }
    }
 }
+

@@ -8,8 +8,6 @@ package Shared.AS3.COMPANIONAPP
    
    public dynamic class MobileButtonHint extends BSButtonHint
    {
-       
-      
       public var background:MovieClip;
       
       private const BUTTON_MARGIN:Number = 4;
@@ -107,3 +105,4 @@ package Shared.AS3.COMPANIONAPP
       }
    }
 }
+

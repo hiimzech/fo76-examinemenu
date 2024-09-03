@@ -4,8 +4,6 @@ package Shared
    
    public class DummyEntryList extends UpdateEventList
    {
-       
-      
       protected var _addsDummyEntryOnBlankList:Boolean = false;
       
       protected var _dummyEntryText:String = "$None";
@@ -113,3 +111,4 @@ package Shared
       }
    }
 }
+

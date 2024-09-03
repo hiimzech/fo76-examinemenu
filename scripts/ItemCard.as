@@ -3,12 +3,18 @@ package
    import Shared.AS3.BSUIComponent;
    import flash.events.Event;
    
-   [Embed(source="/_assets/assets.swf", symbol="ItemCard")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol375")]
    public class ItemCard extends BSUIComponent
    {
-      
       public static const EVENT_ITEM_CARD_UPDATED:String = "ItemCard::Updated";
-       
+      
+      m_Count = 0;
+      m_BlankEntryFillTarget = 0;
+      m_EntrySpacing = -3.5;
+      m_EntrySpacingChanged = false;
+      m_EntryCount = 0;
+      m_BottomUp = true;
+      _currencyType = 0;
       
       private var _InfoObj:Array;
       
@@ -56,7 +62,6 @@ package
       
       public function ItemCard()
       {
-         this.m_EntrySpacing = -3.5;
          super();
          this._InfoObj = new Array();
          this._showItemDesc = true;
@@ -235,7 +240,8 @@ package
                         {
                            if(this._InfoObj[_loc12_].text == "$wt" && this.m_Count > 1)
                            {
-                              (_loc16_ = new ItemCard_StandardEntry()).populateStackWeight(this._InfoObj[_loc12_],this.m_Count);
+                              _loc16_ = new ItemCard_StandardEntry();
+                              _loc16_.populateStackWeight(this._InfoObj[_loc12_],this.m_Count);
                               _loc3_.push(_loc16_);
                            }
                            _loc2_.PopulateEntry(this._InfoObj[_loc12_]);
@@ -285,14 +291,15 @@ package
          if(_loc8_.maxMeterHealth > 0 && _loc8_.currentHealth != -1 && this.bItemHealthEnabled)
          {
             _loc2_ = this.CreateEntry(this.ET_ITEM_HEALTH);
-            var dura:Array = null;
             if(_loc2_ != null)
             {
+               var dura:Array = null;
                dura = (_loc2_ as ItemCard_ItemHealthEntry).PopulateEntry(_loc8_);
                var nxtLine:ItemCard_Entry = this.CreateEntry(this.ET_STANDARD);
                if(nxtLine != null)
                {
-                  (nxtLine = new ItemCard_StandardEntry()).PopulateEntry({
+                  nxtLine = new ItemCard_StandardEntry();
+                  nxtLine.PopulateEntry({
                      "text":String(dura[0]),
                      "value":String(dura[1])
                   });
@@ -313,7 +320,8 @@ package
          if(_loc6_.length > 0)
          {
             _loc2_ = this.CreateEntry(this.ET_ITEM_DESCRIPTION);
-            if((_loc18_ = _loc2_ as ItemCard_DescriptionEntry) != null)
+            _loc18_ = _loc2_ as ItemCard_DescriptionEntry;
+            if(_loc18_ != null)
             {
                _loc18_.PopulateEntries(_loc6_);
                _loc3_.push(_loc2_);
@@ -389,7 +397,8 @@ package
             _loc6_ = uint(_loc2_);
             while(_loc6_ < this.m_BlankEntryFillTarget)
             {
-               (_loc5_ = new ItemCard_StandardEntry()).PopulateEntry({
+               _loc5_ = new ItemCard_StandardEntry();
+               _loc5_.PopulateEntry({
                   "text":"",
                   "value":""
                });
@@ -478,3 +487,4 @@ package
       }
    }
 }
+

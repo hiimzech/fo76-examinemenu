@@ -2,7 +2,6 @@ package Shared.AS3
 {
    public class PerkClipBase extends BSDisplayObject
    {
-      
       public static const STAT_TYPE_STRENGTH:uint = 0;
       
       public static const STAT_TYPE_PERCEPTION:uint = 1;
@@ -20,7 +19,6 @@ package Shared.AS3
       public static const RANK_MIN:uint = 1;
       
       public static const RANK_MAX:uint = 5;
-       
       
       protected var m_PerkID:uint = 4294967295;
       
@@ -246,3 +244,4 @@ package Shared.AS3
       }
    }
 }
+

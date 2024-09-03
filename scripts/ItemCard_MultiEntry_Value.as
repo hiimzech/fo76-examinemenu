@@ -2,11 +2,9 @@ package
 {
    import Shared.GlobalFunc;
    
-   [Embed(source="/_assets/assets.swf", symbol="ItemCard_MultiEntry_Value")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol138")]
    public class ItemCard_MultiEntry_Value extends ItemCard_Entry
    {
-       
-      
       public function ItemCard_MultiEntry_Value()
       {
          addFrameScript(0,this.frame1,1,this.frame2,2,this.frame3);
@@ -45,3 +43,4 @@ package
       }
    }
 }
+

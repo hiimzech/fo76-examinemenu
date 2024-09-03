@@ -2,11 +2,9 @@ package ExamineMenu_fla
 {
    import flash.display.MovieClip;
    
-   [Embed(source="/_assets/assets.swf", symbol="ExamineMenu_fla.ItemCard_Comparison_93")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol95")]
    public dynamic class ItemCard_Comparison_93 extends MovieClip
    {
-       
-      
       public function ItemCard_Comparison_93()
       {
          super();
@@ -19,3 +17,4 @@ package ExamineMenu_fla
       }
    }
 }
+

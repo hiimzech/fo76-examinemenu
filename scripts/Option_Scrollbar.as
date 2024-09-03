@@ -8,14 +8,12 @@ package
    import flash.geom.Rectangle;
    import flash.ui.Keyboard;
    
-   [Embed(source="/_assets/assets.swf", symbol="Option_Scrollbar")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol315")]
    public class Option_Scrollbar extends MovieClip
    {
-      
       public static const VALUE_CHANGE:String = "Option_Scrollbar::VALUE_CHANGE";
       
       public static const VALUE_CHANGE_FAILED:String = "Option_Scrollbar::VALUE_CHANGE_FAILED";
-       
       
       public var Track_mc:MovieClip;
       
@@ -245,3 +243,4 @@ package
       }
    }
 }
+

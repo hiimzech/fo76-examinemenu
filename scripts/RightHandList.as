@@ -3,11 +3,9 @@ package
    import Shared.AS3.BSScrollingListEntry;
    import Shared.DummyEntryList;
    
-   [Embed(source="/_assets/assets.swf", symbol="RightHandList")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol376")]
    public class RightHandList extends DummyEntryList
    {
-       
-      
       public function RightHandList()
       {
          super();
@@ -41,3 +39,4 @@ package
       }
    }
 }
+

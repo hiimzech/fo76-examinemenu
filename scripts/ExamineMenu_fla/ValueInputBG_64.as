@@ -2,11 +2,9 @@ package ExamineMenu_fla
 {
    import flash.display.MovieClip;
    
-   [Embed(source="/_assets/assets.swf", symbol="ExamineMenu_fla.ValueInputBG_64")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol328")]
    public dynamic class ValueInputBG_64 extends MovieClip
    {
-       
-      
       public function ValueInputBG_64()
       {
          super();
@@ -24,3 +22,4 @@ package ExamineMenu_fla
       }
    }
 }
+

@@ -4,7 +4,6 @@ package Shared.AS3.Styles
    
    public class ExamineMenu_RightHandListStyle
    {
-      
       public static var listEntryClass_Inspectable:String = "ModListEntry";
       
       public static var numListItems_Inspectable:uint = 10;
@@ -16,7 +15,6 @@ package Shared.AS3.Styles
       public static var restoreListIndex_Inspectable:Boolean = false;
       
       public static var blankEntryFillTarget:uint = 10;
-       
       
       public function ExamineMenu_RightHandListStyle()
       {
@@ -24,3 +22,4 @@ package Shared.AS3.Styles
       }
    }
 }
+

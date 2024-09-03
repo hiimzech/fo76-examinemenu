@@ -3,11 +3,9 @@ package ExamineMenu_fla
    import flash.display.MovieClip;
    import flash.text.TextField;
    
-   [Embed(source="/_assets/assets.swf", symbol="ExamineMenu_fla.DifferenceText_104")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol98")]
    public dynamic class DifferenceText_104 extends MovieClip
    {
-       
-      
       public var Difference_tf:TextField;
       
       public function DifferenceText_104()
@@ -27,3 +25,4 @@ package ExamineMenu_fla
       }
    }
 }
+

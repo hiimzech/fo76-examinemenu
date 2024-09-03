@@ -7,11 +7,9 @@ package
    
    public dynamic class ListInfoObject extends EventDispatcher
    {
-      
       public static const FILTERS_DUPLICATE_CHANGE:String = "ListInfoObject::filterDuplicateChange";
       
       public static const ENTRY_LIST_CHANGE:String = "ListInfoObject::entryListChange";
-       
       
       private var _filterer:Object;
       
@@ -183,3 +181,4 @@ package
       }
    }
 }
+

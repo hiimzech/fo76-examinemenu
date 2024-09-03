@@ -2,12 +2,12 @@ package
 {
    import Shared.GlobalFunc;
    import flash.display.MovieClip;
-   import scaleform.gfx.Extensions;
    
-   [Embed(source="/_assets/assets.swf", symbol="ItemCard_ItemHealthEntry")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol249")]
    public class ItemCard_ItemHealthEntry extends ItemCard_Entry
    {
-       
+      m_ConditionLengthFrames = 100;
+      m_ConditionFrames = 110;
       
       public var ConditionMeter_mc:MovieClip;
       
@@ -49,19 +49,24 @@ package
                result[1] = "0% / " + maxhp.toString() + " / " + barSize.toString();
             }
          }
-         else if(barSize = 100)
+         else
          {
-            result[0] = "HP%/Max";
-            if(curhp > 0)
+            barSize = 100;
+            if(barSize)
             {
-               result[1] = ratio.toFixed(2) + "% / " + maxhp.toString();
-            }
-            else
-            {
-               result[1] = "0% / " + maxhp.toString();
+               result[0] = "HP%/Max";
+               if(curhp > 0)
+               {
+                  result[1] = ratio.toFixed(2) + "% / " + maxhp.toString();
+               }
+               else
+               {
+                  result[1] = "0% / " + maxhp.toString();
+               }
             }
          }
          return result;
       }
    }
 }
+

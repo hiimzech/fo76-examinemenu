@@ -25,11 +25,9 @@ package ExamineMenu_fla
    import flash.utils.*;
    import flash.xml.*;
    
-   [Embed(source="/_assets/assets.swf", symbol="ExamineMenu_fla.VaultBoySafeRectGroup_3")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol391")]
    public dynamic class VaultBoySafeRectGroup_3 extends MovieClip
    {
-       
-      
       public var FeaturedItemVaultboy_mc:FeaturedItemVaultboy;
       
       public function VaultBoySafeRectGroup_3()
@@ -73,3 +71,4 @@ package ExamineMenu_fla
       }
    }
 }
+

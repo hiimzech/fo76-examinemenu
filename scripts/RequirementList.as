@@ -4,11 +4,9 @@ package
    import flash.display.MovieClip;
    import flash.events.Event;
    
-   [Embed(source="/_assets/assets.swf", symbol="RequirementList")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol33")]
    public class RequirementList extends BSScrollingList
    {
-       
-      
       public function RequirementList()
       {
          super();
@@ -47,3 +45,4 @@ package
       }
    }
 }
+

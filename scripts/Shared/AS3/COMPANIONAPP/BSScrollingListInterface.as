@@ -4,7 +4,6 @@ package Shared.AS3.COMPANIONAPP
    
    public class BSScrollingListInterface
    {
-      
       public static const STATS_SPECIAL_ENTRY_LINKAGE_ID:String = "SPECIALListEntry";
       
       public static const STATS_PERKS_ENTRY_LINKAGE_ID:String = "PerksListEntry";
@@ -50,7 +49,6 @@ package Shared.AS3.COMPANIONAPP
       public static const RADIO_RENDERER_LINKAGE_ID:String = "RadioItemRendererMc";
       
       public static const PIPBOY_MESSAGE_RENDERER_LINKAGE_ID:String = "PipboyMessageItemRenderer";
-       
       
       public function BSScrollingListInterface()
       {
@@ -158,3 +156,4 @@ package Shared.AS3.COMPANIONAPP
       }
    }
 }
+

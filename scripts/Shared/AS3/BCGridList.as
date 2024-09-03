@@ -13,7 +13,6 @@ package Shared.AS3
    
    public class BCGridList extends MovieClip
    {
-      
       public static const TEXT_OPTION_NONE:String = "None";
       
       public static const TEXT_OPTION_SHRINK_TO_FIT:String = "Shrink To Fit";
@@ -33,7 +32,6 @@ package Shared.AS3
       public static const SELECTION_EDGE_BOUNCE:String = "BCGridList::selectionEdgeBounce";
       
       public static const ITEM_CLICKED:String = "BCGridList::itemClicked";
-       
       
       public var Body_mc:MovieClip;
       
@@ -946,8 +944,8 @@ package Shared.AS3
       
       private function createEntryClip(param1:uint, param2:uint, param3:uint) : Boolean
       {
-         var _loc4_:BSScrollingListEntry;
-         if((_loc4_ = this.getNewEntryClip()) != null)
+         var _loc4_:BSScrollingListEntry = this.getNewEntryClip();
+         if(_loc4_ != null)
          {
             _loc4_.parentClip = this.parent as MovieClip;
             _loc4_.clipIndex = param1;
@@ -975,7 +973,8 @@ package Shared.AS3
          var _loc4_:BSScrollingListEntry = null;
          while(this.EntryHolder_mc.numChildren > 0)
          {
-            (_loc4_ = this.getClipByIndex(0)).Dtor();
+            _loc4_ = this.getClipByIndex(0);
+            _loc4_.Dtor();
             this.EntryHolder_mc.removeChildAt(0);
          }
          this.m_ClipVector = new Vector.<BSScrollingListEntry>();
@@ -1139,7 +1138,8 @@ package Shared.AS3
             _loc11_ = 0;
             while(_loc11_ < this.m_MaxDisplayedItems)
             {
-               if((_loc12_ = this.m_ClipVector[_loc11_]) != null)
+               _loc12_ = this.m_ClipVector[_loc11_];
+               if(_loc12_ != null)
                {
                   if(_loc11_ + _loc1_ < _loc2_)
                   {
@@ -1191,3 +1191,4 @@ package Shared.AS3
       }
    }
 }
+

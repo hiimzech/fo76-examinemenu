@@ -4,7 +4,6 @@ package Shared.AS3.Styles
    
    public class ExamineMenu_CurrentModListStyle
    {
-      
       public static var listEntryClass_Inspectable:String = "CurrentModListEntry";
       
       public static var numListItems_Inspectable:uint = 10;
@@ -14,7 +13,6 @@ package Shared.AS3.Styles
       public static var restoreListIndex_Inspectable:Boolean = false;
       
       public static var verticalSpacing_Inspectable:Number = 2.5;
-       
       
       public function ExamineMenu_CurrentModListStyle()
       {
@@ -22,3 +20,4 @@ package Shared.AS3.Styles
       }
    }
 }
+

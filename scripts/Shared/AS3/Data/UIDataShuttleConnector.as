@@ -2,8 +2,6 @@ package Shared.AS3.Data
 {
    public class UIDataShuttleConnector
    {
-       
-      
       public var _Watch:Function;
       
       public var _RemoveWatch:Function;
@@ -23,8 +21,8 @@ package Shared.AS3.Data
       {
          var _loc6_:String = null;
          var _loc4_:Object = new Object();
-         var _loc5_:UIDataFromClient;
-         if(!(_loc5_ = param3))
+         var _loc5_:UIDataFromClient = param3;
+         if(!_loc5_)
          {
             _loc5_ = new UIDataFromClient(_loc4_);
          }
@@ -51,3 +49,4 @@ package Shared.AS3.Data
       }
    }
 }
+

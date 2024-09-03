@@ -2,11 +2,9 @@ package
 {
    import Shared.AS3.BSScrollingListFadeEntry;
    
-   [Embed(source="/_assets/assets.swf", symbol="RequirementListEntry")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol28")]
    public class RequirementListEntry extends BSScrollingListFadeEntry
    {
-       
-      
       public function RequirementListEntry()
       {
          super();
@@ -27,3 +25,4 @@ package
       }
    }
 }
+

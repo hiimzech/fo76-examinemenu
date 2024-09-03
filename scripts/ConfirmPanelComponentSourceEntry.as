@@ -8,8 +8,6 @@ package
    
    public class ConfirmPanelComponentSourceEntry extends MovieClip
    {
-       
-      
       public var textField:TextField;
       
       private var XBufferBeforeComponentsC:* = 17.25;
@@ -140,7 +138,8 @@ package
          var _loc7_:* = 0;
          while(_loc7_ < _loc6_)
          {
-            if((_loc8_ = this.EntriesA[_loc7_] as ConfirmPanelComponentEntry).y < _loc4_ - 1)
+            _loc8_ = this.EntriesA[_loc7_] as ConfirmPanelComponentEntry;
+            if(_loc8_.y < _loc4_ - 1)
             {
                _loc8_.visible = false;
             }
@@ -201,3 +200,4 @@ package
       }
    }
 }
+

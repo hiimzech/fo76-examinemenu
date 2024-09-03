@@ -2,11 +2,9 @@ package
 {
    import flash.display.MovieClip;
    
-   [Embed(source="/_assets/assets.swf", symbol="MessageBoxButtonList")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol64")]
    public dynamic class MessageBoxButtonList extends MovieClip
    {
-       
-      
       public var ScrollDown:MovieClip;
       
       public var ScrollUp:MovieClip;
@@ -19,3 +17,4 @@ package
       }
    }
 }
+

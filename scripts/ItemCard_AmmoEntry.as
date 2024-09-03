@@ -1,10 +1,8 @@
 package
 {
-   [Embed(source="/_assets/assets.swf", symbol="ItemCard_AmmoEntry")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol282")]
    public class ItemCard_AmmoEntry extends ItemCard_Entry
    {
-       
-      
       public function ItemCard_AmmoEntry()
       {
          addFrameScript(0,this.frame1,1,this.frame2);
@@ -31,3 +29,4 @@ package
       }
    }
 }
+

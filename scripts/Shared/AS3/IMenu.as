@@ -16,8 +16,6 @@ package Shared.AS3
    
    public class IMenu extends BSDisplayObject
    {
-       
-      
       private var _uiPlatform:uint;
       
       private var _bPS3Switch:Boolean;
@@ -240,3 +238,4 @@ package Shared.AS3
       }
    }
 }
+

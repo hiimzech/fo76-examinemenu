@@ -6,8 +6,6 @@ package Shared.AS3.Data
    
    public class UsesEventDispatcherBackend implements IEventDispatcher
    {
-       
-      
       private var m_Dispatcher:EventDispatcher;
       
       private var _eventDispatcherBackend:BSUIEventDispatcherBackend;
@@ -75,3 +73,4 @@ package Shared.AS3.Data
       }
    }
 }
+

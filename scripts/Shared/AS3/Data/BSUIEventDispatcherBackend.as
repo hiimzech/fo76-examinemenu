@@ -2,8 +2,6 @@ package Shared.AS3.Data
 {
    public class BSUIEventDispatcherBackend
    {
-       
-      
       public var DispatchEventToGame:Function;
       
       public function BSUIEventDispatcherBackend()
@@ -17,3 +15,4 @@ package Shared.AS3.Data
       }
    }
 }
+

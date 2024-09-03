@@ -3,11 +3,9 @@ package
    import Shared.AS3.BSScrollingList;
    import flash.display.MovieClip;
    
-   [Embed(source="/_assets/assets.swf", symbol="ItemCard_ComponentsEntry")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol268")]
    public class ItemCard_ComponentsEntry extends ItemCard_Entry
    {
-       
-      
       public var EntryHolder_mc:MovieClip;
       
       private var currY:Number;
@@ -49,3 +47,4 @@ package
       }
    }
 }
+

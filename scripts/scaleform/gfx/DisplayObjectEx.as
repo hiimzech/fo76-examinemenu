@@ -4,8 +4,6 @@ package scaleform.gfx
    
    public class DisplayObjectEx
    {
-       
-      
       public function DisplayObjectEx()
       {
          super();
@@ -39,3 +37,4 @@ package scaleform.gfx
       }
    }
 }
+

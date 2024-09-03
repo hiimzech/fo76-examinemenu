@@ -4,11 +4,9 @@ package Shared.AS3
    import scaleform.gfx.Extensions;
    import scaleform.gfx.TextFieldEx;
    
-   [Embed(source="/_assets/assets.swf", symbol="Shared.AS3.PerkClipRequirement")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol371")]
    public class PerkClipRequirement extends PerkClipSmall
    {
-       
-      
       public var Rank_mc:MovieClip;
       
       public function PerkClipRequirement()
@@ -28,3 +26,4 @@ package Shared.AS3
       }
    }
 }
+

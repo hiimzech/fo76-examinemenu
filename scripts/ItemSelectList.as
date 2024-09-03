@@ -6,11 +6,9 @@ package
    import flash.events.Event;
    import flash.events.KeyboardEvent;
    
-   [Embed(source="/_assets/assets.swf", symbol="ItemSelectList")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol48")]
    public class ItemSelectList extends BSScrollingList
    {
-       
-      
       public var FilterCount:uint = 0;
       
       public var CategoryNameList:Array;
@@ -73,3 +71,4 @@ package
       }
    }
 }
+

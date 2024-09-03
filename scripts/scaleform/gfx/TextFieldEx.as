@@ -5,7 +5,6 @@ package scaleform.gfx
    
    public final class TextFieldEx extends InteractiveObjectEx
    {
-      
       public static const VALIGN_NONE:String = "none";
       
       public static const VALIGN_TOP:String = "top";
@@ -27,7 +26,6 @@ package scaleform.gfx
       public static const VAUTOSIZE_CENTER:String = "center";
       
       public static const VAUTOSIZE_BOTTOM:String = "bottom";
-       
       
       public function TextFieldEx()
       {
@@ -132,3 +130,4 @@ package scaleform.gfx
       }
    }
 }
+

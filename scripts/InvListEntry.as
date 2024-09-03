@@ -6,11 +6,9 @@ package
    import flash.filters.BitmapFilterQuality;
    import flash.filters.DropShadowFilter;
    
-   [Embed(source="/_assets/assets.swf", symbol="InvListEntry")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol83")]
    public class InvListEntry extends ItemListEntryBase
    {
-       
-      
       public var EquipIconInstance:MovieClip;
       
       public var FavoriteIconInstance:MovieClip;
@@ -38,7 +36,7 @@ package
          }
          else
          {
-            _loc3_ = String(param1.text);
+            _loc3_ = param1.text;
          }
          var _loc4_:* = GlobalFunc.BuildLegendaryStarsGlyphString(param1);
          if(param1.text != undefined)
@@ -114,3 +112,4 @@ package
       }
    }
 }
+

@@ -3,11 +3,9 @@ package ExamineMenu_fla
    import flash.display.MovieClip;
    import flash.events.Event;
    
-   [Embed(source="/_assets/assets.swf", symbol="ExamineMenu_fla.Attribute4_42")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol350")]
    public dynamic class Attribute4_42 extends MovieClip
    {
-       
-      
       public var AttributeText_mc:MovieClip;
       
       public function Attribute4_42()
@@ -28,3 +26,4 @@ package ExamineMenu_fla
       }
    }
 }
+

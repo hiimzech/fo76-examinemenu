@@ -2,13 +2,11 @@ package fl.motion
 {
    public class ColorMatrix extends DynamicMatrix
    {
-      
       protected static const LUMINANCER:Number = 0.3086;
       
       protected static const LUMINANCEG:Number = 0.6094;
       
       protected static const LUMINANCEB:Number = 0.082;
-       
       
       public function ColorMatrix()
       {
@@ -152,8 +150,6 @@ package fl.motion
 
 class XFormData
 {
-    
-   
    public var ox:Number;
    
    public var oy:Number;
@@ -165,3 +161,4 @@ class XFormData
       super();
    }
 }
+

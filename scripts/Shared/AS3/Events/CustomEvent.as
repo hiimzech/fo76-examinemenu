@@ -4,9 +4,7 @@ package Shared.AS3.Events
    
    public class CustomEvent extends Event
    {
-      
       public static const ACTION_HOVERCHARACTER:String = "HoverCharacter";
-       
       
       public var params:Object;
       
@@ -22,3 +20,4 @@ package Shared.AS3.Events
       }
    }
 }
+
