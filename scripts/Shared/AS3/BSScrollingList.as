@@ -42,6 +42,10 @@ package Shared.AS3
       
       public static const PLAY_FOCUS_SOUND:String = "BSScrollingList::playFocusSound";
       
+      public static const TOP_EDGE_BOUNCE:String = "BSScrollingList::TopEdgeBounce";
+      
+      public static const BOTTOM_EDGE_BOUNCE:String = "BSScrollingList::BottomEdgeBounce";
+      
       public static const MOBILE_ITEM_PRESS:String = "BSScrollingList::mobileItemPress";
        
       
@@ -1153,6 +1157,10 @@ package Shared.AS3
                   dispatchEvent(new Event(PLAY_FOCUS_SOUND,true,true));
                }
             }
+            else
+            {
+               dispatchEvent(new Event(TOP_EDGE_BOUNCE,true,true));
+            }
          }
          else if(this.bAllowSelectionDisabledListNav)
          {
@@ -1195,6 +1203,10 @@ package Shared.AS3
                   this.bMouseDrivenNav = false;
                   dispatchEvent(new Event(PLAY_FOCUS_SOUND,true,true));
                }
+            }
+            else
+            {
+               dispatchEvent(new Event(BOTTOM_EDGE_BOUNCE,true,true));
             }
          }
          else if(this.bAllowSelectionDisabledListNav)
