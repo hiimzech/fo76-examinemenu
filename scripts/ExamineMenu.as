@@ -2114,6 +2114,22 @@ package
          this.BGSCodeObj.HideMenu();
       }
       
+      public function ModModeToInvMode() : void
+      {
+         this.ModModeToSlotsMode();
+         this.PopCraftingHierarchy();
+         this.ModListObject.SetInactive();
+         this.ModSlotListObject.SetActive(this.ModSlotBase_mc.ModSlotList_mc,"ModSlotListObject");
+         this.InventoryListObject.SetActive(this.InventoryBase_mc.InventoryList_mc,"InventoryListObject");
+         this.InventoryListObject.selectedIndex = 0;
+         this.ModListObject.removeEventListener(BSScrollingList.SELECTION_CHANGE,this.ModChange);
+         this.SetRightListLabel("$CURRENT MODS");
+         this.eMode = this.INVENTORY_MODE;
+         this.BGSCodeObj.PlaySound("UIMenuCancel");
+         this.BGSCodeObj.RemoveHighlight();
+         this.PopCraftingHierarchy();
+      }
+      
       private function onBackButton() : void
       {
          if(this.QuantityModal_mc.opened)

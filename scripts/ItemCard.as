@@ -285,9 +285,9 @@ package
          if(_loc8_.maxMeterHealth > 0 && _loc8_.currentHealth != -1 && this.bItemHealthEnabled)
          {
             _loc2_ = this.CreateEntry(this.ET_ITEM_HEALTH);
-            var dura:Array = null;
             if(_loc2_ != null)
             {
+               var dura:Array = null;
                dura = (_loc2_ as ItemCard_ItemHealthEntry).PopulateEntry(_loc8_);
                var nxtLine:ItemCard_Entry = this.CreateEntry(this.ET_STANDARD);
                if(nxtLine != null)
