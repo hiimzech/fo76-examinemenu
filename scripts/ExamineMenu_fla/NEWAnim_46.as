@@ -3,9 +3,11 @@ package ExamineMenu_fla
    import flash.display.MovieClip;
    import flash.events.Event;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol362")]
+   [Embed(source="/_assets/assets.swf", symbol="ExamineMenu_fla.NEWAnim_46")]
    public dynamic class NEWAnim_46 extends MovieClip
    {
+       
+      
       public function NEWAnim_46()
       {
          super();
@@ -28,4 +30,3 @@ package ExamineMenu_fla
       }
    }
 }
-

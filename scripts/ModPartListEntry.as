@@ -5,9 +5,11 @@ package
    import flash.display.MovieClip;
    import flash.geom.ColorTransform;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol58")]
+   [Embed(source="/_assets/assets.swf", symbol="ModPartListEntry")]
    public class ModPartListEntry extends BSScrollingListFadeEntry
    {
+       
+      
       public var ModSelectedIcon_mc:MovieClip;
       
       public var FavoriteIcon_mc:MovieClip;
@@ -33,4 +35,3 @@ package
       }
    }
 }
-

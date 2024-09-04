@@ -5,7 +5,9 @@ package Shared.AS3.Events
    
    public class PlatformRequestEvent extends Event
    {
+      
       public static const PLATFORM_REQUEST:String = "GetPlatform";
+       
       
       internal var _target:MovieClip;
       
@@ -26,4 +28,3 @@ package Shared.AS3.Events
       }
    }
 }
-

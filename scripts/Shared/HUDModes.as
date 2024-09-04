@@ -2,6 +2,7 @@ package Shared
 {
    public class HUDModes
    {
+      
       public static const ALL:String = "All";
       
       public static const ACTIVATE_TYPE:String = "ActivateTypeMode";
@@ -63,6 +64,7 @@ package Shared
       public static const DIALOGUE_MODE:String = "DialogueMode";
       
       public static const LEGENDARY_PERKS_MODE:String = "LegendaryPerksMode";
+       
       
       public function HUDModes()
       {
@@ -70,4 +72,3 @@ package Shared
       }
    }
 }
-

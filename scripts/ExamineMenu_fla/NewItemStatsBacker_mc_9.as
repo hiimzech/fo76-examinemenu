@@ -3,9 +3,11 @@ package ExamineMenu_fla
    import flash.display.MovieClip;
    import flash.text.TextField;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol430")]
+   [Embed(source="/_assets/assets.swf", symbol="ExamineMenu_fla.NewItemStatsBacker_mc_9")]
    public dynamic class NewItemStatsBacker_mc_9 extends MovieClip
    {
+       
+      
       public var itemStatsLabel_tf:TextField;
       
       public function NewItemStatsBacker_mc_9()
@@ -90,4 +92,3 @@ package ExamineMenu_fla
       }
    }
 }
-

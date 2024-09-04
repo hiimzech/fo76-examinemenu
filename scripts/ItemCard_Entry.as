@@ -8,9 +8,11 @@ package
    
    public class ItemCard_Entry extends MovieClip
    {
+      
       public static var DynamicModDescEnable:Boolean = false;
       
       public static var AdvanceModDescMode:Boolean = false;
+       
       
       public var Label_tf:TextField;
       
@@ -143,7 +145,7 @@ package
          {
             if(param1.value is String)
             {
-               _loc3_ = param1.value;
+               _loc3_ = String(param1.value);
             }
             else
             {
@@ -201,4 +203,3 @@ package
       }
    }
 }
-

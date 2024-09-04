@@ -4,6 +4,8 @@ package Shared.AS3.Data
    
    public class UIDataFromClient extends EventDispatcher
    {
+       
+      
       private var m_Payload:Object;
       
       private var m_Ready:Boolean = false;
@@ -56,4 +58,3 @@ package Shared.AS3.Data
       }
    }
 }
-

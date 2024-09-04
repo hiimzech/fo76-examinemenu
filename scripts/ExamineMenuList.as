@@ -5,10 +5,12 @@ package
    import flash.events.Event;
    import flash.events.MouseEvent;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol382")]
+   [Embed(source="/_assets/assets.swf", symbol="ExamineMenuList")]
    public class ExamineMenuList extends DummyEntryList
    {
+      
       public static const MOUSE_OVER:String = "ItemList::mouse_over";
+       
       
       public function ExamineMenuList()
       {
@@ -61,4 +63,3 @@ package
       }
    }
 }
-

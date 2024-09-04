@@ -8,6 +8,8 @@ package Shared.AS3
    
    public class PerkClipSmall extends PerkClipBase
    {
+       
+      
       public var Title_mc:MovieClip;
       
       public var VaultBoyImageContainer_mc:SWFLoaderClip;
@@ -79,4 +81,3 @@ package Shared.AS3
       }
    }
 }
-

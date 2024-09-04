@@ -7,9 +7,11 @@ package
    import scaleform.gfx.Extensions;
    import scaleform.gfx.TextFieldEx;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol88")]
+   [Embed(source="/_assets/assets.swf", symbol="ItemCard_ValueEntry")]
    public class ItemCard_ValueEntry extends ItemCard_Entry
    {
+       
+      
       private var _currencyType:uint = 0;
       
       private var currencyImageInstance:MovieClip;
@@ -54,7 +56,7 @@ package
          this.PopulateText(param1.text);
          if(Value_tf != null)
          {
-            _loc2_ = param1.value;
+            _loc2_ = String(param1.value);
             GlobalFunc.SetText(Value_tf,_loc2_,false);
             if(Icon_mc != null)
             {
@@ -73,4 +75,3 @@ package
       }
    }
 }
-

@@ -4,6 +4,7 @@ package Shared.AS3.Styles
    
    public class ExamineMenu_LeftHandListStyle
    {
+      
       public static var listEntryClass_Inspectable:String = "InvListEntry";
       
       public static var numListItems_Inspectable:Number = 10;
@@ -13,6 +14,7 @@ package Shared.AS3.Styles
       public static var restoreListIndex_Inspectable:Boolean = false;
       
       public static var verticalSpacing_Inspectable:Number = 0;
+       
       
       public function ExamineMenu_LeftHandListStyle()
       {
@@ -20,4 +22,3 @@ package Shared.AS3.Styles
       }
    }
 }
-

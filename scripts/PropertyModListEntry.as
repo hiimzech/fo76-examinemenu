@@ -2,9 +2,11 @@ package
 {
    import Shared.AS3.BSScrollingListEntry;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol12")]
+   [Embed(source="/_assets/assets.swf", symbol="PropertyModListEntry")]
    public class PropertyModListEntry extends BSScrollingListEntry
    {
+       
+      
       public function PropertyModListEntry()
       {
          super();
@@ -17,4 +19,3 @@ package
       }
    }
 }
-

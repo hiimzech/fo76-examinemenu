@@ -4,10 +4,12 @@ package
    import flash.display.MovieClip;
    import flash.text.TextField;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol294")]
+   [Embed(source="/_assets/assets.swf", symbol="DynamicModDescriptionEntry")]
    public class DynamicModDescriptionEntry extends BSScrollingListEntry
    {
+      
       public static var AdvancedModDescMode:Boolean = false;
+       
       
       public var Arrow_mc:MovieClip;
       
@@ -50,7 +52,7 @@ package
          }
          else if(AdvancedModDescMode)
          {
-            _loc3_ = param1.value;
+            _loc3_ = String(param1.value);
             _loc3_ = parseFloat(_loc3_) > 0 ? "+" + _loc3_ : _loc3_;
             _loc3_ = !!param1.isPercentage ? _loc3_ + "%" : _loc3_;
             this.ValueText_mc.gotoAndStop(!!param1.isPositive ? "blue" : "red");
@@ -89,4 +91,3 @@ package
       }
    }
 }
-

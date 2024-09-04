@@ -11,6 +11,7 @@ package Shared.AS3
    
    public class BSSlider extends BSUIComponent
    {
+      
       public static const VALUE_CHANGED:String = "Slider::ValueChanged";
       
       public static const FILL_MIN_POS_OFFSET:Number = 2;
@@ -20,6 +21,7 @@ package Shared.AS3
       public static const HANDLE_SIZE_MIN_PERCENT:Number = 0.25;
       
       public static const HANDLE_SIZE_MAX_PERCENT:Number = 0.75;
+       
       
       public var SliderBackground_mc:MovieClip;
       
@@ -437,4 +439,3 @@ package Shared.AS3
       }
    }
 }
-

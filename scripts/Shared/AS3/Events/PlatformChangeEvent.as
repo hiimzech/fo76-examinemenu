@@ -4,6 +4,7 @@ package Shared.AS3.Events
    
    public class PlatformChangeEvent extends Event
    {
+      
       public static const PLATFORM_PC_KB_MOUSE:uint = 0;
       
       public static const PLATFORM_PC_GAMEPAD:uint = 1;
@@ -23,6 +24,7 @@ package Shared.AS3.Events
       public static const PLATFORM_PC_KB_BE:uint = 2;
       
       public static const PLATFORM_CHANGE:String = "SetPlatform";
+       
       
       internal var _uiPlatform:uint = 4294967295;
       
@@ -87,4 +89,3 @@ package Shared.AS3.Events
       }
    }
 }
-

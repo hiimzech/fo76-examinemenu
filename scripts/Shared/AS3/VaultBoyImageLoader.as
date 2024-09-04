@@ -8,6 +8,8 @@ package Shared.AS3
    
    public dynamic class VaultBoyImageLoader extends BSUIComponent
    {
+       
+      
       public var VaultBoyImageInternal_mc:BSUIComponent;
       
       private var SWF:MovieClip;
@@ -157,8 +159,7 @@ package Shared.AS3
          }
          if(this.bUseFixedQuestStageSize_Inspectable)
          {
-            _loc4_ = this.SWF.graphics;
-            _loc4_.clear();
+            (_loc4_ = this.SWF.graphics).clear();
             _loc4_.beginFill(0,0);
             _loc4_.drawRect(0,0,this.questAnimStageWidth_Inspectable,this.questAnimStageHeight_Inspectable);
             _loc4_.endFill();
@@ -211,4 +212,3 @@ package Shared.AS3
       }
    }
 }
-

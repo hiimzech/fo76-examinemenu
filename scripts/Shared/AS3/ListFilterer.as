@@ -5,7 +5,9 @@ package Shared.AS3
    
    public class ListFilterer extends EventDispatcher
    {
+      
       public static const FILTER_CHANGE:String = "ListFilterer::filter_change";
+       
       
       private var iItemFilter:int;
       
@@ -141,4 +143,3 @@ package Shared.AS3
       }
    }
 }
-

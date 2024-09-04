@@ -4,9 +4,11 @@ package
    import flash.text.TextFieldAutoSize;
    import scaleform.gfx.TextFieldEx;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol267")]
+   [Embed(source="/_assets/assets.swf", symbol="ItemCard_DescriptionEntry")]
    public class ItemCard_DescriptionEntry extends ItemCard_Entry
    {
+       
+      
       public var Background_mc:MovieClip;
       
       public function ItemCard_DescriptionEntry()
@@ -33,7 +35,7 @@ package
          {
             if(_loc2_ == "")
             {
-               _loc2_ = _loc3_.text;
+               _loc2_ = String(_loc3_.text);
             }
             else
             {
@@ -45,4 +47,3 @@ package
       }
    }
 }
-

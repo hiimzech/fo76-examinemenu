@@ -5,9 +5,11 @@ package
    import flash.display.MovieClip;
    import flash.text.TextField;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol24")]
+   [Embed(source="/_assets/assets.swf", symbol="ModListEntry")]
    public class ModListEntry extends ItemListEntryBase
    {
+       
+      
       public var count:TextField;
       
       public var taggedIcon_mc:MovieClip;
@@ -50,7 +52,7 @@ package
             {
                _loc5_ = param1.betcText == true || Boolean(param1.enabled) || Boolean(param1.hasRequired);
             }
-            _loc4_ = param1.text;
+            _loc4_ = String(param1.text);
          }
          if(param1.text != undefined)
          {
@@ -88,4 +90,3 @@ package
       }
    }
 }
-

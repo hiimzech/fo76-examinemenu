@@ -2,9 +2,11 @@ package ExamineMenu_fla
 {
    import flash.display.MovieClip;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol261")]
+   [Embed(source="/_assets/assets.swf", symbol="ExamineMenu_fla.icon_durability_96")]
    public dynamic class icon_durability_96 extends MovieClip
    {
+       
+      
       public function icon_durability_96()
       {
          super();
@@ -17,4 +19,3 @@ package ExamineMenu_fla
       }
    }
 }
-

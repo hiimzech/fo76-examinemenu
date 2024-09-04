@@ -3,9 +3,11 @@ package
    import Shared.GlobalFunc;
    import flash.display.MovieClip;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol110")]
+   [Embed(source="/_assets/assets.swf", symbol="ItemCard_TimedEntry")]
    public class ItemCard_TimedEntry extends ItemCard_Entry
    {
+       
+      
       public var TimerIcon_mc:MovieClip;
       
       private var TIMER_ORIG_X:Number;
@@ -44,4 +46,3 @@ package
       }
    }
 }
-

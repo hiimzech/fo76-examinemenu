@@ -2,9 +2,11 @@ package
 {
    import flash.display.MovieClip;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol263")]
+   [Embed(source="/_assets/assets.swf", symbol="ItemCard_DurabilityEntry")]
    public class ItemCard_DurabilityEntry extends ItemCard_Entry
    {
+       
+      
       public var Durability_mc:MovieClip;
       
       private var m_DurabilityFrames:int = 6;
@@ -31,4 +33,3 @@ package
       }
    }
 }
-

@@ -8,6 +8,8 @@ package
    
    public class ConfirmPanelComponentEntry extends MovieClip
    {
+       
+      
       public var textField:TextField;
       
       public var Background_mc:MovieClip;
@@ -114,4 +116,3 @@ package
       }
    }
 }
-

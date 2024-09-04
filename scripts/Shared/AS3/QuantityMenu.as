@@ -15,9 +15,10 @@ package Shared.AS3
    import flash.ui.Keyboard;
    import flash.utils.getTimer;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol39")]
+   [Embed(source="/_assets/assets.swf", symbol="Shared.AS3.QuantityMenu")]
    public class QuantityMenu extends BSUIComponent
    {
+      
       private static const LabelBufferX:* = 3;
       
       public static const QUANTITY_CHANGED:* = "QuantityChanged";
@@ -39,6 +40,7 @@ package Shared.AS3
       public static const MAX:String = "QuantityMenu::quantityMaxed";
       
       public static const CANCEL:String = "QuantityMenu::quantityCancelled";
+       
       
       public var Label_tf:TextField;
       
@@ -678,4 +680,3 @@ package Shared.AS3
       }
    }
 }
-

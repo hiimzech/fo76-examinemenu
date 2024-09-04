@@ -9,9 +9,11 @@ package Shared.AS3
    
    public dynamic class BSButtonHintData extends EventDispatcher
    {
+      
       public static const BUTTON_HINT_DATA_CHANGE:String = "ButtonHintDataChange";
       
       public static const EVENT_CONTROL_MAP_DATA:String = "ControlMapData";
+       
       
       private var _strButtonText:String;
       
@@ -432,7 +434,7 @@ package Shared.AS3
             {
                if(param2[_loc4_].userEventName == this.userEventMapping)
                {
-                  _loc3_ = param2[_loc4_].buttonName;
+                  _loc3_ = String(param2[_loc4_].buttonName);
                   break;
                }
                _loc4_++;
@@ -456,4 +458,3 @@ package Shared.AS3
       }
    }
 }
-

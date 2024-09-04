@@ -17,6 +17,7 @@ package Shared.AS3
    
    public class BSScrollingList extends MovieClip
    {
+      
       public static const TEXT_OPTION_NONE:String = "None";
       
       public static const TEXT_OPTION_SHRINK_TO_FIT:String = "Shrink To Fit";
@@ -41,11 +42,8 @@ package Shared.AS3
       
       public static const PLAY_FOCUS_SOUND:String = "BSScrollingList::playFocusSound";
       
-      public static const TOP_EDGE_BOUNCE:String = "BSScrollingList::TopEdgeBounce";
-      
-      public static const BOTTOM_EDGE_BOUNCE:String = "BSScrollingList::BottomEdgeBounce";
-      
       public static const MOBILE_ITEM_PRESS:String = "BSScrollingList::mobileItemPress";
+       
       
       public var scrollList:MobileScrollList;
       
@@ -330,8 +328,7 @@ package Shared.AS3
          var _loc3_:uint = 0;
          while(_loc3_ < this.EntryHolder_mc.numChildren)
          {
-            _loc5_ = this.GetClipByIndex(_loc3_);
-            if(_loc5_.visible == true && _loc5_.itemIndex == param1)
+            if((_loc5_ = this.GetClipByIndex(_loc3_)).visible == true && _loc5_.itemIndex == param1)
             {
                _loc2_ = _loc5_;
                break;
@@ -559,8 +556,7 @@ package Shared.AS3
             }
             if(_loc3_ != -1 && _loc3_ < this.EntriesA.length)
             {
-               _loc4_ = this.FindClipForEntry(_loc3_);
-               if(_loc4_ != null)
+               if((_loc4_ = this.FindClipForEntry(_loc3_)) != null)
                {
                   this.SetEntry(_loc4_,this.EntriesA[_loc3_]);
                }
@@ -861,8 +857,7 @@ package Shared.AS3
          var _loc4_:uint = 0;
          while(_loc4_ < this.uiNumListItems)
          {
-            _loc6_ = this.GetClipByIndex(_loc4_);
-            if(_loc6_)
+            if(_loc6_ = this.GetClipByIndex(_loc4_))
             {
                _loc6_.visible = false;
                _loc6_.itemIndex = int.MAX_VALUE;
@@ -881,8 +876,7 @@ package Shared.AS3
          }
          while(_loc2_ != int.MAX_VALUE && _loc2_ != -1 && _loc2_ < this.EntriesA.length && this.iListItemsShown < this.uiNumListItems && _loc1_ <= this.fListHeight)
          {
-            _loc7_ = this.GetClipByIndex(this.iListItemsShown);
-            if(_loc7_)
+            if(_loc7_ = this.GetClipByIndex(this.iListItemsShown))
             {
                this.SetEntry(_loc7_,this.EntriesA[_loc2_]);
                _loc7_.itemIndex = _loc2_;
@@ -994,8 +988,7 @@ package Shared.AS3
          var _loc6_:* = false;
          if(!this._filterer.IsValidIndex(this.iSelectedIndex))
          {
-            _loc7_ = this._filterer.GetPrevFilterMatch(this.iSelectedIndex);
-            if(_loc7_ == int.MAX_VALUE)
+            if((_loc7_ = this._filterer.GetPrevFilterMatch(this.iSelectedIndex)) == int.MAX_VALUE)
             {
                if(this._filterer.GetNextFilterMatch(this.iSelectedIndex) == int.MAX_VALUE)
                {
@@ -1160,10 +1153,6 @@ package Shared.AS3
                   dispatchEvent(new Event(PLAY_FOCUS_SOUND,true,true));
                }
             }
-            else
-            {
-               dispatchEvent(new Event(TOP_EDGE_BOUNCE,true,true));
-            }
          }
          else if(this.bAllowSelectionDisabledListNav)
          {
@@ -1206,10 +1195,6 @@ package Shared.AS3
                   this.bMouseDrivenNav = false;
                   dispatchEvent(new Event(PLAY_FOCUS_SOUND,true,true));
                }
-            }
-            else
-            {
-               dispatchEvent(new Event(BOTTOM_EDGE_BOUNCE,true,true));
             }
          }
          else if(this.bAllowSelectionDisabledListNav)
@@ -1364,4 +1349,3 @@ package Shared.AS3
       }
    }
 }
-

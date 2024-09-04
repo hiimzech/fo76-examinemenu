@@ -4,9 +4,11 @@ package Components
    import flash.display.MovieClip;
    import flash.text.TextField;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol8")]
+   [Embed(source="/_assets/assets.swf", symbol="Components.TextEntry")]
    public class TextEntry extends MovieClip
    {
+       
+      
       public var TextEntryAnim_mc:MovieClip;
       
       public var TextEntryBackground_mc:MovieClip;
@@ -80,4 +82,3 @@ package Components
       }
    }
 }
-

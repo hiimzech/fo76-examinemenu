@@ -2,9 +2,11 @@ package ExamineMenu_fla
 {
    import flash.display.MovieClip;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol19")]
+   [Embed(source="/_assets/assets.swf", symbol="ExamineMenu_fla.List2Icon_150")]
    public dynamic class List2Icon_150 extends MovieClip
    {
+       
+      
       public function List2Icon_150()
       {
          super();
@@ -17,4 +19,3 @@ package ExamineMenu_fla
       }
    }
 }
-

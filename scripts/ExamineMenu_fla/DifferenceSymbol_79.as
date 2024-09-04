@@ -2,9 +2,11 @@ package ExamineMenu_fla
 {
    import flash.display.MovieClip;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol109")]
+   [Embed(source="/_assets/assets.swf", symbol="ExamineMenu_fla.DifferenceSymbol_79")]
    public dynamic class DifferenceSymbol_79 extends MovieClip
    {
+       
+      
       public function DifferenceSymbol_79()
       {
          super();
@@ -32,4 +34,3 @@ package ExamineMenu_fla
       }
    }
 }
-

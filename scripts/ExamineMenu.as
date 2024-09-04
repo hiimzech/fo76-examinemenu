@@ -26,9 +26,10 @@ package
    import scaleform.gfx.Extensions;
    import scaleform.gfx.TextFieldEx;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol458")]
+   [Embed(source="/_assets/assets.swf", symbol="ExamineMenu")]
    public class ExamineMenu extends IMenu
    {
+      
       private static const MIN_ITEM_CARD_ENTRIES:int = 10;
       
       private static const MAX_ITEM_CARD_ENTRIES:int = 15;
@@ -36,54 +37,7 @@ package
       public static const EVENT_UPDATE_PIPBOY_INV_SELECTION:String = "Pipboy::UpdateInventorySelection";
       
       public static const EVENT_IS_CRAFTING:String = "Crafting::IsCrafting";
-      
-      m_ConfirmMenuOpen = false;
-      TakeButtonVisiblity = false;
-      ExitButtonVisiblity = true;
-      ItemStatsVisibility = true;
-      _ScrapQuantity = 1;
-      bConfirm = false;
-      strStartName = "";
-      strBuildButtonText = "$BUILD";
-      strAlternateButtonText = "";
-      AternateTextEnabled = true;
-      bEnteringText = false;
-      bQueuedBackToMods = false;
-      CraftingMenuData = null;
-      _inspectMode = false;
-      _featuredItemMode = false;
-      _singleItemInspectMode = false;
-      _itemNameManagedByCode = false;
-      Language = "en";
-      _allowClearName = false;
-      _allowEquip = false;
-      _allowRename = true;
-      _allowRepair = false;
-      RepairKitsEnabled = false;
-      _showScrapButton = true;
-      _isCookingMenu = false;
-      _eMode = 0;
-      m_IsCrafting = false;
-      bTransitionToCrafting = false;
-      _itemLevelData = null;
-      _allowsModding = true;
-      _allowsCrafting = true;
-      _modalActive = false;
-      _isWorkbench = false;
-      _repairKitCount = 0;
-      _wasModalJustConfirmed = false;
-      _isModeInitialized = false;
-      _isExternalPurchaseOpen = false;
-      _isWaitingForRefreshMTX = false;
-      _HasZeus = false;
-      m_CraftableQuantity = 0;
-      m_PreviousMode = "";
-      m_SelectedModListEntryIndex = -1;
-      m_RestoreSelectedIndex = false;
-      m_DynamicModDescEnabled = false;
-      m_AdvancedModDescMode = false;
-      isHideUI = false;
-      hasPerkPanel = false;
+       
       
       public var BGSCodeObj:Object;
       
@@ -651,7 +605,7 @@ package
       
       private function updateModalActive() : *
       {
-         var _loc1_:String = BSUIDataManager.GetDataFromClient("HUDModeData").data.hudMode;
+         var _loc1_:String = String(BSUIDataManager.GetDataFromClient("HUDModeData").data.hudMode);
          this.modalActive = this.QuantityModal_mc.opened || _loc1_ == HUDModes.MESSAGE_MODE;
          this.InventoryBase_mc.InventoryList_mc.disableInput_Inspectable = this.modalActive;
          this.ItemLevelListObject.disableInput = this.modalActive;
@@ -745,7 +699,7 @@ package
          });
          BSUIDataManager.Subscribe("ExamineMenuMode",function(param1:FromClientDataEvent):*
          {
-            var _loc2_:String = param1.data.mode;
+            var _loc2_:String = String(param1.data.mode);
             if(_loc2_.length > 0)
             {
                if(m_PreviousMode != _loc2_ || _loc2_ == "inspect")
@@ -1441,7 +1395,6 @@ package
                   this.AlternateButton.ButtonEnabled = this.AternateTextEnabled;
                   this.ModButton.ButtonEnabled = this.isCrafting || this.ModSlotListObject.entryList && this.ModSlotListObject.entryList.length > 0;
                   this.InspectButton.ButtonVisible = true;
-                  this.InspectRepairButton.ButtonVisible = this._allowRepair;
                   this.ScrapButton.ButtonVisible = this._showScrapButton;
                   this.ToggleEquipButton.ButtonVisible = this._allowEquip;
                }
@@ -1607,8 +1560,11 @@ package
                            this.onHideUI();
                         }
                      }
-                     this.onScrapBuildAdd();
-                     _loc3_ = true;
+                     else
+                     {
+                        this.onScrapBuildAdd();
+                        _loc3_ = true;
+                     }
                   }
                   break;
                case "LTrigger":
@@ -2158,22 +2114,6 @@ package
          this.BGSCodeObj.HideMenu();
       }
       
-      public function ModModeToInvMode() : void
-      {
-         this.ModModeToSlotsMode();
-         this.PopCraftingHierarchy();
-         this.ModListObject.SetInactive();
-         this.ModSlotListObject.SetActive(this.ModSlotBase_mc.ModSlotList_mc,"ModSlotListObject");
-         this.InventoryListObject.SetActive(this.InventoryBase_mc.InventoryList_mc,"InventoryListObject");
-         this.InventoryListObject.selectedIndex = 0;
-         this.ModListObject.removeEventListener(BSScrollingList.SELECTION_CHANGE,this.ModChange);
-         this.SetRightListLabel("$CURRENT MODS");
-         this.eMode = this.INVENTORY_MODE;
-         this.BGSCodeObj.PlaySound("UIMenuCancel");
-         this.BGSCodeObj.RemoveHighlight();
-         this.PopCraftingHierarchy();
-      }
-      
       private function onBackButton() : void
       {
          if(this.QuantityModal_mc.opened)
@@ -2325,22 +2265,22 @@ package
          var _loc1_:String = "";
          if(this.inspectMode || this.eMode == this.INVENTORY_MODE)
          {
-            _loc1_ = this.BGSCodeObj.GetItemDescription();
+            _loc1_ = String(this.BGSCodeObj.GetItemDescription());
          }
          else if(this.eMode == this.MOD_MODE || this.eMode == this.LEVEL_SELECT_MODE || this.eMode == this.REQUIREMENTS_MODE)
          {
             if(this.isCrafting)
             {
-               _loc1_ = this.BGSCodeObj.GetItemDescription();
+               _loc1_ = String(this.BGSCodeObj.GetItemDescription());
             }
             else if(this.InventoryBase_mc.InventoryList_mc.selectedIndex < this.InventoryBase_mc.InventoryList_mc.entryList.length && this.InventoryBase_mc.InventoryList_mc.entryList[this.InventoryBase_mc.InventoryList_mc.selectedIndex] && this.InventoryBase_mc.InventoryList_mc.entryList[this.InventoryBase_mc.InventoryList_mc.selectedIndex].description != undefined)
             {
-               _loc1_ = this.InventoryBase_mc.InventoryList_mc.entryList[this.InventoryBase_mc.InventoryList_mc.selectedIndex].description;
+               _loc1_ = String(this.InventoryBase_mc.InventoryList_mc.entryList[this.InventoryBase_mc.InventoryList_mc.selectedIndex].description);
             }
          }
          else if(this.eMode == this.SLOTS_MODE && this.ModSlotListObject.selectedEntry && !this.ModSlotListObject.selectedEntry.enabled)
          {
-            _loc1_ = this.ModSlotListObject.selectedEntry.tooltip;
+            _loc1_ = String(this.ModSlotListObject.selectedEntry.tooltip);
          }
          this.itemDescription = _loc1_;
       }
@@ -2439,7 +2379,7 @@ package
          var _loc2_:* = "";
          if(_loc1_ == 1)
          {
-            _loc2_ = this._craftingHierarchy[0];
+            _loc2_ = String(this._craftingHierarchy[0]);
          }
          else
          {
@@ -2542,4 +2482,3 @@ package
       }
    }
 }
-

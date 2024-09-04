@@ -3,12 +3,14 @@ package
    import Shared.GlobalFunc;
    import flash.display.MovieClip;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol143")]
+   [Embed(source="/_assets/assets.swf", symbol="ItemCard_MultiEntry")]
    public class ItemCard_MultiEntry extends ItemCard_Entry
    {
+      
       public static const DMG_WEAP_ID:String = "$dmg";
       
       public static const DMG_ARMO_ID:String = "$dr";
+       
       
       public var EntryHolder_mc:MovieClip;
       
@@ -56,8 +58,7 @@ package
          {
             if(param1[_loc4_].text == param2 && IsEntryValid(param1[_loc4_]))
             {
-               _loc5_ = new ItemCard_MultiEntry_Value();
-               _loc5_.Icon_mc.gotoAndStop(param2 == DMG_WEAP_ID ? param1[_loc4_].damageType + GlobalFunc.NUM_DAMAGE_TYPES : param1[_loc4_].damageType);
+               (_loc5_ = new ItemCard_MultiEntry_Value()).Icon_mc.gotoAndStop(param2 == DMG_WEAP_ID ? param1[_loc4_].damageType + GlobalFunc.NUM_DAMAGE_TYPES : param1[_loc4_].damageType);
                _loc5_.PopulateEntry(param1[_loc4_]);
                this.EntryHolder_mc.addChild(_loc5_);
                ++this.m_EntryCount;
@@ -84,4 +85,3 @@ package
       }
    }
 }
-

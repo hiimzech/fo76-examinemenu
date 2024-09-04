@@ -1,8 +1,10 @@
 package
 {
-   [Embed(source="/_assets/assets.swf", symbol="symbol254")]
+   [Embed(source="/_assets/assets.swf", symbol="ItemCard_FireModeEntry")]
    public class ItemCard_FireModeEntry extends ItemCard_Entry
    {
+       
+      
       public function ItemCard_FireModeEntry()
       {
          addFrameScript(0,this.frame1,1,this.frame2);
@@ -29,4 +31,3 @@ package
       }
    }
 }
-

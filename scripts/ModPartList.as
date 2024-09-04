@@ -4,9 +4,11 @@ package
    import flash.display.MovieClip;
    import flash.events.Event;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol59")]
+   [Embed(source="/_assets/assets.swf", symbol="ModPartList")]
    public class ModPartList extends BSScrollingList
    {
+       
+      
       public function ModPartList()
       {
          super();
@@ -47,4 +49,3 @@ package
       }
    }
 }
-
