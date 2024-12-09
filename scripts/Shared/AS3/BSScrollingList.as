@@ -626,7 +626,7 @@ package Shared.AS3
                         _loc2_ = this.FindClipForEntry(this.iSelectedIndex);
                         _loc9_++;
                      }
-                     if(_loc9_ == this.uiNumListItems)
+                     if(_loc9_ > this.uiNumListItems)
                      {
                         throw new Error("Force-exited list selection loop before the selected entry could be fully scrolled on-screen.  Shouldn\'t be possible!");
                      }

@@ -8,6 +8,8 @@ package Shared
       
       protected var _addsDummyEntryOnBlankList:Boolean = false;
       
+      protected var _addedDummyEntryOnBlankList:Boolean = false;
+      
       protected var _dummyEntryText:String = "$None";
       
       protected var _blankEntryFillTarget:uint = 0;
@@ -25,6 +27,11 @@ package Shared
       public function set addsDummyEntryOnBlankList(param1:Boolean) : void
       {
          this._addsDummyEntryOnBlankList = param1;
+      }
+      
+      public function get addedDummyEntryOnBlankList() : Boolean
+      {
+         return this._addedDummyEntryOnBlankList;
       }
       
       public function get dummyEntryText() : String
@@ -52,6 +59,7 @@ package Shared
          super.UpdateList();
          var _loc1_:Boolean = false;
          var _loc2_:uint = iListItemsShown;
+         this._addedDummyEntryOnBlankList = false;
          if(iListItemsShown == 0 && this._addsDummyEntryOnBlankList)
          {
             this.AddDummyEntry();
@@ -98,9 +106,8 @@ package Shared
       
       protected function AddDummyEntry() : void
       {
-         var _loc1_:BSScrollingListEntry = null;
          var _loc2_:Object = null;
-         _loc1_ = GetClipByIndex(0);
+         var _loc1_:BSScrollingListEntry = GetClipByIndex(0);
          if(_loc1_)
          {
             _loc2_ = new Object();
@@ -108,6 +115,7 @@ package Shared
             _loc1_.visible = true;
             _loc1_.selected = true;
             _loc1_.SetEntryText(_loc2_,strTextOption);
+            this._addedDummyEntryOnBlankList = true;
             iListItemsShown = 1;
          }
       }

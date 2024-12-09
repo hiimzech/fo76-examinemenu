@@ -21,6 +21,8 @@ package
       
       public var ConfirmQuestion_mc:MovieClip;
       
+      public var ConfirmSubtitle_mc:MovieClip;
+      
       public var ScrollUp_mc:MovieClip;
       
       public var ScrollDown_mc:MovieClip;
@@ -74,6 +76,7 @@ package
          this.ButtonHintBar_mc.SetButtonHintData(this.ButtonHints);
          this.AltButton.ButtonVisible = false;
          this.AltButton2.ButtonVisible = false;
+         this.ConfirmSubtitle_mc.visible = false;
          this.m_Entries = new Vector.<ConfirmPanelComponentSourceEntry>();
          this.ButtonHintBar_mc.useVaultTecColor = true;
          Extensions.enabled = true;
@@ -112,6 +115,19 @@ package
       public function set confirmQuestion(param1:String) : *
       {
          GlobalFunc.SetText(this.ConfirmQuestion_mc.ConfirmQuestion_tf,param1,false);
+      }
+      
+      public function set confirmSubtitle(param1:String) : *
+      {
+         if(param1.length > 0)
+         {
+            GlobalFunc.SetText(this.ConfirmSubtitle_mc.ConfirmSubtitle_tf,param1,false);
+            this.ConfirmSubtitle_mc.visible = true;
+         }
+         else
+         {
+            this.ConfirmSubtitle_mc.visible = false;
+         }
       }
       
       public function set acceptButtonText(param1:String) : *
@@ -162,60 +178,56 @@ package
       
       public function Build() : *
       {
-         var _loc6_:uint = 0;
-         var _loc7_:ConfirmPanelComponentSourceEntry = null;
+         var _loc7_:uint = 0;
+         var _loc8_:ConfirmPanelComponentSourceEntry = null;
          var _loc1_:* = this.m_Entries.length;
          var _loc2_:Number = this.ConfirmQuestion_mc.y;
          var _loc3_:uint = 0;
          var _loc4_:TextField = this.ConfirmQuestion_mc.ConfirmQuestion_tf as TextField;
-         this.m_ConfirmQuestionFullHeight = 0;
-         if(_loc4_.numLines > 0)
+         var _loc5_:TextField = this.ConfirmSubtitle_mc.ConfirmSubtitle_tf as TextField;
+         _loc2_ += GlobalFunc.getTextfieldSize(_loc4_);
+         if(this.ConfirmSubtitle_mc.visible)
          {
-            _loc3_ = 0;
-            while(_loc3_ < _loc4_.numLines)
-            {
-               this.m_ConfirmQuestionFullHeight += _loc4_.getLineMetrics(_loc3_).height;
-               _loc3_++;
-            }
+            this.ConfirmSubtitle_mc.y = _loc2_;
+            _loc2_ += GlobalFunc.getTextfieldSize(_loc5_);
          }
-         this.m_ConfirmQuestionFullHeight += this.YBufferAfterQuestionC + this.ScrollUp_mc.height;
-         _loc2_ += this.m_ConfirmQuestionFullHeight;
+         _loc2_ += this.YBufferAfterQuestionC;
          this.ScrollUp_mc.y = _loc2_;
-         var _loc5_:Number = 0;
-         _loc3_ = 0;
-         while(_loc3_ < this.ConfirmQuestion_mc.ConfirmQuestion_tf.numLines)
+         _loc2_ += this.ScrollUp_mc.height + this.YBufferAfterQuestionC / 2;
+         this.m_ConfirmQuestionFullHeight = _loc2_;
+         var _loc6_:Number = GlobalFunc.getTextfieldSize(_loc4_,false);
+         if(this.ConfirmSubtitle_mc.visible)
          {
-            _loc5_ = Math.max(_loc5_,this.ConfirmQuestion_mc.ConfirmQuestion_tf.getLineMetrics(_loc3_).width);
-            _loc3_++;
+            _loc6_ = Math.max(_loc6_,GlobalFunc.getTextfieldSize(_loc5_,false));
          }
-         _loc6_ = 0;
-         while(_loc6_ < _loc1_)
+         _loc7_ = 0;
+         while(_loc7_ < _loc1_)
          {
-            (_loc7_ = this.m_Entries[_loc6_]).originalY = _loc2_;
-            _loc7_.y = _loc2_;
-            _loc7_.UpdateList();
-            _loc5_ = Math.max(_loc5_,this.m_Entries[_loc6_].fullWidth);
-            _loc2_ += _loc7_.height + this.YBufferBetweenEntriesC;
-            _loc6_++;
+            (_loc8_ = this.m_Entries[_loc7_]).originalY = _loc2_;
+            _loc8_.y = _loc2_;
+            _loc8_.UpdateList();
+            _loc6_ = Math.max(_loc6_,this.m_Entries[_loc7_].fullWidth);
+            _loc2_ += _loc8_.height + this.YBufferBetweenEntriesC;
+            _loc7_++;
          }
          this.ButtonHintBar_mc.redrawUIComponent();
-         _loc5_ = Math.max(_loc5_,this.ButtonHintBar_mc.Sizer_mc.width);
-         _loc5_ = Math.max(this.MinWidthC,_loc5_ + this.WidthPaddingC);
-         _loc6_ = 0;
-         while(_loc6_ < _loc1_)
+         _loc6_ = Math.max(_loc6_,this.ButtonHintBar_mc.Sizer_mc.width);
+         _loc6_ = Math.max(this.MinWidthC,_loc6_ + this.WidthPaddingC);
+         _loc7_ = 0;
+         while(_loc7_ < _loc1_)
          {
-            (_loc7_ = this.m_Entries[_loc6_]).x = _loc5_ / 2;
-            _loc6_++;
+            (_loc8_ = this.m_Entries[_loc7_]).x = _loc6_ / 2;
+            _loc7_++;
          }
          this.TopComponentSource = !!_loc1_ ? 0 : -1;
          this.TopComponent = 0;
          this.BGRect_mc.height = Math.min(_loc2_,this.MaxHeightC) + this.YBufferBeforeButtonsC + this.ButtonHintBar_mc.Sizer_mc.height + this.YBufferAfterButtonsC;
          this.ButtonHintBar_mc.y = this.BGRect_mc.height - this.ButtonHintBar_mc.Sizer_mc.height - this.YBufferAfterButtonsC;
-         this.x = (loaderInfo.width - _loc5_) / 2;
+         this.x = (loaderInfo.width - _loc6_) / 2;
          this.y = (loaderInfo.height - this.BGRect_mc.height) / 2;
-         this.BGRect_mc.width = _loc5_;
-         this.ConfirmQuestion_mc.x = _loc5_ / 2;
-         this.ButtonHintBar_mc.x = _loc5_ / 2;
+         this.BGRect_mc.width = _loc6_;
+         this.ConfirmQuestion_mc.x = _loc6_ / 2;
+         this.ButtonHintBar_mc.x = _loc6_ / 2;
          this.ScrollDown_mc.y = this.ButtonHintBar_mc.y - this.YBufferBeforeButtonsC - this.ScrollDown_mc.height;
          this.UpdateScroll();
       }
@@ -338,7 +350,7 @@ package
          }
          else
          {
-            _loc1_ = this.ConfirmQuestion_mc.y + this.m_ConfirmQuestionFullHeight;
+            _loc1_ = this.m_ConfirmQuestionFullHeight;
             _loc2_ = this.ButtonHintBar_mc.y - this.YBufferBeforeButtonsC;
             _loc3_ = this.m_Entries[this.TopComponentSource];
             _loc4_ = _loc3_.GetComponentOriginalY(this.TopComponent) - _loc1_;

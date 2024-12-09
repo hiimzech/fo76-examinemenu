@@ -42,6 +42,8 @@ package Shared.AS3
       
       protected var m_IsLinked:Boolean = false;
       
+      protected var m_IsGhoul:Boolean = false;
+      
       protected var m_IsNew:Boolean = false;
       
       protected var m_IsLevelMet:Boolean = true;
@@ -156,6 +158,15 @@ package Shared.AS3
          if(param1 != this.m_IsShared)
          {
             this.m_IsShared = param1;
+            SetIsDirty();
+         }
+      }
+      
+      public function set isGhoul(param1:Boolean) : void
+      {
+         if(param1 != this.m_IsGhoul)
+         {
+            this.m_IsGhoul = param1;
             SetIsDirty();
          }
       }

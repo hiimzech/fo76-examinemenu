@@ -282,6 +282,12 @@ package Shared
       
       public static const REWARD_TYPE_ENUM_TICKETS:* = 38;
       
+      public static const REWARD_TYPE_ENUM_PLAYER_TITLE:* = 39;
+      
+      public static const PLAYER_TITLE_DELIMITER:* = "|";
+      
+      public static const PLAYER_TITLE_DIVIDER:* = " |";
+      
       public static const IMAGE_FRAME_MAP:Object = {
          "a":1,
          "b":2,
@@ -333,6 +339,82 @@ package Shared
          _loc2_.writeObject(param1);
          _loc2_.position = 0;
          return _loc2_.readObject();
+      }
+      
+      public static function GeneratePlayerNameAndTitle(param1:String) : String
+      {
+         var _loc4_:uint = 0;
+         var _loc2_:String = "";
+         var _loc3_:Array = param1.split(PLAYER_TITLE_DELIMITER);
+         _loc2_ = String(_loc3_[0]);
+         if(_loc3_.length > 1)
+         {
+            _loc2_ += PLAYER_TITLE_DIVIDER;
+            _loc4_ = 1;
+            while(_loc4_ < _loc3_.length)
+            {
+               _loc2_ += " " + _loc3_[_loc4_];
+               _loc4_++;
+            }
+         }
+         return _loc2_;
+      }
+      
+      public static function GeneratePlayerName(param1:String) : String
+      {
+         return param1.split(PLAYER_TITLE_DELIMITER)[0];
+      }
+      
+      public static function HasPlayerTitle(param1:String) : Boolean
+      {
+         return param1.indexOf(PLAYER_TITLE_DELIMITER) > -1;
+      }
+      
+      public static function GeneratePlayerTitle(param1:String) : String
+      {
+         var _loc4_:uint = 0;
+         var _loc2_:String = "";
+         var _loc3_:Array = param1.split(PLAYER_TITLE_DELIMITER);
+         if(_loc3_.length > 1)
+         {
+            _loc2_ = String(_loc3_[1]);
+            _loc4_ = 2;
+            while(_loc4_ < _loc3_.length)
+            {
+               if(_loc3_[_loc4_].length > 0)
+               {
+                  _loc2_ += " " + _loc3_[_loc4_];
+               }
+               _loc4_++;
+            }
+         }
+         return _loc2_;
+      }
+      
+      public static function GeneratePlayerNameAndTitleArray(param1:String) : Array
+      {
+         var _loc5_:uint = 0;
+         var _loc2_:Array = param1.split(PLAYER_TITLE_DELIMITER);
+         var _loc3_:String = "";
+         if(_loc2_.length > 1)
+         {
+            _loc3_ = String(_loc2_[1]);
+            _loc5_ = 2;
+            while(_loc5_ < _loc2_.length)
+            {
+               if(_loc2_[_loc5_].length > 0)
+               {
+                  _loc3_ += " " + _loc2_[_loc5_];
+               }
+               _loc5_++;
+            }
+         }
+         var _loc4_:Array = new Array(_loc2_[0]);
+         if(_loc3_ != "")
+         {
+            _loc4_.push(_loc3_);
+         }
+         return _loc4_;
       }
       
       public static function Lerp(param1:Number, param2:Number, param3:Number, param4:Number, param5:Number, param6:Boolean) : Number
@@ -480,6 +562,12 @@ package Shared
                break;
             case REWARD_TYPE_ENUM_FLAIR:
                _loc4_ = "IconCR_Flair";
+               break;
+            case REWARD_TYPE_ENUM_TICKETS:
+               _loc4_ = "IconCR_Ticket";
+               break;
+            case REWARD_TYPE_ENUM_PLAYER_TITLE:
+               _loc4_ = "IconCR_PlayerTitle";
          }
          return param1.setContainerIconClip(_loc4_);
       }
@@ -756,6 +844,43 @@ package Shared
                this.text = param1;
             }
          };
+      }
+      
+      public static function TruncateSingleLineText(param1:TextField) : *
+      {
+         var _loc2_:int = 0;
+         if(param1.text.length > 3)
+         {
+            _loc2_ = param1.getCharIndexAtPoint(param1.width,0);
+            if(_loc2_ > 0)
+            {
+               param1.replaceText(_loc2_ - 1,param1.length,"…");
+            }
+         }
+      }
+      
+      public static function SetTruncatedMultilineText(param1:TextField, param2:String, param3:Boolean = false) : *
+      {
+         var _loc8_:* = null;
+         var _loc9_:int = 0;
+         var _loc10_:* = undefined;
+         var _loc4_:TextLineMetrics = param1.getLineMetrics(0);
+         var _loc5_:int = param1.height / _loc4_.height;
+         param1.text = "W";
+         var _loc6_:int = param1.width / param1.textWidth;
+         GlobalFunc.SetText(param1,param2,false,param3);
+         var _loc7_:int = Math.min(_loc5_,param1.numLines);
+         if(param1.numLines > _loc5_)
+         {
+            _loc8_ = param2;
+            _loc10_ = (_loc9_ = param1.getLineOffset(_loc5_ - 1)) + _loc6_ - 1;
+            if(_loc8_.charAt(_loc10_ - 1) == " ")
+            {
+               _loc10_--;
+            }
+            _loc8_ = _loc8_.substr(0,_loc10_) + "…";
+            GlobalFunc.SetText(param1,_loc8_,false,param3);
+         }
       }
       
       public static function SetText(param1:TextField, param2:String, param3:Boolean = false, param4:Boolean = false, param5:* = false) : *
