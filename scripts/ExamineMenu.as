@@ -2421,6 +2421,7 @@ package
          }
          if(this.hideUIButton.ButtonText == "HIDE UI")
          {
+            GlobalFunc.ShowHUDMessage("Better Workbench 1.0.14");
             this.hideUIButton.ButtonText = "SHOW UI";
             this.isHideUI = false;
             this.hideUIButton.ButtonFlashing = false;
