@@ -1394,7 +1394,9 @@ package
                   this.AlternateButton.ButtonText = this.strAlternateButtonText;
                   this.AlternateButton.ButtonEnabled = this.AternateTextEnabled;
                   this.ModButton.ButtonEnabled = this.isCrafting || this.ModSlotListObject.entryList && this.ModSlotListObject.entryList.length > 0;
-                  this.InspectButton.ButtonVisible = true;
+                  this.InspectButton.ButtonVisible = this.hasValidEntries();
+                  this.RepairButton.ButtonVisible &&= this.hasValidEntries();
+                  this.WorkbenchRepairButton.ButtonVisible &&= this.hasValidEntries();
                   this.ScrapButton.ButtonVisible = this._showScrapButton;
                   this.ToggleEquipButton.ButtonVisible = this._allowEquip;
                }
@@ -2443,7 +2445,6 @@ package
          }
          if(this.hideUIButton.ButtonText == "HIDE UI")
          {
-            GlobalFunc.ShowHUDMessage("Better Workbench 1.0.14");
             this.hideUIButton.ButtonText = "SHOW UI";
             this.isHideUI = false;
             this.hideUIButton.ButtonFlashing = false;
