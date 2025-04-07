@@ -1452,6 +1452,28 @@ package
          }
       }
       
+      private function hasValidEntries() : Boolean
+      {
+         var _loc2_:int = 0;
+         var _loc3_:int = 0;
+         var _loc1_:Boolean = false;
+         if(this.InventoryBase_mc && this.InventoryBase_mc.InventoryList_mc && !this.InventoryBase_mc.InventoryList_mc.addedDummyEntryOnBlankList)
+         {
+            _loc2_ = int(this.InventoryBase_mc.InventoryList_mc.entryList.length);
+            _loc3_ = 0;
+            while(_loc3_ < _loc2_)
+            {
+               if(this.InventoryBase_mc.InventoryList_mc.entryList[_loc3_] != null)
+               {
+                  _loc1_ = true;
+                  break;
+               }
+               _loc3_++;
+            }
+         }
+         return _loc1_;
+      }
+      
       public function ProcessUserEvent(param1:String, param2:Boolean) : Boolean
       {
          if(param1 == "DISABLED")

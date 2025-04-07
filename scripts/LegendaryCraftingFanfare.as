@@ -101,8 +101,6 @@ package
       
       private function DisplayNextAttribute(param1:Event) : void
       {
-         var _loc2_:uint = 0;
-         var _loc3_:String = null;
          if(this.m_starCount > 0 && this.m_starCount < this.m_TopAttributeClips.length)
          {
             this.m_TopAttributeClips[this.m_starCount - 1].AttributeText_mc.Attribute_tf.text = this.m_AttributeText[0];
@@ -113,12 +111,10 @@ package
          }
          else if(this.m_starCount == 0 && this.m_nextAttribute < this.m_AttributeClips.length && this.m_nextAttribute < this.m_AttributeText.length && this.m_AttributeText[this.m_nextAttribute] != "")
          {
-            _loc2_ = this.m_IsFourStarFanfare ? this.FOUR_STAR_CLIP_INDEX : this.m_nextAttribute;
-            this.m_AttributeClips[_loc2_].AttributeText_mc.Attribute_tf.text = this.m_AttributeText[this.m_nextAttribute];
-            this.m_AttributeClips[_loc2_].gotoAndPlay("rollOn");
+            this.m_AttributeClips[this.m_nextAttribute].AttributeText_mc.Attribute_tf.text = this.m_AttributeText[this.m_nextAttribute];
+            this.m_AttributeClips[this.m_nextAttribute].gotoAndPlay("rollOn");
             ++this.m_nextAttribute;
-            _loc3_ = this.m_IsFourStarFanfare ? "UIFanfareLegendaryCrafted04" : "UIFanfareLegendaryCrafted0" + this.m_nextAttribute;
-            GlobalFunc.PlayMenuSound(_loc3_);
+            GlobalFunc.PlayMenuSound("UIFanfareLegendaryCrafted0" + this.m_nextAttribute);
          }
          else
          {
