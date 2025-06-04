@@ -2473,7 +2473,7 @@ package
             this.hideUIButton.ButtonFlashing = false;
             this.InventoryBase_mc.visible = true;
             this.ModSlotBase_mc.visible = true;
-            this.ItemCardList_mc.visible = true;
+            this.ItemCardContainer_mc.visible = true;
             this.CraftingHeirarchy_mc.visible = true;
             this.KnownModsInfo_mc.visible = true;
             this.LegendaryItemDescription_tf.visible = true;
@@ -2499,7 +2499,7 @@ package
             this.isHideUI = true;
             this.InventoryBase_mc.visible = false;
             this.ModSlotBase_mc.visible = false;
-            this.ItemCardList_mc.visible = false;
+            this.ItemCardContainer_mc.visible = false;
             this.perkPanelLabel_mc.visible = false;
             this.PerkPanel0_mc.visible = false;
             this.PerkPanel1_mc.visible = false;
