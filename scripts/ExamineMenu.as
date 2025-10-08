@@ -387,7 +387,7 @@ package
          this.KnownModsInfo_mc.KnownModsInfo_tf.visible = false;
          this.ScrapButton.disabledButtonCallback = this.onScrapClickDisabled;
          this.FilterCraftableButton = new BSButtonHintData("SHOW ALL CRAFTABLES","Q","PSN_L3","Xenon_L3",1,this.onFilterCraftable);
-         this.FilterAtxButton = new BSButtonHintData("LEARNT PLANS","V","PSN_Select","Xenon_Select",1,this.onFilterAtx);
+         this.FilterAtxButton = new BSButtonHintData("KNOWN PLANS","V","PSN_Select","Xenon_Select",1,this.onFilterAtx);
          this.hideUIButton = new BSButtonHintData("SHOW UI","G","PSN_R2","Xenon_R2",1,this.onHideUI);
          this.RepairButton = new BSButtonHintData("REPAIR","T","PSN_Y","Xenon_Y",1,this.onTRepair);
          this.InspectButton = new BSButtonHintData("$INSPECT","X","PSN_R3","Xenon_R3",1,this.onInspect);
@@ -1064,6 +1064,7 @@ package
          this.ModSlotButtonHints.push(this.ToggleCraftingButton);
          this.ModSlotButtonHints.push(this.FilterCraftableButton);
          this.ModSlotButtonHints.push(this.FilterAtxButton);
+         this.ModSlotButtonHints.push(this.hideUIButton);
          this.ModsListHints = new Vector.<BSButtonHintData>();
          this.ModsListHints.push(this.AutoBuild);
          this.ModsListHints.push(this.TagButton);
@@ -1072,6 +1073,7 @@ package
          this.ModsListHints.push(this.ToggleCraftingButton);
          this.ModsListHints.push(this.FilterCraftableButton);
          this.ModsListHints.push(this.FilterAtxButton);
+         this.ModSlotButtonHints.push(this.hideUIButton);
          this.ComponentsListHints = new Vector.<BSButtonHintData>();
          this.ComponentsListHints.push(this.Build);
          this.ComponentsListHints.push(this.ChooseComponents);
