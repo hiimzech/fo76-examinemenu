@@ -8,6 +8,7 @@ package
    import Shared.AS3.Data.FromClientDataEvent;
    import Shared.AS3.Data.UIDataFromClient;
    import Shared.AS3.Events.CustomEvent;
+   import Shared.AS3.Events.PlatformChangeEvent;
    import Shared.AS3.IMenu;
    import Shared.AS3.PerkClipRequirement;
    import Shared.AS3.QuantityMenu;
@@ -22,6 +23,8 @@ package
    import flash.events.Event;
    import flash.events.MouseEvent;
    import flash.text.TextField;
+   import flash.utils.clearTimeout;
+   import flash.utils.setTimeout;
    import scaleform.gfx.Extensions;
    import scaleform.gfx.TextFieldEx;
    
@@ -33,9 +36,17 @@ package
       
       private static const MAX_ITEM_CARD_ENTRIES:int = 15;
       
+      public static const EVENT_TRANSFER_LOCKING_FEATURE_ENABLED:* = "TransferLockingFeature::Enabled";
+      
+      public static const EVENT_TRANSFER_LOCKING_FEATURE_DISABLED:* = "TransferLockingFeature::Disabled";
+      
       public static const EVENT_UPDATE_PIPBOY_INV_SELECTION:String = "Pipboy::UpdateInventorySelection";
       
       public static const EVENT_IS_CRAFTING:String = "Crafting::IsCrafting";
+      
+      public static const EVENT_LOCK_ITEM:String = "ExamineMenu::TransferLockToggle";
+      
+      private static var m_IsTransferLockingFeatureEnabled:Boolean = false;
        
       
       public var BGSCodeObj:Object;
@@ -85,6 +96,14 @@ package
       public var ItemCardList_mc:ItemCard;
       
       private var m_ConfirmMenuOpen:Boolean = false;
+      
+      private var m_LockHolding:Boolean = false;
+      
+      private var m_LockHoldStartTimeout:int = -1;
+      
+      private var m_TransferLockText:String = "$LOCK";
+      
+      private var m_TransferUnlockText:String = "$UNLOCK";
       
       public var InventoryListObject:ListInfoObject;
       
@@ -147,6 +166,8 @@ package
       private var RepairKitButton:BSButtonHintData;
       
       private var WorkbenchRepairButton:BSButtonHintData;
+      
+      private var LockButton:BSButtonHintData;
       
       private var ModsListHints:Vector.<BSButtonHintData>;
       
@@ -335,6 +356,7 @@ package
          this.ToggleEquipButton = new BSButtonHintData("$EQUIP","F","PSN_L2","Xenon_L2",1,this.onToggleEquip);
          this.RepairKitButton = new BSButtonHintData("$REPAIR KIT","T","PSN_Y","Xenon_Y",1,this.onRepairKit);
          this.WorkbenchRepairButton = new BSButtonHintData("$WORKBENCH REPAIR","R","PSN_X","Xenon_X",1,this.onWorkbenchRepair);
+         this.LockButton = new BSButtonHintData("$LOCK","L","PSN_Y","Xenon_Y",1,this.onLockButton);
          this.AutoBuild = new BSButtonHintData("$BUILD","Space","PSN_A","Xenon_A",1,this.onScrapBuildAdd);
          this.ChooseComponents = new BSButtonHintData("$CHOOSE COMPONENTS","Space","PSN_A","Xenon_A",1,this.onModButton);
          this.TagButton = new BSButtonHintData("$TAG FOR SEARCH","X","PSN_R3","Xenon_R3",1,this.onSearch);
@@ -347,11 +369,6 @@ package
          this.QuantityCancelButton = new BSButtonHintData("$CANCEL","TAB","PSN_B","Xenon_B",1,this.onQuantityCancel);
          this.RotateButton = new BSButtonHintData("$ROTATE","A/D","PSN_L2R2","Xenon_L2R2",1,null);
          this.CameraButton = new BSButtonHintData("$CAMERA","C","PSN_L1","Xenon_L1",1,null);
-         this.FilterCraftableButton = new BSButtonHintData("SHOW ALL CRAFTABLES","Q","PSN_L3","Xenon_L3",1,this.onFilterCraftable);
-         this.FilterAtxButton = new BSButtonHintData("LEARNT PLANS","V","PSN_Select","Xenon_Select",1,this.onFilterAtx);
-         this.hideUIButton = new BSButtonHintData("SHOW UI","G","PSN_R2","Xenon_R2",1,this.onHideUI);
-         this.RepairButton = new BSButtonHintData("REPAIR","T","PSN_Y","Xenon_Y",1,this.onTRepair);
-         this.InspectButton = new BSButtonHintData("$INSPECT","X","PSN_R3","Xenon_R3",1,this.onInspect);
          this._craftingHierarchy = new Array();
          super();
          addFrameScript(11,this.frame12,17,this.frame18,24,this.frame25,37,this.frame38);
@@ -368,6 +385,17 @@ package
          this.ButtonHintBar_mc.useVaultTecColor = true;
          this.RepairKitButton.ButtonVisible = false;
          this.KnownModsInfo_mc.KnownModsInfo_tf.visible = false;
+         this.ScrapButton.disabledButtonCallback = this.onScrapClickDisabled;
+         this.FilterCraftableButton = new BSButtonHintData("SHOW ALL CRAFTABLES","Q","PSN_L3","Xenon_L3",1,this.onFilterCraftable);
+         this.FilterAtxButton = new BSButtonHintData("LEARNT PLANS","V","PSN_Select","Xenon_Select",1,this.onFilterAtx);
+         this.hideUIButton = new BSButtonHintData("SHOW UI","G","PSN_R2","Xenon_R2",1,this.onHideUI);
+         this.RepairButton = new BSButtonHintData("REPAIR","T","PSN_Y","Xenon_Y",1,this.onTRepair);
+         this.InspectButton = new BSButtonHintData("$INSPECT","X","PSN_R3","Xenon_R3",1,this.onInspect);
+      }
+      
+      public static function get IsTransferLockingFeatureEnabled() : Boolean
+      {
+         return m_IsTransferLockingFeatureEnabled;
       }
       
       public function AddRotateButtons() : *
@@ -619,8 +647,8 @@ package
       {
          var _loc1_:String = String(BSUIDataManager.GetDataFromClient("HUDModeData").data.hudMode);
          this.modalActive = this.QuantityModal_mc.opened || _loc1_ == HUDModes.MESSAGE_MODE;
-         this.InventoryBase_mc.InventoryList_mc.disableInput_Inspectable = this.modalActive;
-         this.ItemLevelListObject.disableInput = this.modalActive;
+         this.InventoryBase_mc.InventoryList_mc.disableInput_Inspectable = this.modalActive || !this.InventoryBase_mc.visible;
+         this.ItemLevelListObject.disableInput = this.modalActive || !this.InventoryBase_mc.visible;
       }
       
       public function set isCrafting(param1:Boolean) : *
@@ -635,6 +663,21 @@ package
          if(!this.inspectMode && this.allowsModding && this.allowsCrafting && !this.QuantityModal_mc.opened)
          {
             this.ToggleCrafting();
+         }
+      }
+      
+      private function onFFEvent(param1:FromClientDataEvent) : void
+      {
+         var _loc2_:* = param1.data;
+         if(GlobalFunc.HasFFEvent(_loc2_,EVENT_TRANSFER_LOCKING_FEATURE_ENABLED))
+         {
+            m_IsTransferLockingFeatureEnabled = true;
+            this.BGSCodeObj.UpdateItemList();
+         }
+         else if(GlobalFunc.HasFFEvent(_loc2_,EVENT_TRANSFER_LOCKING_FEATURE_DISABLED))
+         {
+            m_IsTransferLockingFeatureEnabled = false;
+            this.BGSCodeObj.UpdateItemList();
          }
       }
       
@@ -659,6 +702,8 @@ package
          addEventListener(BSScrollingList.ITEM_PRESS,this.onItemPressed);
          addEventListener(MouseEvent.MOUSE_WHEEL,this.onMouseWheel);
          addEventListener(QuantityMenu.CONFIRM,this.onQuantityAccept);
+         addEventListener(PlatformChangeEvent.PLATFORM_CHANGE,this.onPlatformChange);
+         BSUIDataManager.Subscribe("FireForgetEvent",this.onFFEvent);
          this.InventoryListObject.addEventListener(BSScrollingList.SELECTION_CHANGE,this.InventorySelectionChange);
          this.ModSlotListObject.addEventListener(BSScrollingList.SELECTION_CHANGE,this.FillPossibleModPartArray);
          this.ModSlotListObject.addEventListener(ListInfoObject.ENTRY_LIST_CHANGE,this.UpdateButtons);
@@ -746,6 +791,11 @@ package
                isWorkbench = param1.data.isWorkbench;
                repairKitCount = param1.data.repairKitCount;
                RepairKitsEnabled = param1.data.repairKitsEnabled;
+               if(m_IsTransferLockingFeatureEnabled != param1.data.isTransferLockingFeatureEnabled)
+               {
+                  m_IsTransferLockingFeatureEnabled = param1.data.isTransferLockingFeatureEnabled;
+                  InventoryBase_mc.InventoryList_mc.InvalidateData();
+               }
                RenameButton.ButtonText = !!allowClearName ? "$CLEARNAME" : "$RENAME";
             }
          });
@@ -759,6 +809,11 @@ package
             UpdateButtons();
          });
          BSUIDataManager.Subscribe("MenuStackData",this.onMenuStackUpdate);
+      }
+      
+      private function onPlatformChange(param1:PlatformChangeEvent) : void
+      {
+         this.UpdateButtons();
       }
       
       private function onMenuStackUpdate(param1:FromClientDataEvent) : void
@@ -777,7 +832,7 @@ package
                }
                _loc2_--;
             }
-            this.InventoryBase_mc.InventoryList_mc.disableInput_Inspectable = this.m_ConfirmMenuOpen;
+            this.InventoryBase_mc.InventoryList_mc.disableInput_Inspectable = this.m_ConfirmMenuOpen || !this.InventoryBase_mc.visible;
             this.ItemLevelListObject.disableInput = this.m_ConfirmMenuOpen;
             if(this.m_ConfirmMenuOpen && this.isCrafting && this.m_RestoreSelectedIndex)
             {
@@ -995,6 +1050,7 @@ package
          this.InventoryButtonHints.push(this.ScrapButton);
          this.InventoryButtonHints.push(this.RepairButton);
          this.InventoryButtonHints.push(this.InspectButton);
+         this.InventoryButtonHints.push(this.LockButton);
          this.InventoryButtonHints.push(this.ModButton);
          this.InventoryButtonHints.push(this.ExitButton);
          this.InventoryButtonHints.push(this.AlternateButton);
@@ -1008,7 +1064,6 @@ package
          this.ModSlotButtonHints.push(this.ToggleCraftingButton);
          this.ModSlotButtonHints.push(this.FilterCraftableButton);
          this.ModSlotButtonHints.push(this.FilterAtxButton);
-         this.ModSlotButtonHints.push(this.hideUIButton);
          this.ModsListHints = new Vector.<BSButtonHintData>();
          this.ModsListHints.push(this.AutoBuild);
          this.ModsListHints.push(this.TagButton);
@@ -1017,7 +1072,6 @@ package
          this.ModsListHints.push(this.ToggleCraftingButton);
          this.ModsListHints.push(this.FilterCraftableButton);
          this.ModsListHints.push(this.FilterAtxButton);
-         this.ModsListHints.push(this.hideUIButton);
          this.ComponentsListHints = new Vector.<BSButtonHintData>();
          this.ComponentsListHints.push(this.Build);
          this.ComponentsListHints.push(this.ChooseComponents);
@@ -1091,7 +1145,10 @@ package
       public function LevelChange(param1:Event) : *
       {
          var _loc2_:* = this.ItemLevelListObject.selectedEntry;
-         this.BGSCodeObj.LevelSelectChanged(_loc2_.level);
+         if(_loc2_)
+         {
+            this.BGSCodeObj.LevelSelectChanged(_loc2_.level);
+         }
       }
       
       public function UpdateBackground() : *
@@ -1100,6 +1157,7 @@ package
          {
             if(this.CurrentModsListObject.entryList.length)
             {
+               this.CenterShadedBG_mc.gotoAndStop("inspect");
                GlobalFunc.SetText(this.CurrentModsBase_mc.SlotsLabel_tf,"$CURRENT MODS",false);
             }
             else
@@ -1347,7 +1405,7 @@ package
       
       public function UpdateButtons() : void
       {
-         var _loc1_:TextField = null;
+         var _loc2_:TextField = null;
          this.BackButton.ButtonText = this.eMode == this.SLOTS_MODE && this._isCookingMenu ? "$EXIT" : "$BACK";
          this.ToggleCraftingButton.ButtonVisible = !this.inspectMode && this.allowsModding && this.allowsCrafting;
          this.ToggleCraftingButton.ButtonText = this.isCrafting ? "$SWITCHTOMODIFY" : "$SWITCHTOCRAFT";
@@ -1366,18 +1424,18 @@ package
          {
             this.Header_mc.HeaderText_tf.text = "$MODIFY";
          }
+         var _loc1_:Object = this.InventoryBase_mc.InventoryList_mc.selectedEntry;
          if(this.RepairKitsEnabled)
          {
             this.RepairKitButton.ButtonVisible = this.BGSCodeObj.CanRepairSelectedItem(true);
-            _loc1_ = new TextField();
-            _loc1_.text = "$REPAIR_KIT_NUM";
-            this.RepairKitButton.ButtonText = _loc1_.text.replace("{1}",this._repairKitCount);
-            this.RepairKitButton.ButtonVisible = this.RepairKitsEnabled;
+            _loc2_ = new TextField();
+            _loc2_.text = "$REPAIR_KIT_NUM";
+            this.RepairKitButton.ButtonText = _loc2_.text.replace("{1}",this._repairKitCount);
             this.RepairButton.ButtonText = "REPAIR";
             this.RepairButton.ButtonVisible = true;
             this.WorkbenchRepairButton.ButtonVisible = this._isWorkbench;
             this.WorkbenchRepairButton.ButtonDisabled = !this.BGSCodeObj.CanRepairSelectedItem(false);
-            if(this.WorkbenchRepairButton.ButtonDisabled && this.RepairKitsEnabled)
+            if(this.WorkbenchRepairButton.ButtonDisabled)
             {
                this.RepairButton.ButtonText = this.RepairKitButton.ButtonText;
             }
@@ -1406,19 +1464,32 @@ package
                   {
                      this.ToggleEquipButton.ButtonText = !!this.BGSCodeObj.IsSelectedItemEquipped() ? "$UNEQUIP" : "$EQUIP";
                   }
-                  if(this._showScrapButton)
-                  {
-                     this.ScrapButton.ButtonEnabled = this.BGSCodeObj.CanScrapSelectedItem();
-                  }
                   this.AlternateButton.ButtonVisible = this.strAlternateButtonText.length > 0;
                   this.AlternateButton.ButtonText = this.strAlternateButtonText;
                   this.AlternateButton.ButtonEnabled = this.AternateTextEnabled;
                   this.ModButton.ButtonEnabled = this.isCrafting || this.ModSlotListObject.entryList && this.ModSlotListObject.entryList.length > 0;
-                  this.InspectButton.ButtonVisible = this.hasValidEntries();
-                  this.RepairButton.ButtonVisible &&= this.hasValidEntries();
-                  this.WorkbenchRepairButton.ButtonVisible &&= this.hasValidEntries();
+                  if(this._allowRepair)
+                  {
+                     this.RepairButton.ButtonEnabled = this._allowRepair && this.hasValidEntries();
+                  }
                   this.ScrapButton.ButtonVisible = this._showScrapButton;
+                  this.ScrapButton.ButtonEnabled = Boolean(this.BGSCodeObj.CanScrapSelectedItem()) && _loc1_ != null && !(m_IsTransferLockingFeatureEnabled && _loc1_.isTransferLocked);
                   this.ToggleEquipButton.ButtonVisible = this._allowEquip;
+                  this.LockButton.ButtonVisible = m_IsTransferLockingFeatureEnabled;
+                  if(this.LockButton.ButtonVisible)
+                  {
+                     if(_loc1_ == null)
+                     {
+                        this.LockButton.ButtonDisabled = true;
+                        this.LockButton.ButtonText = this.m_TransferLockText;
+                     }
+                     else
+                     {
+                        this.LockButton.ButtonDisabled = !_loc1_.canBeTransferLocked;
+                        this.LockButton.ButtonText = !!_loc1_.isTransferLocked ? this.m_TransferUnlockText : this.m_TransferLockText;
+                     }
+                     this.LockButton.canHold = uiController != PlatformChangeEvent.PLATFORM_PC_KB_MOUSE;
+                  }
                }
                break;
             case this.SLOTS_MODE:
@@ -1472,6 +1543,10 @@ package
                this.ItemLevelAcceptButton.ButtonVisible = true;
                this.ItemLevelCancelButton.ButtonVisible = true;
          }
+         if(this.eMode == this.MOD_MODE)
+         {
+            _loc1_ = this.InventoryBase_mc.InventoryList_mc.selectedEntry;
+         }
       }
       
       private function hasValidEntries() : Boolean
@@ -1522,11 +1597,24 @@ package
          {
             _loc3_ = this.QuantityModal_mc.ProcessUserEvent(param1,param2);
          }
+         if(!_loc3_ && param2)
+         {
+            switch(param1)
+            {
+               case "TransferLockItem_Hold":
+                  if(this.m_LockHoldStartTimeout == -1 && this.LockButton.ButtonVisible && this.LockButton.canHold && this.eMode != this.INSPECT_MODE)
+                  {
+                     this.m_LockHoldStartTimeout = setTimeout(this.startItemLockHold,GlobalFunc.HOLD_METER_DELAY);
+                     _loc3_ = true;
+                     break;
+                  }
+            }
+         }
          if(this.isHideUI && param1 != "RTrigger")
          {
             return false;
          }
-         if(param2 == false && !_loc3_)
+         if(!_loc3_ && !param2)
          {
             switch(param1)
             {
@@ -1618,8 +1706,26 @@ package
                      _loc3_ = true;
                   }
                   break;
+               case "TransferLockItem_Press":
+                  if(this.LockButton.ButtonVisible && this.LockButton.ButtonEnabled && this.eMode != this.INSPECT_MODE)
+                  {
+                     this.onLockButton();
+                     _loc3_ = true;
+                  }
+                  break;
+               case "TransferLockItem_Hold":
+                  if(this.m_LockHolding)
+                  {
+                     this.m_LockHolding = false;
+                     this.stopItemLockHold();
+                     _loc3_ = true;
+                  }
+                  else if(this.m_LockHoldStartTimeout != -1)
+                  {
+                     this.stopItemLockHold();
+                  }
                case "YButton":
-                  if(!this.modalActive)
+                  if(!_loc3_ && !this.modalActive && this.RepairButton.ButtonVisible && this.RepairButton.ButtonEnabled)
                   {
                      if(this.eMode == this.INVENTORY_MODE)
                      {
@@ -1659,6 +1765,11 @@ package
                         this.onSearch();
                         _loc3_ = true;
                      }
+                  }
+                  if(!this.inspectMode && !this.modalActive)
+                  {
+                     this.onSearch();
+                     _loc3_ = true;
                   }
                   break;
                case "XButton":
@@ -1714,6 +1825,36 @@ package
             }
          }
          return _loc3_;
+      }
+      
+      private function startItemLockHold() : void
+      {
+         this.m_LockHolding = true;
+         addEventListener(Event.ENTER_FRAME,this.onEnterFrame);
+      }
+      
+      private function onEnterFrame(param1:Event) : void
+      {
+         if(this.m_LockHolding)
+         {
+            this.LockButton.holdPercent += GlobalFunc.HOLD_METER_TICK_AMOUNT;
+            if(this.LockButton.holdPercent >= 1)
+            {
+               this.onLockButton();
+               this.stopItemLockHold();
+            }
+         }
+      }
+      
+      private function stopItemLockHold() : *
+      {
+         if(this.m_LockHoldStartTimeout != -1)
+         {
+            clearTimeout(this.m_LockHoldStartTimeout);
+            this.m_LockHoldStartTimeout = -1;
+         }
+         this.LockButton.holdPercent = 0;
+         removeEventListener(Event.ENTER_FRAME,this.onEnterFrame);
       }
       
       private function onMouseWheel(param1:MouseEvent) : *
@@ -1799,6 +1940,12 @@ package
          }
       }
       
+      private function onLockButton() : void
+      {
+         BSUIDataManager.dispatchEvent(new CustomEvent(EVENT_LOCK_ITEM,{"serverHandleID":this.InventoryListObject.selectedEntry.serverHandleID}));
+         GlobalFunc.PlayMenuSound(GlobalFunc.MENU_SOUND_OK);
+      }
+      
       private function onRename() : void
       {
          if(this.allowClearName)
@@ -1835,13 +1982,13 @@ package
          {
             return;
          }
-         if(this.FilterAtxButton.ButtonText == "LEARNT PLANS")
+         if(this.FilterAtxButton.ButtonText == "KNOWN PLANS")
          {
             this.FilterAtxButton.ButtonText = "ALL PLANS";
          }
          else
          {
-            this.FilterAtxButton.ButtonText = "LEARNT PLANS";
+            this.FilterAtxButton.ButtonText = "KNOWN PLANS";
          }
          this.BGSCodeObj.ToggleAtx();
          this.filterCommon();
@@ -1890,6 +2037,15 @@ package
          }
       }
       
+      private function onScrapClickDisabled() : void
+      {
+         if(this.InventoryListObject.selectedEntry.isTransferLocked)
+         {
+            GlobalFunc.ShowHUDMessage("$CannotScrapLockedItem");
+            GlobalFunc.PlayMenuSound(GlobalFunc.MENU_SOUND_CANCEL);
+         }
+      }
+      
       private function onScrapBuildAdd() : void
       {
          var _loc1_:* = undefined;
@@ -1909,13 +2065,21 @@ package
                {
                   case this.INVENTORY_MODE:
                      _loc1_ = this.InventoryListObject.selectedEntry;
-                     if(_loc1_ != null && _loc1_.count > this.SCRAP_ITEM_COUNT_THRESHOLD)
+                     if(_loc1_ != null)
                      {
-                        this.openQuantityModal();
-                     }
-                     else
-                     {
-                        this.BGSCodeObj.ScrapItem(this._ScrapQuantity);
+                        if(_loc1_.isTransferLocked)
+                        {
+                           GlobalFunc.ShowHUDMessage("$CannotScrapLockedItem");
+                           GlobalFunc.PlayMenuSound(GlobalFunc.MENU_SOUND_CANCEL);
+                        }
+                        else if(_loc1_.count > this.SCRAP_ITEM_COUNT_THRESHOLD)
+                        {
+                           this.openQuantityModal();
+                        }
+                        else
+                        {
+                           this.BGSCodeObj.ScrapItem(this._ScrapQuantity);
+                        }
                      }
                      break;
                   case this.MOD_MODE:
@@ -2089,7 +2253,7 @@ package
                      }
                      else if(!this._itemLevelData.hasLevels && this.isCrafting)
                      {
-                        _loc2_ = this.GetIsMTX() || this.GetIsZeus() ? this.GetHasEntitlement() : true;
+                        _loc2_ = Boolean(this.GetIsMTX() || this.GetIsZeus() ? this.GetHasEntitlement() : true);
                         if(this.RequirementsListObject.craftableQuantity > 1 && _loc2_)
                         {
                            this.openQuantityModal();
@@ -2361,7 +2525,7 @@ package
          this.ItemCardContainer_mc.Background_mc.Box_mc.height = this.ITEM_CARD_START_HEIGHT + this.ITEM_CARD_ENTRY_HEIGHT * _loc2_;
          this.ItemCardContainer_mc.Background_mc.Box_mc.y = this.ITEM_CARD_START_Y - this.ITEM_CARD_ENTRY_HEIGHT * _loc2_;
          this.ItemCardContainer_mc.Background_mc.itemStatsLabel_tf.y = this.ITEM_CARD_LABEL_START_Y - (this.ITEM_CARD_ENTRY_HEIGHT - 1) * _loc2_;
-         this.ItemCardContainer_mc.Background_mc.StatsLabelBG_mc.y = this.ITEM_CARD_LABEL_START_Y - (this.ITEM_CARD_ENTRY_HEIGHT - 1) * _loc2_;
+         this.ItemCardContainer_mc.Background_mc.StatsLabelBG_mc.y = this.ITEM_CARD_LABEL_START_Y - (this.ITEM_CARD_ENTRY_HEIGHT - 1) * _loc2_ - 1;
       }
       
       public function set itemDescription(param1:String) : *

@@ -58,7 +58,6 @@ package
       
       public function ItemCard()
       {
-         this.m_EntrySpacing = -3.5;
          super();
          this._InfoObj = new Array();
          this._showItemDesc = true;
@@ -158,10 +157,15 @@ package
          var _loc7_:Object = null;
          var _loc9_:Number = NaN;
          var _loc11_:Number = NaN;
-         var _loc15_:uint = 0;
-         var _loc16_:ItemCard_Entry = null;
-         var _loc17_:Object = null;
-         var _loc18_:ItemCard_DescriptionEntry = null;
+         var _loc12_:int = 0;
+         var _loc15_:String = null;
+         var _loc16_:uint = 0;
+         var _loc17_:uint = 0;
+         var _loc18_:uint = 0;
+         var _loc19_:uint = 0;
+         var _loc20_:ItemCard_Entry = null;
+         var _loc21_:Object = null;
+         var _loc22_:ItemCard_DescriptionEntry = null;
          super.redrawUIComponent();
          while(this.numChildren > 0)
          {
@@ -174,7 +178,7 @@ package
          var _loc6_:Array = new Array();
          var _loc8_:Object = new Object();
          var _loc10_:Number = 0;
-         var _loc12_:int = int(this._InfoObj.length - 1);
+         _loc12_ = int(this._InfoObj.length - 1);
          while(_loc12_ >= 0)
          {
             switch(this._InfoObj[_loc12_].text)
@@ -223,7 +227,23 @@ package
                   _loc11_ = Number(this._InfoObj[_loc12_].value);
                   break;
                default:
-                  if(this._InfoObj[_loc12_].showAsDescription != true)
+                  if((_loc15_ = String(this._InfoObj[_loc12_].text)).search("dmg_") != -1)
+                  {
+                     _loc4_ = true;
+                     _loc16_ = uint(_loc15_.indexOf("_"));
+                     _loc17_ = uint(_loc15_.substr(_loc16_ + 1));
+                     this._InfoObj[_loc12_].damageType = _loc17_;
+                     this._InfoObj[_loc12_].text = ItemCard_MultiEntry.DMG_WEAP_ID;
+                  }
+                  else if(_loc15_.search("dr_") != -1)
+                  {
+                     _loc5_ = true;
+                     _loc16_ = uint(_loc15_.indexOf("_"));
+                     _loc18_ = uint(_loc15_.substr(_loc16_ + 1));
+                     this._InfoObj[_loc12_].damageType = _loc18_;
+                     this._InfoObj[_loc12_].text = ItemCard_MultiEntry.DMG_ARMO_ID;
+                  }
+                  else if(this._InfoObj[_loc12_].showAsDescription != true)
                   {
                      if(ItemCard_DurabilityEntry.IsEntryValid(this._InfoObj[_loc12_]))
                      {
@@ -231,14 +251,14 @@ package
                      }
                      else
                      {
-                        _loc15_ = this.GetEntryType(this._InfoObj[_loc12_]);
-                        _loc2_ = this.CreateEntry(_loc15_);
+                        _loc19_ = this.GetEntryType(this._InfoObj[_loc12_]);
+                        _loc2_ = this.CreateEntry(_loc19_);
                         if(_loc2_ != null)
                         {
                            if(this._InfoObj[_loc12_].text == "$wt" && this.m_Count > 1)
                            {
-                              (_loc16_ = new ItemCard_StandardEntry()).populateStackWeight(this._InfoObj[_loc12_],this.m_Count);
-                              _loc3_.push(_loc16_);
+                              (_loc20_ = new ItemCard_StandardEntry()).populateStackWeight(this._InfoObj[_loc12_],this.m_Count);
+                              _loc3_.push(_loc20_);
                            }
                            _loc2_.PopulateEntry(this._InfoObj[_loc12_]);
                            _loc3_.push(_loc2_);
@@ -251,11 +271,11 @@ package
          }
          if(this._showItemDesc)
          {
-            for each(_loc17_ in this._InfoObj)
+            for each(_loc21_ in this._InfoObj)
             {
-               if(_loc17_.showAsDescription == true)
+               if(_loc21_.showAsDescription == true)
                {
-                  _loc6_.push(_loc17_);
+                  _loc6_.push(_loc21_);
                }
             }
          }
@@ -315,9 +335,9 @@ package
          if(_loc6_.length > 0)
          {
             _loc2_ = this.CreateEntry(this.ET_ITEM_DESCRIPTION);
-            if((_loc18_ = _loc2_ as ItemCard_DescriptionEntry) != null)
+            if((_loc22_ = _loc2_ as ItemCard_DescriptionEntry) != null)
             {
-               _loc18_.PopulateEntries(_loc6_);
+               _loc22_.PopulateEntries(_loc6_);
                _loc3_.push(_loc2_);
             }
          }
