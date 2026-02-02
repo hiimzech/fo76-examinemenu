@@ -1073,7 +1073,7 @@ package
          this.ModsListHints.push(this.ToggleCraftingButton);
          this.ModsListHints.push(this.FilterCraftableButton);
          this.ModsListHints.push(this.FilterAtxButton);
-         this.ModSlotButtonHints.push(this.hideUIButton);
+         this.ModsListHints.push(this.hideUIButton);
          this.ComponentsListHints = new Vector.<BSButtonHintData>();
          this.ComponentsListHints.push(this.Build);
          this.ComponentsListHints.push(this.ChooseComponents);
@@ -1433,14 +1433,7 @@ package
             _loc2_ = new TextField();
             _loc2_.text = "$REPAIR_KIT_NUM";
             this.RepairKitButton.ButtonText = _loc2_.text.replace("{1}",this._repairKitCount);
-            this.RepairButton.ButtonText = "REPAIR";
-            this.RepairButton.ButtonVisible = true;
-            this.WorkbenchRepairButton.ButtonVisible = this._isWorkbench;
-            this.WorkbenchRepairButton.ButtonDisabled = !this.BGSCodeObj.CanRepairSelectedItem(false);
-            if(this.WorkbenchRepairButton.ButtonDisabled)
-            {
-               this.RepairButton.ButtonText = this.RepairKitButton.ButtonText;
-            }
+            this.RepairButton.ButtonText = this.RepairKitButton.ButtonText;
          }
          else
          {
@@ -1450,6 +1443,19 @@ package
          {
             this.WorkbenchRepairButton.ButtonVisible = true;
             this.WorkbenchRepairButton.ButtonDisabled = !this.BGSCodeObj.CanRepairSelectedItem(false);
+            this.RepairButton.ButtonText = "REPAIR";
+            this.RepairButton.ButtonVisible = true;
+            if(this.WorkbenchRepairButton.ButtonDisabled)
+            {
+               if(this.RepairKitButton.ButtonVisible)
+               {
+                  this.RepairButton.ButtonText = this.RepairKitButton.ButtonText;
+               }
+               else
+               {
+                  this.RepairButton.ButtonVisible = false;
+               }
+            }
          }
          else
          {
@@ -1579,6 +1585,10 @@ package
          {
             return false;
          }
+         if(this.isHideUI && param1 != "RTrigger")
+         {
+            return false;
+         }
          var _loc3_:Boolean = false;
          if(!this.modalActive)
          {
@@ -1611,10 +1621,6 @@ package
                      break;
                   }
             }
-         }
-         if(this.isHideUI && param1 != "RTrigger")
-         {
-            return false;
          }
          if(!_loc3_ && !param2)
          {
@@ -1727,7 +1733,7 @@ package
                      this.stopItemLockHold();
                   }
                case "YButton":
-                  if(!_loc3_ && !this.modalActive && this.RepairButton.ButtonVisible && this.RepairButton.ButtonEnabled)
+                  if(!_loc3_ && !this.modalActive)
                   {
                      if(this.eMode == this.INVENTORY_MODE)
                      {
@@ -1756,10 +1762,6 @@ package
                         {
                            this.onInspect();
                         }
-                        else if(!this.inspectMode)
-                        {
-                           this.onSearch();
-                        }
                         _loc3_ = true;
                      }
                      else if(!this.inspectMode)
@@ -1767,11 +1769,6 @@ package
                         this.onSearch();
                         _loc3_ = true;
                      }
-                  }
-                  if(!this.inspectMode && !this.modalActive)
-                  {
-                     this.onSearch();
-                     _loc3_ = true;
                   }
                   break;
                case "XButton":
