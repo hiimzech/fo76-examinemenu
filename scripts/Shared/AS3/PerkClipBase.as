@@ -20,6 +20,12 @@ package Shared.AS3
       public static const RANK_MIN:uint = 1;
       
       public static const RANK_MAX:uint = 5;
+      
+      public static const RACE_RESTRICTION_NONE:uint = 0;
+      
+      public static const RACE_RESTRICTION_HUMAN:uint = 1;
+      
+      public static const RACE_RESTRICTION_GHOUL:uint = 2;
        
       
       protected var m_PerkID:uint = 4294967295;
@@ -59,6 +65,8 @@ package Shared.AS3
       protected var m_MostlyHidden:Boolean = false;
       
       protected var m_CanRankUp:Boolean = false;
+      
+      protected var m_PlayerRaceRestriction:uint = 0;
       
       public function PerkClipBase()
       {
@@ -254,6 +262,21 @@ package Shared.AS3
             this.m_CanRankUp = param1;
             SetIsDirty();
          }
+      }
+      
+      public function set playerRaceRestriction(param1:uint) : void
+      {
+         if(this.m_PlayerRaceRestriction != param1)
+         {
+            this.m_PlayerRaceRestriction = param1;
+            this.m_IsGhoul = param1 == RACE_RESTRICTION_GHOUL;
+            SetIsDirty();
+         }
+      }
+      
+      public function get pplayerRaceRestriction() : uint
+      {
+         return this.m_PlayerRaceRestriction;
       }
    }
 }

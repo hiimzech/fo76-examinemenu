@@ -3,12 +3,12 @@ package ExamineMenu_fla
    import flash.display.MovieClip;
    import flash.events.Event;
    
-   [Embed(source="/_assets/assets.swf", symbol="ExamineMenu_fla.NEWAnim_46")]
-   public dynamic class NEWAnim_46 extends MovieClip
+   [Embed(source="/_assets/assets.swf", symbol="ExamineMenu_fla.NEWAnim_49")]
+   public dynamic class NEWAnim_49 extends MovieClip
    {
        
       
-      public function NEWAnim_46()
+      public function NEWAnim_49()
       {
          super();
          addFrameScript(0,this.frame1,6,this.frame7,25,this.frame26);

@@ -3,16 +3,14 @@ package ExamineMenu_fla
    import flash.display.MovieClip;
    import flash.text.TextField;
    
-   [Embed(source="/_assets/assets.swf", symbol="ExamineMenu_fla.ModDescriptionBase_10")]
-   public dynamic class ModDescriptionBase_10 extends MovieClip
+   [Embed(source="/_assets/assets.swf", symbol="ExamineMenu_fla.ValueText_mc_81")]
+   public dynamic class ValueText_mc_81 extends MovieClip
    {
        
       
-      public var DynamicModDescription_mc:DynamicModDescriptionBase;
+      public var ValueText_tf:TextField;
       
-      public var ModDescription_tf:TextField;
-      
-      public function ModDescriptionBase_10()
+      public function ValueText_mc_81()
       {
          super();
          addFrameScript(0,this.frame1,1,this.frame2);

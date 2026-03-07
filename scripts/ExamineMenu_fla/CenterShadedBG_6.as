@@ -7,8 +7,6 @@ package ExamineMenu_fla
    {
        
       
-      public var ItemStats_mc:MovieClip;
-      
       public function CenterShadedBG_6()
       {
          super();

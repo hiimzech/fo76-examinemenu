@@ -25,8 +25,8 @@ package ExamineMenu_fla
    import flash.utils.*;
    import flash.xml.*;
    
-   [Embed(source="/_assets/assets.swf", symbol="ExamineMenu_fla.ModsBase_23")]
-   public dynamic class ModsBase_23 extends MovieClip
+   [Embed(source="/_assets/assets.swf", symbol="ExamineMenu_fla.ModsBase_26")]
+   public dynamic class ModsBase_26 extends MovieClip
    {
        
       
@@ -34,7 +34,7 @@ package ExamineMenu_fla
       
       public var SlotsLabel_tf:TextField;
       
-      public function ModsBase_23()
+      public function ModsBase_26()
       {
          super();
          this.__setProp_ModSlotList_mc_ModsBase_ModSlotList_mc_0();

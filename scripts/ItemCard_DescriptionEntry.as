@@ -35,11 +35,11 @@ package
          {
             if(_loc2_ == "")
             {
-               _loc2_ = _loc3_.text == "Description" ? String(_loc3_.value) : String(_loc3_.text);
+               _loc2_ = String(_loc3_.text);
             }
             else
             {
-               _loc2_ += _loc3_.text == "Description" ? "$$ItemCard_DescriptionEntryConcatenator " + _loc3_.value : "$$ItemCard_DescriptionEntryConcatenator " + _loc3_.value;
+               _loc2_ += "$$ItemCard_DescriptionEntryConcatenator " + _loc3_.text;
             }
          }
          PopulateText(_loc2_);

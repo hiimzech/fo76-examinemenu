@@ -2,12 +2,12 @@ package ExamineMenu_fla
 {
    import flash.display.MovieClip;
    
-   [Embed(source="/_assets/assets.swf", symbol="ExamineMenu_fla.SetBonusIcon_127")]
-   public dynamic class SetBonusIcon_127 extends MovieClip
+   [Embed(source="/_assets/assets.swf", symbol="ExamineMenu_fla.SetBonusIcon_131")]
+   public dynamic class SetBonusIcon_131 extends MovieClip
    {
        
       
-      public function SetBonusIcon_127()
+      public function SetBonusIcon_131()
       {
          super();
          addFrameScript(0,this.frame1,1,this.frame2);
