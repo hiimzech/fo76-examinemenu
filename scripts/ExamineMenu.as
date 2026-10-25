@@ -1620,6 +1620,7 @@ package
                   {
                      this.m_LockHoldStartTimeout = setTimeout(this.startItemLockHold,GlobalFunc.HOLD_METER_DELAY);
                      _loc3_ = true;
+                     break;
                   }
             }
          }
@@ -2255,7 +2256,7 @@ package
                      }
                      else if(!this._itemLevelData.hasLevels && this.isCrafting)
                      {
-                        _loc2_ = this.GetIsMTX() || this.GetIsZeus() ? this.GetHasEntitlement() : true;
+                        _loc2_ = Boolean(this.GetIsMTX() || this.GetIsZeus() ? this.GetHasEntitlement() : true);
                         if(this.RequirementsListObject.craftableQuantity > 1 && _loc2_)
                         {
                            this.openQuantityModal();
