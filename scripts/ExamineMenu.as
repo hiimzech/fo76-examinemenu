@@ -2627,6 +2627,70 @@ package
          this.CraftingHeirarchy_mc.CraftingHeirarchy_tf.text = _loc2_.toUpperCase();
       }
       
+      private function onHideUI() : void
+      {
+         if(this._inspectMode || this.QuantityModal_mc.opened || isCookingMenu)
+         {
+            return;
+         }
+         if(this.hideUIButton.ButtonText == "HIDE UI")
+         {
+            this.hideUIButton.ButtonText = "SHOW UI";
+            this.isHideUI = false;
+            this.hideUIButton.ButtonFlashing = false;
+            this.InventoryBase_mc.visible = true;
+            this.ModSlotBase_mc.visible = true;
+            this.ItemCardContainer_mc.visible = true;
+            this.CraftingHeirarchy_mc.visible = true;
+            this.KnownModsInfo_mc.visible = true;
+            this.LegendaryItemDescription_tf.visible = true;
+            this.InventoryBase_mc.InventoryList_mc.disableInput_Inspectable = false;
+            this.UpdateDescription();
+            this.UpdateBackground();
+            this.UpdatePerks();
+            if(this.hasPerkPanel)
+            {
+               this.CenterShadedBG_mc.gotoAndStop("craftModPerks");
+               this.perkPanelLabel_mc.visible = true;
+            }
+            else
+            {
+               this.CenterShadedBG_mc.gotoAndStop("craftMod");
+               this.perkPanelLabel_mc.visible = false;
+            }
+            this.OnItemCardUpdated(null);
+         }
+         else
+         {
+            this.hideUIButton.ButtonText = "HIDE UI";
+            this.isHideUI = true;
+            this.InventoryBase_mc.visible = false;
+            this.ModSlotBase_mc.visible = false;
+            this.ItemCardContainer_mc.visible = false;
+            this.perkPanelLabel_mc.visible = false;
+            this.PerkPanel0_mc.visible = false;
+            this.PerkPanel1_mc.visible = false;
+            this.CraftingHeirarchy_mc.visible = false;
+            this.KnownModsInfo_mc.visible = false;
+            this.LegendaryItemDescription_tf.visible = false;
+            this.InventoryBase_mc.InventoryList_mc.disableInput_Inspectable = true;
+            this.CenterShadedBG_mc.gotoAndStop("inspectNoMenus");
+            this.hideUIButton.ButtonFlashing = true;
+         }
+      }
+      
+      private function onTRepair() : void
+      {
+         if(this.RepairButton.ButtonText == "REPAIR")
+         {
+            this.onWorkbenchRepair();
+         }
+         else
+         {
+            this.onRepairKit();
+         }
+      }
+      
       internal function frame12() : *
       {
          stop();
