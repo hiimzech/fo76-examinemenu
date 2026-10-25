@@ -47,6 +47,8 @@ package
       public static const EVENT_LOCK_ITEM:String = "ExamineMenu::TransferLockToggle";
       
       private static var m_IsTransferLockingFeatureEnabled:Boolean = false;
+      
+      private static var m_bTransferLockSettingAllowCraftingUse:Boolean = false;
        
       
       public var BGSCodeObj:Object;
@@ -151,8 +153,6 @@ package
       
       private var ModSlotButtonHints:Vector.<BSButtonHintData>;
       
-      private var ModButton:BSButtonHintData;
-      
       private var BackButton:BSButtonHintData;
       
       private var ScrapButton:BSButtonHintData;
@@ -188,8 +188,6 @@ package
       private var Add:BSButtonHintData;
       
       protected var ItemLevelSelectButtons:Vector.<BSButtonHintData>;
-      
-      protected var ItemLevelAcceptButton:BSButtonHintData;
       
       protected var ItemLevelCancelButton:BSButtonHintData;
       
@@ -350,7 +348,6 @@ package
          this.ExitButton = new BSButtonHintData("$EXIT","TAB","PSN_B","Xenon_B",1,this.onBackButton);
          this.ToggleCraftingButton = new BSButtonHintData("$SWITCHTOCRAFT","R","PSN_X","Xenon_X",1,this.onToggleCraftingbutton);
          this.PrevBtnVisibility = new Array();
-         this.ModButton = new BSButtonHintData("$MODIFY","Space","PSN_A","Xenon_A",1,this.onModButton);
          this.BackButton = new BSButtonHintData("$BACK","TAB","PSN_B","Xenon_B",1,this.onBackButton);
          this.ScrapButton = new BSButtonHintData("$SCRAP","G","PSN_R2","Xenon_R2",1,this.onScrapBuildAdd);
          this.ToggleEquipButton = new BSButtonHintData("$EQUIP","F","PSN_L2","Xenon_L2",1,this.onToggleEquip);
@@ -363,7 +360,6 @@ package
          this.AlternateButton = new BSButtonHintData("","R","PSN_X","Xenon_X",1,this.onAlternateButton);
          this.Build = new BSButtonHintData("$BUILD","R","PSN_X","Xenon_X",1,this.onScrapBuildAdd);
          this.Add = new BSButtonHintData("$ADD","R","PSN_X","Xenon_X",1,this.onScrapBuildAdd);
-         this.ItemLevelAcceptButton = new BSButtonHintData("$ACCEPT","Space","PSN_A","Xenon_A",1,this.onModButton);
          this.ItemLevelCancelButton = new BSButtonHintData("$CANCEL","TAB","PSN_B","Xenon_B",1,this.onBackButton);
          this.QuantityAcceptButton = new BSButtonHintData("$ACCEPT","Space","PSN_A","Xenon_A",1,this.onQuantityAccept);
          this.QuantityCancelButton = new BSButtonHintData("$CANCEL","TAB","PSN_B","Xenon_B",1,this.onQuantityCancel);
@@ -396,6 +392,11 @@ package
       public static function get IsTransferLockingFeatureEnabled() : Boolean
       {
          return m_IsTransferLockingFeatureEnabled;
+      }
+      
+      public static function get TransferLockSettingAllowCraftingUse() : Boolean
+      {
+         return m_bTransferLockSettingAllowCraftingUse;
       }
       
       public function AddRotateButtons() : *
@@ -534,12 +535,12 @@ package
          this.KnownModsInfo_mc.KnownModsInfo_tf.visible = !this.isCrafting && (this._eMode == this.INVENTORY_MODE || this._eMode == this.SLOTS_MODE || this._eMode == this.MOD_MODE);
       }
       
-      private function get eMode() : *
+      public function get eMode() : *
       {
          return this._eMode;
       }
       
-      private function set eMode(param1:uint) : *
+      public function set eMode(param1:uint) : *
       {
          this._eMode = param1;
          this.SetButtonHintData();
@@ -796,6 +797,13 @@ package
                   m_IsTransferLockingFeatureEnabled = param1.data.isTransferLockingFeatureEnabled;
                   InventoryBase_mc.InventoryList_mc.InvalidateData();
                }
+               if(param1.data.bTransferLockSettingAllowCraftingUse != undefined)
+               {
+                  m_bTransferLockSettingAllowCraftingUse = param1.data.bTransferLockSettingAllowCraftingUse;
+                  ConfirmPanelComponentEntry.bTransferLockSettingAllowCraftingUse = m_bTransferLockSettingAllowCraftingUse;
+                  ModListObject.RefreshList();
+                  RequirementsListObject.RefreshList();
+               }
                RenameButton.ButtonText = !!allowClearName ? "$CLEARNAME" : "$RENAME";
             }
          });
@@ -871,9 +879,9 @@ package
          BSUIDataManager.dispatchEvent(new CustomEvent(EVENT_IS_CRAFTING,{"isCrafting":this.m_IsCrafting}));
       }
       
-      public function DisplayLegendaryFanfare(param1:String, param2:Boolean) : void
+      public function DisplayLegendaryFanfare(param1:String) : void
       {
-         this.LegendaryCraftingFanfare_mc.ShowFanfare(param1,param2);
+         this.LegendaryCraftingFanfare_mc.ShowFanfare(param1);
       }
       
       public function GoBackToMod() : void
@@ -932,7 +940,6 @@ package
          this._isModeInitialized = true;
          this.inspectMode = false;
          this.SetCraftingHierarchy("$CRAFTING");
-         this.ModButton.ButtonText = "$Select";
          this.Build.ButtonText = this.strBuildButtonText;
          this.AutoBuild.ButtonText = this.strBuildButtonText;
          this.eMode = this.SLOTS_MODE;
@@ -968,7 +975,6 @@ package
          this.ModSlotBase_mc.visible = true;
          this.CurrentModsBase_mc.ModSlotList_mc.visible = false;
          this.SetCraftingHierarchy("$MODIFY");
-         this.ModButton.ButtonText = "$MODIFY";
          this.eMode = this.INVENTORY_MODE;
          this.BGSCodeObj.RemoveHighlight();
          this.ModListObject.SetInactive();
@@ -1027,13 +1033,11 @@ package
       private function PopulateButtonBar() : void
       {
          this.ItemLevelSelectButtons = new Vector.<BSButtonHintData>();
-         this.ItemLevelSelectButtons.push(this.ItemLevelAcceptButton);
-         this.ItemLevelSelectButtons.push(this.ItemLevelCancelButton);
-         this.ItemLevelAcceptButton.ButtonVisible = false;
-         this.ItemLevelCancelButton.ButtonVisible = false;
          this.ItemLevelSelectButtons.push(this.ToggleCraftingButton);
          this.ItemLevelSelectButtons.push(this.FilterCraftableButton);
          this.ItemLevelSelectButtons.push(this.FilterAtxButton);
+         this.ItemLevelSelectButtons.push(this.ItemLevelCancelButton);
+         this.ItemLevelCancelButton.ButtonVisible = false;
          this.InspectModeButtons = new Vector.<BSButtonHintData>();
          this.InspectModeButtons.push(this.RenameButton);
          this.InspectModeButtons.push(this.TakeButton);
@@ -1051,39 +1055,37 @@ package
          this.InventoryButtonHints.push(this.RepairButton);
          this.InventoryButtonHints.push(this.InspectButton);
          this.InventoryButtonHints.push(this.LockButton);
-         this.InventoryButtonHints.push(this.ModButton);
-         this.InventoryButtonHints.push(this.ExitButton);
          this.InventoryButtonHints.push(this.AlternateButton);
          this.InventoryButtonHints.push(this.ToggleCraftingButton);
          this.InventoryButtonHints.push(this.FilterCraftableButton);
          this.InventoryButtonHints.push(this.FilterAtxButton);
+         this.InventoryButtonHints.push(this.ExitButton);
          this.ModSlotButtonHints = new Vector.<BSButtonHintData>();
-         this.ModSlotButtonHints.push(this.ModButton);
-         this.ModSlotButtonHints.push(this.BackButton);
          this.ModSlotButtonHints.push(this.AlternateButton);
          this.ModSlotButtonHints.push(this.ToggleCraftingButton);
          this.ModSlotButtonHints.push(this.FilterCraftableButton);
          this.ModSlotButtonHints.push(this.FilterAtxButton);
          this.ModSlotButtonHints.push(this.hideUIButton);
+         this.ModSlotButtonHints.push(this.BackButton);
          this.ModsListHints = new Vector.<BSButtonHintData>();
          this.ModsListHints.push(this.AutoBuild);
          this.ModsListHints.push(this.TagButton);
-         this.ModsListHints.push(this.BackButton);
          this.ModsListHints.push(this.AlternateButton);
          this.ModsListHints.push(this.ToggleCraftingButton);
          this.ModsListHints.push(this.FilterCraftableButton);
          this.ModsListHints.push(this.FilterAtxButton);
          this.ModsListHints.push(this.hideUIButton);
+         this.ModsListHints.push(this.BackButton);
          this.ComponentsListHints = new Vector.<BSButtonHintData>();
          this.ComponentsListHints.push(this.Build);
          this.ComponentsListHints.push(this.ChooseComponents);
          this.ComponentsListHints.push(this.BackButton);
          this.MiscItemListHints = new Vector.<BSButtonHintData>();
          this.MiscItemListHints.push(this.Add);
-         this.MiscItemListHints.push(this.BackButton);
          this.MiscItemListHints.push(this.ToggleCraftingButton);
          this.MiscItemListHints.push(this.FilterCraftableButton);
          this.MiscItemListHints.push(this.FilterAtxButton);
+         this.MiscItemListHints.push(this.BackButton);
          this.QuantityButtons = new Vector.<BSButtonHintData>();
          this.QuantityButtons.push(this.QuantityAcceptButton);
          this.QuantityButtons.push(this.QuantityCancelButton);
@@ -1372,7 +1374,14 @@ package
                   this.ButtonHintBar_mc.SetButtonHintData(this.ComponentsListHints);
                   break;
                case this.LEVEL_SELECT_MODE:
-                  this.ButtonHintBar_mc.SetButtonHintData(this.ItemLevelSelectButtons);
+                  if(this.modalActive)
+                  {
+                     this.ButtonHintBar_mc.SetButtonHintData(this.QuantityButtons);
+                  }
+                  else
+                  {
+                     this.ButtonHintBar_mc.SetButtonHintData(this.ItemLevelSelectButtons);
+                  }
                   break;
                case this.ITEM_SELECT_MODE:
                   this.ButtonHintBar_mc.SetButtonHintData(this.MiscItemListHints);
@@ -1475,7 +1484,6 @@ package
                   this.AlternateButton.ButtonVisible = this.strAlternateButtonText.length > 0;
                   this.AlternateButton.ButtonText = this.strAlternateButtonText;
                   this.AlternateButton.ButtonEnabled = this.AternateTextEnabled;
-                  this.ModButton.ButtonEnabled = this.isCrafting || this.ModSlotListObject.entryList && this.ModSlotListObject.entryList.length > 0;
                   if(this._allowRepair)
                   {
                      this.RepairButton.ButtonEnabled = this._allowRepair && this.hasValidEntries();
@@ -1504,10 +1512,7 @@ package
                this.AlternateButton.ButtonVisible = this.strAlternateButtonText.length > 0;
                this.AlternateButton.ButtonText = this.strAlternateButtonText;
                this.AlternateButton.ButtonEnabled = this.AternateTextEnabled;
-               this.ItemLevelAcceptButton.ButtonVisible = false;
-               this.ItemLevelCancelButton.ButtonVisible = false;
                this.hideUIButton.ButtonVisible = !this._isCookingMenu;
-               this.hasPerkPanel = this.perkPanelLabel_mc.visible;
                break;
             case this.MOD_MODE:
                this.AutoBuild.ButtonVisible = true;
@@ -1536,10 +1541,8 @@ package
                this.AlternateButton.ButtonVisible = this.strAlternateButtonText.length > 0;
                this.AlternateButton.ButtonText = this.strAlternateButtonText;
                this.AlternateButton.ButtonEnabled = this.AternateTextEnabled;
-               this.ItemLevelAcceptButton.ButtonVisible = false;
                this.ItemLevelCancelButton.ButtonVisible = false;
                this.hideUIButton.ButtonVisible = !this._isCookingMenu;
-               this.hasPerkPanel = this.perkPanelLabel_mc.visible;
                break;
             case this.REQUIREMENTS_MODE:
                this.BGSCodeObj.SetItemSelectValuesForComponents(this.MiscItemListObject.entryList,this.MiscItemListObject.CategoryNameList);
@@ -1548,7 +1551,6 @@ package
                this.ChooseComponents.ButtonEnabled = !this.ModSlotBase_mc.ModSlotList_mc.filterer.IsFilterEmpty(this.ModSlotBase_mc.ModSlotList_mc.filterer.itemFilter);
                break;
             case this.LEVEL_SELECT_MODE:
-               this.ItemLevelAcceptButton.ButtonVisible = true;
                this.ItemLevelCancelButton.ButtonVisible = true;
          }
          if(this.eMode == this.MOD_MODE)
@@ -1618,7 +1620,6 @@ package
                   {
                      this.m_LockHoldStartTimeout = setTimeout(this.startItemLockHold,GlobalFunc.HOLD_METER_DELAY);
                      _loc3_ = true;
-                     break;
                   }
             }
          }
@@ -2119,6 +2120,7 @@ package
             stage.focus = this.QuantityModal_mc;
             GlobalFunc.PlayMenuSound(GlobalFunc.MENU_SOUND_POPUP);
             this.updateModalActive();
+            this.SetButtonHintData();
             this.UpdateButtons();
          }
          else if(_loc1_ != null)
@@ -2128,6 +2130,7 @@ package
             stage.focus = this.QuantityModal_mc;
             GlobalFunc.PlayMenuSound(GlobalFunc.MENU_SOUND_POPUP);
             this.updateModalActive();
+            this.SetButtonHintData();
             this.UpdateButtons();
          }
       }
@@ -2252,7 +2255,7 @@ package
                      }
                      else if(!this._itemLevelData.hasLevels && this.isCrafting)
                      {
-                        _loc2_ = Boolean(this.GetIsMTX() || this.GetIsZeus() ? this.GetHasEntitlement() : true);
+                        _loc2_ = this.GetIsMTX() || this.GetIsZeus() ? this.GetHasEntitlement() : true;
                         if(this.RequirementsListObject.craftableQuantity > 1 && _loc2_)
                         {
                            this.openQuantityModal();
@@ -2621,70 +2624,6 @@ package
             }
          }
          this.CraftingHeirarchy_mc.CraftingHeirarchy_tf.text = _loc2_.toUpperCase();
-      }
-      
-      private function onHideUI() : void
-      {
-         if(this._inspectMode || this.QuantityModal_mc.opened || isCookingMenu)
-         {
-            return;
-         }
-         if(this.hideUIButton.ButtonText == "HIDE UI")
-         {
-            this.hideUIButton.ButtonText = "SHOW UI";
-            this.isHideUI = false;
-            this.hideUIButton.ButtonFlashing = false;
-            this.InventoryBase_mc.visible = true;
-            this.ModSlotBase_mc.visible = true;
-            this.ItemCardContainer_mc.visible = true;
-            this.CraftingHeirarchy_mc.visible = true;
-            this.KnownModsInfo_mc.visible = true;
-            this.LegendaryItemDescription_tf.visible = true;
-            this.InventoryBase_mc.InventoryList_mc.disableInput_Inspectable = false;
-            this.UpdateDescription();
-            this.UpdateBackground();
-            this.UpdatePerks();
-            if(this.hasPerkPanel)
-            {
-               this.CenterShadedBG_mc.gotoAndStop("craftModPerks");
-               this.perkPanelLabel_mc.visible = true;
-            }
-            else
-            {
-               this.CenterShadedBG_mc.gotoAndStop("craftMod");
-               this.perkPanelLabel_mc.visible = false;
-            }
-            this.OnItemCardUpdated(null);
-         }
-         else
-         {
-            this.hideUIButton.ButtonText = "HIDE UI";
-            this.isHideUI = true;
-            this.InventoryBase_mc.visible = false;
-            this.ModSlotBase_mc.visible = false;
-            this.ItemCardContainer_mc.visible = false;
-            this.perkPanelLabel_mc.visible = false;
-            this.PerkPanel0_mc.visible = false;
-            this.PerkPanel1_mc.visible = false;
-            this.CraftingHeirarchy_mc.visible = false;
-            this.KnownModsInfo_mc.visible = false;
-            this.LegendaryItemDescription_tf.visible = false;
-            this.InventoryBase_mc.InventoryList_mc.disableInput_Inspectable = true;
-            this.CenterShadedBG_mc.gotoAndStop("inspectNoMenus");
-            this.hideUIButton.ButtonFlashing = true;
-         }
-      }
-      
-      private function onTRepair() : void
-      {
-         if(this.RepairButton.ButtonText == "REPAIR")
-         {
-            this.onWorkbenchRepair();
-         }
-         else
-         {
-            this.onRepairKit();
-         }
       }
       
       internal function frame12() : *
